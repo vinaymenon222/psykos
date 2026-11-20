@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head><meta charset="utf-8"><title>Graphs and bipartite graphs · PSY:KOS lesson</title><script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap"><link rel="icon" href="../../../assets/logo-light.png">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<style>
+:root,:root[data-theme="dark"]{--bg:#141813;--card:#1D221C;--tx:#EEE8DC;--mut:#A7AE9F;--bd:#30382E;--pri:#A3BC8E;--u:#8EB5A8;--v:#D9A73E;--bad:#E58A6E;--ok:#A3BC8E;--node:#2A3128;--dot:#2C342A;--on:#141813;--ink-x:#EEE8DC;--muted-x:#A7AE9F;--line-x:#30382E;--panel-x:#1D221C;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#F1ECE2;--card:#FBF8F2;--tx:#1E281D;--mut:#5A6454;--bd:#E3DBCB;--pri:#4E6A44;--u:#86ACA0;--v:#C9952E;--bad:#B0432D;--ok:#4E6A44;--node:#ECE5D7;--dot:#DDD4C2;--on:#FBF8F2;--ink-x:#1E281D;--muted-x:#5A6454;--line-x:#E3DBCB;--panel-x:#FBF8F2;color-scheme:light}
+
+
+
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 "Lexend",system-ui,sans-serif}
+main{max-width:1120px;margin:0 auto;padding:20px 16px 40px}
+h1{font:700 clamp(28px,5vw,44px)/1.1 "Lexend",system-ui,sans-serif;margin:0 0 6px}
+.lead{color:var(--mut);margin:0 0 18px;max-width:62ch}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.seg{display:inline-flex;border:1.5px solid var(--pri);border-radius:10px;overflow:hidden}
+button{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:7px 13px;cursor:pointer}
+button:hover{border-color:var(--pri)}
+button:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.seg button{border:0;border-radius:0;background:transparent;color:var(--pri);font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--pri);color:var(--card)}
+.wrap{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(250px,1fr);gap:16px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}}
+.stage{background:var(--card);border:1.5px solid var(--bd);border-radius:14px;padding:8px}
+svg{display:block;width:100%;height:auto;touch-action:none;border-radius:10px;
+background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:20px 20px}
+.edge{stroke:var(--mut);stroke-width:2.5}
+.edge.m{stroke:var(--ok);stroke-width:7}
+.edge.odd{stroke:var(--bad);stroke-width:5;stroke-dasharray:9 6}
+.div{stroke:var(--bd);stroke-width:2;stroke-dasharray:4 8}
+.hd{fill:var(--mut);font:700 18px "Lexend",system-ui,sans-serif;text-anchor:middle}
+.node circle{stroke:var(--tx);stroke-width:2;cursor:pointer}
+.node.sel circle{stroke:var(--pri);stroke-width:6}
+.node.vis circle{stroke:var(--pri);stroke-width:4}
+.node text{fill:#0b1220;font:700 15px "Lexend",system-ui,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.node.neu text{fill:var(--tx)}
+.ord{fill:var(--pri);font:700 13px system-ui,sans-serif;text-anchor:middle}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:8px 6px 2px;color:var(--mut);font-size:14px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:5px}
+.ln{display:inline-block;width:22px;height:0;border-top:5px solid;vertical-align:3px;margin-right:5px}
+.side{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border:1.5px solid var(--bd);border-radius:14px;padding:14px 16px}
+.card h2{font:700 18px "Lexend",system-ui,sans-serif;margin:0 0 8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stats b{display:block;font:700 26px "Lexend",system-ui,sans-serif}
+.stats span{color:var(--mut);font-size:13px}
+.verdict{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:700;color:#fff}
+.verdict.yes{background:var(--ok)}.verdict.no{background:var(--bad)}
+pre{margin:8px 0 0;font:14px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;color:var(--tx)}
+.note{color:var(--mut);font-size:15px;margin:0}
+#msg{min-height:22px;color:var(--bad);font-size:14px;margin:6px 4px 0}
+
+/* ---- PSY:KOS look ---- */
+*{box-sizing:border-box}
+body{font-family:"Lexend",system-ui,sans-serif !important;font-weight:300}
+h1{font-family:"Lexend",system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:-0.02em;font-size:clamp(28px,4.5vw,38px) !important}
+h2,.card h2,.box h2{font-family:"Lexend",system-ui,sans-serif !important;font-weight:500 !important;font-size:16px !important}
+b,strong{font-weight:500}
+button,select{font-family:"Lexend",system-ui,sans-serif !important}
+.psy-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0 18px}
+.psy-back{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:14px;border:1px solid var(--line-x);color:var(--ink-x);text-decoration:none;font-size:15px}
+.psy-back svg,.psy-theme svg{width:18px;height:18px}
+.psy-theme{width:44px;height:44px;border-radius:999px;border:0 !important;padding:0 !important;background:var(--panel-x) !important;color:var(--ink-x);display:inline-flex;align-items:center;justify-content:center}
+.psy-sun{display:block}.psy-moon{display:none}
+:root[data-theme="light"] .psy-sun{display:none}:root[data-theme="light"] .psy-moon{display:block}
+.psy-kicker{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-x);margin-bottom:6px}
+
+.stage,.card{border:0 !important;border-radius:24px !important}
+.stage{padding:10px !important}
+svg{border-radius:16px !important}
+button{border-radius:12px !important;border:1px solid var(--bd) !important;font-weight:400}
+button:hover{border-color:var(--pri) !important}
+.seg{border:1px solid var(--bd) !important;border-radius:12px !important;padding:3px;gap:3px;background:var(--card)}
+.seg button{border:0 !important;border-radius:9px !important;color:var(--tx) !important;font-weight:400 !important}
+.seg button[aria-pressed="true"]{background:var(--pri) !important;color:var(--on) !important;font-weight:500 !important}
+.go{background:var(--pri) !important;color:var(--on) !important;border-color:var(--pri) !important;font-weight:500 !important}
+.stats b{font-family:"Lexend",system-ui,sans-serif !important;font-weight:400 !important}
+.verdict{color:var(--on) !important;font-weight:500 !important}
+.verdict.na{background:var(--bd) !important;color:var(--tx) !important}
+.node text{fill:#141813 !important;font-family:"Lexend",system-ui,sans-serif !important;font-weight:500 !important}
+.node.neu text{fill:var(--tx) !important}
+.num text,.deg,.ord,.hd{font-family:"Lexend",system-ui,sans-serif !important;font-weight:500 !important}
+pre,#seq{font-family:ui-monospace,Consolas,monospace !important;font-weight:400 !important}
+</style>
+</head>
+<body>
+<main><div class="psy-bar"><a class="psy-back" href="../../../lessons.html#Mathematics/1"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>Lesson library</a><button class="psy-theme" type="button" id="psy-theme" aria-label="Switch theme"><svg class="psy-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="psy-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div><span class="psy-kicker">Mathematics · Graph theory</span>
+  <h1>Graph Lab</h1>
+  <p class="lead">Build a graph by hand and watch it get analysed live. Switch to bipartite mode to see two vertex sets and a maximum matching.</p>
+  <div class="bar">
+    <div class="seg" role="group" aria-label="Graph type">
+      <button id="mg" aria-pressed="true">General graph</button>
+      <button id="mb" aria-pressed="false">Bipartite graph</button>
+    </div>
+    <button id="ex">Load example</button>
+    <button id="rnd">Random graph</button>
+    <button id="bfs">Run BFS</button>
+    <button id="del">Delete selected</button>
+    <button id="clr">Clear</button>
+  </div>
+  <div class="wrap">
+    <div>
+      <div class="stage">
+        <svg id="c" viewBox="0 0 800 480" role="img" aria-label="Graph drawing area"><line x1="400" y1="85" x2="547.2243186433545" y2="170" class="edge"></line><line x1="547.2243186433545" y1="170" x2="547.2243186433545" y2="340" class="edge m"></line><line x1="547.2243186433545" y1="340" x2="400" y2="425" class="edge"></line><line x1="400" y1="425" x2="252.77568135664546" y2="340.00000000000006" class="edge m"></line><line x1="252.77568135664546" y1="340.00000000000006" x2="252.77568135664544" y2="170" class="edge"></line><line x1="252.77568135664544" y1="170" x2="400" y2="85" class="edge m"></line><line x1="400" y1="85" x2="400" y2="425" class="edge"></line><g class="node" data-id="1"><circle cx="400" cy="85" r="22" fill="var(--u)"></circle><text x="400" y="85">A</text></g><g class="node" data-id="2"><circle cx="547.2243186433545" cy="170" r="22" fill="var(--v)"></circle><text x="547.2243186433545" y="170">B</text></g><g class="node" data-id="3"><circle cx="547.2243186433545" cy="340" r="22" fill="var(--u)"></circle><text x="547.2243186433545" y="340">C</text></g><g class="node" data-id="4"><circle cx="400" cy="425" r="22" fill="var(--v)"></circle><text x="400" y="425">D</text></g><g class="node" data-id="5"><circle cx="252.77568135664546" cy="340.00000000000006" r="22" fill="var(--u)"></circle><text x="252.77568135664546" y="340.00000000000006">E</text></g><g class="node" data-id="6"><circle cx="252.77568135664544" cy="170" r="22" fill="var(--v)"></circle><text x="252.77568135664544" y="170">F</text></g></svg>
+        <div class="legend" id="legend"><span><i class="sw" style="background:var(--u)"></i>Colour A</span><span><i class="sw" style="background:var(--v)"></i>Colour B</span><span><i class="ln" style="border-color:var(--ok)"></i>Matching edge</span><span><i class="ln" style="border-color:var(--bad);border-top-style:dashed"></i>Odd-cycle edge</span></div>
+      </div>
+      <div id="msg" aria-live="polite"></div>
+      <p class="note">Click empty space to add a vertex. Click one vertex, then another, to add or remove an edge. Drag a vertex to move it.</p>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h2>Live analysis</h2>
+        <div class="stats">
+          <div><b id="sv">6</b><span>vertices</span></div>
+          <div><b id="se">7</b><span>edges</span></div>
+          <div><b id="sc">1</b><span>components</span></div>
+        </div>
+        <div>Bipartite: <span id="vd" class="verdict yes">yes</span></div>
+        <p class="note" id="why" style="margin-top:8px">The vertices split into two groups with every edge joining the groups. No odd cycle exists.</p>
+        <p class="note" id="mt" style="margin-top:8px">Maximum matching size: 3 (green edges). Each vertex is used at most once.</p>
+      </div>
+      <div class="card"><h2>Adjacency list</h2><pre id="adj">A (3): B, F, D
+B (2): A, C
+C (2): B, D
+D (3): C, E, A
+E (2): D, F
+F (2): E, A</pre><pre id="bo"></pre></div>
+      <div class="card"><h2 id="th">About graphs</h2><p class="note" id="tx">A graph G = (V, E) is a set of vertices joined by edges. Degrees always add up to twice the edge count (here 14). If you can two-colour the vertices so no edge joins equal colours, the graph is bipartite.</p></div>
+    </div>
+  </div>
+</main>
+<script>
+const NS='http://www.w3.org/2000/svg',svg=document.getElementById('c');
+const $=id=>document.getElementById(id);
+const S={graph:{n:[],e:[],c:0,ei:0},bip:{n:[],e:[],cu:0,cv:0,ei:0}};
+let mode='graph',sel=null,uid=0,drag=null,bfs=[],timer=null;
+const st=()=>S[mode],byId=id=>st().n.find(n=>n.id===id);
+const key=(a,b)=>a<b?a+'-'+b:b+'-'+a,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function pt(ev){const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+function msg(t){$('msg').textContent=t||''}
+function stopBfs(){clearInterval(timer);timer=null;bfs=[]}
+
+function addNode(x,y){
+  const s=st(),nd={id:++uid,x:clamp(x,30,770),y:clamp(y,45,450)};
+  if(mode==='bip'){nd.side=x<400?0:1;nd.x=nd.side?640:160;nd.label=(nd.side?'v':'u')+(nd.side?++s.cv:++s.cu)}
+  else nd.label=String.fromCharCode(65+(s.c++%26));
+  s.n.push(nd);
+}
+function toggleEdge(a,b){
+  if(a===b)return;const s=st();
+  if(mode==='bip'&&byId(a).side===byId(b).side){msg('In a bipartite graph, every edge must join set U to set V.');return}
+  const k=key(a,b),i=s.e.findIndex(e=>key(e[0],e[1])===k);
+  i>=0?s.e.splice(i,1):s.e.push([a,b]);msg('');
+}
+function clickNode(id){
+  if(sel===null)sel=id;else if(sel===id)sel=null;else{toggleEdge(sel,id);sel=null}
+}
+function delSel(){
+  if(sel===null)return;const s=st();
+  s.n=s.n.filter(n=>n.id!==sel);s.e=s.e.filter(e=>e[0]!==sel&&e[1]!==sel);sel=null;stopBfs();render();
+}
+
+/* ---- analysis: BFS two-colouring, odd cycle, maximum matching ---- */
+function analyze(){
+  const s=st(),adj={};s.n.forEach(n=>adj[n.id]=[]);
+  s.e.forEach(([a,b])=>{adj[a].push(b);adj[b].push(a)});
+  const col={},par={},dep={},odd=new Set();let comps=0,bip=true;
+  for(const n of s.n){
+    if(col[n.id]!==undefined)continue;
+    comps++;col[n.id]=0;dep[n.id]=0;par[n.id]=null;const q=[n.id];
+    while(q.length){
+      const u=q.shift();
+      for(const v of adj[u]){
+        if(col[v]===undefined){col[v]=1-col[u];par[v]=u;dep[v]=dep[u]+1;q.push(v)}
+        else if(col[v]===col[u]&&bip){
+          bip=false;let a=u,b=v;odd.add(key(a,b));
+          while(a!==b){if(dep[a]>=dep[b]){odd.add(key(a,par[a]));a=par[a]}else{odd.add(key(b,par[b]));b=par[b]}}
+        }
+      }
+    }
+  }
+  const match={};let size=0;
+  if(bip){
+    const side=id=>mode==='bip'?byId(id).side:col[id];
+    const aug=(u,seen)=>{for(const v of adj[u]){if(seen.has(v))continue;seen.add(v);
+      if(match[v]===undefined||aug(match[v],seen)){match[v]=u;match[u]=v;return true}}return false};
+    for(const n of s.n)if(side(n.id)===0&&aug(n.id,new Set()))size++;
+  }
+  return{adj,col,comps,odd,bip,match,size};
+}
+
+/* ---- drawing ---- */
+function render(){
+  svg.innerHTML='';const s=st(),A=analyze();
+  if(mode==='bip'){
+    el('line',{x1:400,y1:20,x2:400,y2:465,class:'div'},svg);
+    el('text',{x:160,y:30,class:'hd'},svg).textContent='Set U';
+    el('text',{x:640,y:30,class:'hd'},svg).textContent='Set V';
+  }
+  s.e.forEach(([a,b])=>{
+    const p=byId(a),q=byId(b);let c='edge';
+    if(A.match[a]===b)c+=' m';if(A.odd.has(key(a,b)))c+=' odd';
+    el('line',{x1:p.x,y1:p.y,x2:q.x,y2:q.y,class:c},svg);
+  });
+  s.n.forEach(n=>{
+    const g=el('g',{class:'node'+(A.bip?'':' neu')+(n.id===sel?' sel':'')+(bfs.includes(n.id)?' vis':''),'data-id':n.id},svg);
+    const side=mode==='bip'?n.side:A.col[n.id];
+    el('circle',{cx:n.x,cy:n.y,r:22,fill:A.bip?(side?'var(--v)':'var(--u)'):'var(--node)'},g);
+    el('text',{x:n.x,y:n.y},g).textContent=n.label;
+    const i=bfs.indexOf(n.id);if(i>=0)el('text',{x:n.x,y:n.y+40,class:'ord'},svg).textContent=i+1;
+  });
+  panel(A);
+}
+function panel(A){
+  const s=st();
+  $('sv').textContent=s.n.length;$('se').textContent=s.e.length;$('sc').textContent=A.comps;
+  const v=$('vd');v.textContent=A.bip?'yes':'no';v.className='verdict '+(A.bip?'yes':'no');
+  $('why').textContent=A.bip
+    ?'The vertices split into two groups with every edge joining the groups. No odd cycle exists.'
+    :'An odd cycle (red, dashed) makes a valid two-colouring impossible.';
+  $('mt').textContent=A.bip?'Maximum matching size: '+A.size+' (green edges). Each vertex is used at most once.':'Matching view appears once the graph is bipartite.';
+  $('adj').textContent=s.n.length?s.n.map(n=>n.label+' ('+A.adj[n.id].length+'): '+A.adj[n.id].map(id=>byId(id).label).join(', ')).join('\n'):'Add a vertex to begin.';
+  $('bo').textContent=bfs.length?'\nBFS order: '+bfs.map(id=>byId(id).label).join(' → '):'';
+  const deg=s.e.length*2;
+  $('th').textContent=mode==='bip'?'About bipartite graphs':'About graphs';
+  $('tx').textContent=mode==='bip'
+    ?'A bipartite graph has vertices split into sets U and V so that every edge joins U to V. A matching is a set of edges that share no vertex; the green edges form a maximum one, found with augmenting paths.'
+    :'A graph G = (V, E) is a set of vertices joined by edges. Degrees always add up to twice the edge count (here '+deg+'). If you can two-colour the vertices so no edge joins equal colours, the graph is bipartite.';
+  $('legend').innerHTML=(A.bip?'<span><i class="sw" style="background:var(--u)"></i>'+(mode==='bip'?'Set U':'Colour A')+'</span><span><i class="sw" style="background:var(--v)"></i>'+(mode==='bip'?'Set V':'Colour B')+'</span><span><i class="ln" style="border-color:var(--ok)"></i>Matching edge</span>':'')+'<span><i class="ln" style="border-color:var(--bad);border-top-style:dashed"></i>Odd-cycle edge</span>';
+}
+
+/* ---- examples ---- */
+function ring(k,cx,cy,r){return Array.from({length:k},(_,i)=>[cx+r*Math.cos(2*Math.PI*i/k-Math.PI/2),cy+r*Math.sin(2*Math.PI*i/k-Math.PI/2)])}
+function setG(pos,es){const s=st();s.n=pos.map((p,i)=>({id:++uid,label:String.fromCharCode(65+i),x:p[0],y:p[1]}));s.c=pos.length;s.e=es.map(([a,b])=>[s.n[a].id,s.n[b].id])}
+function setB(nu,nv,es){
+  const s=st(),y=(i,k)=>k===1?240:70+i*(340/(k-1));s.n=[];
+  for(let i=0;i<nu;i++)s.n.push({id:++uid,label:'u'+(i+1),side:0,x:160,y:y(i,nu)});
+  for(let j=0;j<nv;j++)s.n.push({id:++uid,label:'v'+(j+1),side:1,x:640,y:y(j,nv)});
+  s.cu=nu;s.cv=nv;s.e=es.map(([i,j])=>[s.n[i].id,s.n[nu+j].id]);
+}
+const exG=[()=>setG(ring(6,400,255,170),[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,3]]),
+           ()=>setG(ring(5,400,255,170),[[0,1],[1,2],[2,3],[3,4],[4,0],[0,2]])];
+const exB=[()=>setB(4,4,[[0,0],[0,1],[1,0],[2,1],[2,2],[3,2],[3,3]]),
+           ()=>setB(3,3,[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]])];
+let exi={graph:0,bip:0};
+function loadEx(){stopBfs();sel=null;const l=mode==='bip'?exB:exG;l[exi[mode]++%l.length]();msg('');render()}
+function random(){
+  stopBfs();sel=null;msg('');
+  if(mode==='bip'){const es=[];for(let i=0;i<4;i++)for(let j=0;j<4;j++)if(Math.random()<0.4)es.push([i,j]);setB(4,4,es)}
+  else{const k=7,es=[];for(let i=0;i<k;i++)for(let j=i+1;j<k;j++)if(Math.random()<0.3)es.push([i,j]);
+    setG(ring(k,400,255,170).map(p=>[p[0]+(Math.random()*30-15),p[1]+(Math.random()*30-15)]),es)}
+  render();
+}
+function runBfs(){
+  const s=st();if(!s.n.length)return;stopBfs();
+  const A=analyze(),start=sel||s.n[0].id,seen=new Set([start]),q=[start],ord=[];
+  while(q.length){const u=q.shift();ord.push(u);for(const v of A.adj[u])if(!seen.has(v)){seen.add(v);q.push(v)}}
+  let i=0;timer=setInterval(()=>{bfs=ord.slice(0,++i);render();if(i>=ord.length){clearInterval(timer);timer=null}},600);
+}
+function setMode(m){
+  mode=m;sel=null;stopBfs();msg('');
+  $('mg').setAttribute('aria-pressed',m==='graph');$('mb').setAttribute('aria-pressed',m==='bip');
+  if(!st().n.length){exi[m]=0;loadEx()}else render();
+}
+
+/* ---- pointer interaction ---- */
+svg.addEventListener('pointerdown',ev=>{
+  const g=ev.target.closest('.node'),p=pt(ev);
+  drag={id:g?+g.dataset.id:null,sx:p.x,sy:p.y,moved:false};svg.setPointerCapture(ev.pointerId);
+});
+svg.addEventListener('pointermove',ev=>{
+  if(!drag||drag.id===null)return;const p=pt(ev);
+  if(!drag.moved&&Math.hypot(p.x-drag.sx,p.y-drag.sy)<6)return;
+  drag.moved=true;const n=byId(drag.id);n.y=clamp(p.y,45,450);if(mode==='graph')n.x=clamp(p.x,30,770);render();
+});
+svg.addEventListener('pointerup',()=>{
+  if(!drag)return;const d=drag;drag=null;if(d.moved)return;stopBfs();
+  if(d.id===null){addNode(d.sx,d.sy);sel=null;msg('')}else clickNode(d.id);
+  render();
+});
+svg.addEventListener('pointercancel',()=>{drag=null});
+
+$('mg').onclick=()=>setMode('graph');$('mb').onclick=()=>setMode('bip');
+$('ex').onclick=loadEx;$('rnd').onclick=random;$('bfs').onclick=runBfs;$('del').onclick=delSel;
+$('clr').onclick=()=>{const s=st();s.n=[];s.e=[];s.c=s.cu=s.cv=0;sel=null;stopBfs();msg('');render()};
+setMode('graph');
+</script>
+
+
+<script>
+(function(){var b=document.getElementById('psy-theme');function lab(){b.setAttribute('aria-label',document.documentElement.getAttribute('data-theme')==='light'?'Switch to dark mode':'Switch to light mode')}lab();
+b.addEventListener('click',function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('psykos-theme',t)}catch(e){}lab()});
+window.addEventListener('storage',function(e){if(e.key==='psykos-theme'&&e.newValue){document.documentElement.setAttribute('data-theme',e.newValue);lab()}});})();
+</script>
+</body></html>

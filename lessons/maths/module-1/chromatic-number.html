@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head><meta charset="utf-8"><title>Chromatic number · PSY:KOS lesson</title><script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap"><link rel="icon" href="../../../assets/logo-light.png">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+
+<style>
+:root,:root[data-theme="dark"]{--bg:#141813;--panel:#1D221C;--ink:#EEE8DC;--muted:#A7AE9F;--line:#30382E;--accent:#A3BC8E;--bad:#E58A6E;--grid:#2C342A;--node:#2A3128;--on:#141813;--ink-x:#EEE8DC;--muted-x:#A7AE9F;--line-x:#30382E;--panel-x:#1D221C;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#F1ECE2;--panel:#FBF8F2;--ink:#1E281D;--muted:#5A6454;--line:#E3DBCB;--accent:#4E6A44;--bad:#B0432D;--grid:#DDD4C2;--node:#ECE5D7;--on:#FBF8F2;--ink-x:#1E281D;--muted-x:#5A6454;--line-x:#E3DBCB;--panel-x:#FBF8F2;color-scheme:light}
+
+
+
+
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Lexend",system-ui,sans-serif;line-height:1.45}
+main{max-width:1180px;margin:0 auto;padding:18px 16px 32px}
+h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
+.lede{margin:0 0 16px;color:var(--muted);max-width:70ch}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;position:relative;overflow:hidden}
+svg{display:block;width:100%;height:auto;touch-action:none;user-select:none}
+.readout{position:absolute;top:10px;left:14px;pointer-events:none}
+.readout b{font-size:3rem;font-weight:800;line-height:1;display:block}
+.readout span{font-size:.85rem;color:var(--muted)}
+.hint{position:absolute;bottom:8px;left:14px;right:14px;font-size:.82rem;color:var(--muted);pointer-events:none}
+.side{display:flex;flex-direction:column;gap:12px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.box h2{font-size:1rem;margin:0 0 8px;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:6px}
+button,select{font:inherit;font-size:.9rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button[aria-pressed="true"]{background:var(--accent);color:var(--panel);border-color:var(--accent)}
+button.go{background:var(--accent);color:var(--panel);border-color:var(--accent);font-weight:600}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+select{width:100%;margin-bottom:8px}
+.sw{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid var(--line);font-weight:600;font-size:.8rem}
+.sw[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:1px;border-color:var(--panel)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:.9rem}
+dt{color:var(--muted)}dd{margin:0;font-weight:600;text-align:right}
+#log{list-style:none;margin:0;padding:0;max-height:210px;overflow:auto;font-size:.85rem}
+#log li{padding:4px 0;border-bottom:1px solid var(--line)}
+#log li:first-child{font-weight:600}
+.edge{stroke:var(--ink);stroke-width:2.5}
+.edge.bad{stroke:var(--bad);stroke-width:4;stroke-dasharray:7 5}
+.hit{stroke:transparent;stroke-width:16;cursor:pointer}
+.node circle{stroke:var(--ink);stroke-width:2.5;cursor:grab}
+.node text{font-weight:800;font-size:15px;pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.ring{fill:none;stroke:var(--accent);stroke-width:4}
+@media (prefers-reduced-motion:no-preference){.node circle{transition:fill .25s}}
+
+/* ---- PSY:KOS look ---- */
+*{box-sizing:border-box}
+body{font-family:"Lexend",system-ui,sans-serif !important;font-weight:300}
+h1{font-family:"Lexend",system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:-0.02em;font-size:clamp(28px,4.5vw,38px) !important}
+h2,.card h2,.box h2{font-family:"Lexend",system-ui,sans-serif !important;font-weight:500 !important;font-size:16px !important}
+b,strong{font-weight:500}
+button,select{font-family:"Lexend",system-ui,sans-serif !important}
+.psy-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0 18px}
+.psy-back{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:14px;border:1px solid var(--line-x);color:var(--ink-x);text-decoration:none;font-size:15px}
+.psy-back svg,.psy-theme svg{width:18px;height:18px}
+.psy-theme{width:44px;height:44px;border-radius:999px;border:0 !important;padding:0 !important;background:var(--panel-x) !important;color:var(--ink-x);display:inline-flex;align-items:center;justify-content:center}
+.psy-sun{display:block}.psy-moon{display:none}
+:root[data-theme="light"] .psy-sun{display:none}:root[data-theme="light"] .psy-moon{display:block}
+.psy-kicker{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-x);margin-bottom:6px}
+
+.stage,.box{border:0 !important;border-radius:24px !important}
+button,select{border-radius:12px !important;font-weight:400}
+button.go,button[aria-pressed="true"]{color:var(--on) !important;font-weight:500 !important}
+.sw{border-radius:50% !important}
+.readout b{font-weight:400 !important}
+.layout{align-items:start}
+.node text{font-family:"Lexend",system-ui,sans-serif !important;font-weight:500 !important}
+</style>
+</head>
+<body>
+<main><div class="psy-bar"><a class="psy-back" href="../../../lessons.html#Mathematics/1"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>Lesson library</a><button class="psy-theme" type="button" id="psy-theme" aria-label="Switch theme"><svg class="psy-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="psy-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div><span class="psy-kicker">Mathematics · Graph theory</span>
+<h1>Chromatic number explorer</h1>
+<p class="lede">Build a graph, then colour its vertices so that no two connected vertices share a colour. The fewest colours that work is the graph’s chromatic number, χ(G).</p>
+<div class="layout">
+  <div class="stage">
+    <svg id="g" viewBox="0 0 640 460" role="img" aria-label="Graph canvas">
+      <defs><pattern id="p" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="var(--grid)" stroke-width="1"></path></pattern></defs>
+      <rect width="640" height="460" fill="url(#p)"></rect>
+      <g id="layer"></g>
+    </svg>
+    <div class="readout"><b id="chi">?</b><span id="chiNote">between 2 and 3 — colour it to find out</span></div>
+    <div class="hint" id="hint">Drag vertices to rearrange them.</div>
+  </div>
+  <div class="side">
+    <div class="box"><h2>Edit</h2>
+      <div class="row" id="tools">
+        <button data-t="move" aria-pressed="true">Move</button>
+        <button data-t="vertex" aria-pressed="false">Add vertex</button>
+        <button data-t="edge" aria-pressed="false">Add edge</button>
+        <button data-t="erase" aria-pressed="false">Erase</button>
+        <button data-t="paint" aria-pressed="false">Paint</button>
+      </div>
+      <div class="row" id="pal" style="margin-top:8px" aria-label="Colour palette"></div>
+    </div>
+    <div class="box"><h2>Start from</h2>
+      <select id="preset" aria-label="Example graph">
+        <option value="">Choose an example graph…</option>
+        <option value="tri">Triangle</option><option value="c5">Pentagon (5-cycle)</option>
+        <option value="k4">Complete graph K4</option><option value="k33">Bipartite K3,3</option>
+        <option value="w5">Wheel with 5 spokes</option><option value="pet">Petersen graph</option>
+        <option value="rnd">Random graph</option>
+      </select>
+      <button id="clear">Clear canvas</button>
+    </div>
+    <div class="box"><h2>Colour it</h2>
+      <select id="algo" aria-label="Algorithm">
+        <option value="greedy">Greedy (vertex order)</option>
+        <option value="wp">Welsh–Powell (highest degree first)</option>
+        <option value="dsatur">DSATUR (most constrained first)</option>
+        <option value="exact">Exact search (finds χ)</option>
+      </select>
+      <div class="row"><button id="step">Step</button><button id="play" class="go">Play</button><button id="reset">Reset colours</button></div>
+    </div>
+    <div class="box"><h2>Graph facts</h2>
+      <dl><dt>Vertices / edges</dt><dd id="sN">5 / 5</dd>
+      <dt>Upper bound (Δ + 1)</dt><dd id="sU">3</dd>
+      <dt>Lower bound (largest clique)</dt><dd id="sL">2</dd>
+      <dt>Colours used now</dt><dd id="sC">0</dd>
+      <dt>Clashing edges</dt><dd id="sB">0</dd></dl>
+    </div>
+    <div class="box"><h2>What just happened</h2><ul id="log"><li>Loaded “Pentagon (5-cycle)”. Try an algorithm.</li><li>Pick an example or add vertices to begin.</li></ul></div>
+  </div>
+</div>
+</main>
+<script>
+const COLORS=["#C9824F","#6F9A8B","#D9A73E","#8A9F5B","#9C7BA0","#D69C94","#5F8DA8","#A38B73","#6B7A99","#BDB55E"];
+const MAXN=22;
+let nodes=[],edges=[],tool="move",sel=null,brush=0,steps=[],si=0,timer=null,chi=null,cur=null,drag=null;
+const svg=document.getElementById("g"),layer=document.getElementById("layer"),$=id=>document.getElementById(id);
+const key=(a,b)=>a<b?a+"-"+b:b+"-"+a;
+const has=(a,b)=>edges.some(e=>key(e[0],e[1])===key(a,b));
+const adj=()=>{const A=nodes.map(()=>[]);edges.forEach(([a,b])=>{A[a].push(b);A[b].push(a)});return A};
+const lum=h=>{const n=parseInt(h.slice(1),16);return .299*(n>>16)+.587*((n>>8)&255)+.114*(n&255)};
+function pt(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+function log(m){const li=document.createElement("li");li.textContent=m;$("log").prepend(li)}
+
+/* palette */
+COLORS.forEach((c,i)=>{const b=document.createElement("button");b.className="sw";b.style.background=c;b.style.color=lum(c)>150?"#111":"#fff";b.textContent=i+1;b.setAttribute("aria-pressed",i===0);b.setAttribute("aria-label","Colour "+(i+1));
+b.onclick=()=>{brush=i;setTool("paint");[...$("pal").children].forEach((x,j)=>x.setAttribute("aria-pressed",j===i))};$("pal").append(b)});
+
+function setTool(t){tool=t;sel=null;[...$("tools").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.t===t));
+$("hint").textContent={move:"Drag vertices to rearrange them.",vertex:"Click empty space to add a vertex.",edge:"Click one vertex, then another, to connect them. Click an existing edge’s endpoints again to do nothing.",erase:"Click a vertex or an edge to remove it.",paint:"Pick a colour above, then click vertices to colour them by hand."}[t];render()}
+$("tools").onclick=e=>{if(e.target.dataset.t)setTool(e.target.dataset.t)};
+
+/* graph edits */
+function changed(){pause();steps=[];si=0;chi=null;cur=null;render()}
+function delNode(i){nodes.splice(i,1);edges=edges.filter(e=>e[0]!==i&&e[1]!==i).map(e=>e.map(x=>x>i?x-1:x))}
+svg.addEventListener("pointerdown",e=>{
+  const n=e.target.closest("[data-n]"),ed=e.target.closest("[data-e]");
+  if(n){const i=+n.dataset.n;
+    if(tool==="move"||tool==="vertex"){drag=i;svg.setPointerCapture?.(e.pointerId)}
+    else if(tool==="edge"){if(sel===null)sel=i;else{if(sel!==i&&!has(sel,i)){edges.push([sel,i]);changed()}sel=null}render()}
+    else if(tool==="erase"){delNode(i);changed()}
+    else if(tool==="paint"){nodes[i].c=brush;pause();steps=[];chi=null;cur=null;render()}
+  }else if(ed){if(tool==="erase"){edges.splice(+ed.dataset.e,1);changed()}}
+  else{if(tool==="vertex"){if(nodes.length>=MAXN){log("Limit of "+MAXN+" vertices reached.");return}const p=pt(e);nodes.push({x:p.x,y:p.y,c:-1});changed()}else if(sel!==null){sel=null;render()}}
+});
+window.addEventListener("pointermove",e=>{if(drag===null)return;const p=pt(e);nodes[drag].x=Math.max(24,Math.min(616,p.x));nodes[drag].y=Math.max(24,Math.min(436,p.y));render()});
+window.addEventListener("pointerup",()=>{drag=null});
+
+/* analysis */
+function omega(){const A=adj().map(a=>new Set(a));let best=nodes.length?1:0;
+  (function ext(size,cand){if(size>best)best=size;cand.forEach((v,k)=>ext(size+1,cand.slice(k+1).filter(u=>A[v].has(u))))})(0,nodes.map((_,i)=>i));return best}
+function conflicts(){return edges.filter(([a,b])=>nodes[a].c>=0&&nodes[a].c===nodes[b].c).length}
+
+/* algorithms: each returns a list of steps {v,c,t,fin} */
+function plan(name){
+  const n=nodes.length,A=adj(),col=Array(n).fill(-1),out=[];
+  const used=v=>[...new Set(A[v].map(x=>col[x]).filter(c=>c>=0))].sort((a,b)=>a-b);
+  const free=v=>{const u=new Set(used(v));let c=0;while(u.has(c))c++;return c};
+  const fmt=u=>u.length?"{"+u.map(c=>c+1).join(", ")+"}":"nothing yet";
+  if(name==="greedy"||name==="wp"){
+    const order=[...Array(n).keys()];
+    if(name==="wp")order.sort((a,b)=>A[b].length-A[a].length||a-b);
+    order.forEach(v=>{const c=free(v);out.push({v,c,t:`Vertex ${v+1} (degree ${A[v].length}): neighbours use ${fmt(used(v))}, so take colour ${c+1}.`});col[v]=c});
+  }else if(name==="dsatur"){
+    const left=new Set(nodes.map((_,i)=>i));
+    while(left.size){let b=-1,bs=-1,bd=-1;
+      left.forEach(v=>{const s=used(v).length,d=A[v].length;if(s>bs||(s===bs&&d>bd)){b=v;bs=s;bd=d}});
+      const c=free(b);out.push({v:b,c,t:`Vertex ${b+1} sees ${bs} different colour${bs===1?"":"s"} around it, the most of any uncoloured vertex. Take colour ${c+1}.`});col[b]=c;left.delete(b)}
+  }else{
+    const order=[...Array(n).keys()].sort((a,b)=>A[b].length-A[a].length);
+    const lo=Math.max(1,omega());let found=null,k=lo;
+    for(;k<=n;k++){let work=0;const t=Array(n).fill(-1);
+      const bt=(i,m)=>{if(i===n)return true;if(++work>3e6)return false;const v=order[i];
+        for(let c=0;c<=Math.min(k-1,m);c++){if(A[v].some(u=>t[u]===c))continue;t[v]=c;if(bt(i+1,Math.max(m,c+1)))return true;t[v]=-1}return false};
+      if(bt(0,0)){found=t.slice();log(`Try ${k} colours: a valid colouring exists.`);break}
+      log(`Try ${k} colours: every arrangement clashes, so ${k} is not enough.`)}
+    if(!found){log("Search stopped early; the graph is too tangled for this demo.");return[]}
+    const kk=k;order.forEach((v,i)=>out.push({v,c:found[v],t:`Place vertex ${v+1} in colour ${found[v]+1}.`,fin:i===n-1?()=>{chi=kk;log(`χ(G) = ${kk}: ${kk===lo&&lo>1?"a clique of that size forces it, and ":""}${kk} colours work while ${kk-1} cannot.`)}:null}));
+  }
+  return out;
+}
+function start(){pause();nodes.forEach(n=>n.c=-1);chi=null;cur=null;const name=$("algo").value;
+  log(`Running ${$("algo").selectedOptions[0].text}.`);
+  steps=nodes.length?plan(name):[];si=0;render()}
+function step(){
+  if(!steps.length||si>=steps.length){if(steps.length){pause();return}start();if(!steps.length)return}
+  const s=steps[si++];nodes[s.v].c=s.c;cur=s.v;log(s.t);s.fin&&s.fin();
+  if(si>=steps.length){pause();cur=null;if(!chi&&conflicts()===0)log(`Done with ${new Set(nodes.map(n=>n.c)).size} colours. This is an upper bound on χ(G), not always the minimum.`)}
+  render()}
+function pause(){if(timer){clearInterval(timer);timer=null}$("play").textContent="Play"}
+function play(){if(timer){pause();return}if(!steps.length||si>=steps.length){start();if(!steps.length)return}
+  $("play").textContent="Pause";step();if(si<steps.length)timer=setInterval(step,650)}
+$("step").onclick=()=>{pause();step()};$("play").onclick=play;
+$("reset").onclick=()=>{pause();nodes.forEach(n=>n.c=-1);steps=[];si=0;chi=null;cur=null;render()};
+$("algo").onchange=()=>{pause();steps=[];si=0};
+$("clear").onclick=()=>{nodes=[];edges=[];changed();log("Canvas cleared.")};
+
+/* presets */
+function ring(n,cx=320,cy=230,r=170,off=-Math.PI/2){return Array.from({length:n},(_,i)=>({x:cx+r*Math.cos(off+2*Math.PI*i/n),y:cy+r*Math.sin(off+2*Math.PI*i/n),c:-1}))}
+$("preset").onchange=e=>{const v=e.target.value;if(!v)return;let N=[],E=[];
+  const cyc=(a,n)=>{for(let i=0;i<n;i++)E.push([a+i,a+(i+1)%n])};
+  if(v==="tri"){N=ring(3);cyc(0,3)}
+  else if(v==="c5"){N=ring(5);cyc(0,5)}
+  else if(v==="k4"){N=ring(4,320,230,160,-Math.PI/4);for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)E.push([i,j])}
+  else if(v==="k33"){N=[100,230,360].map(y=>({x:200,y:y,c:-1})).concat([100,230,360].map(y=>({x:440,y:y,c:-1})));for(let i=0;i<3;i++)for(let j=3;j<6;j++)E.push([i,j])}
+  else if(v==="w5"){N=ring(5).concat([{x:320,y:230,c:-1}]);cyc(0,5);for(let i=0;i<5;i++)E.push([i,5])}
+  else if(v==="pet"){N=ring(5,320,230,190).concat(ring(5,320,230,90));cyc(0,5);for(let i=0;i<5;i++){E.push([i,i+5]);E.push([5+i,5+(i+2)%5])}}
+  else{const n=9;N=Array.from({length:n},()=>({x:60+Math.random()*520,y:50+Math.random()*360,c:-1}));
+    for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)if(Math.random()<.33)E.push([i,j])}
+  nodes=N;edges=E;sel=null;changed();log(`Loaded “${e.target.selectedOptions[0].text}”. Try an algorithm.`);e.target.value=""};
+
+/* render */
+function render(){
+  let h="";
+  edges.forEach(([a,b],i)=>{const A=nodes[a],B=nodes[b],bad=A.c>=0&&A.c===B.c;
+    h+=`<g data-e="${i}"><line class="hit" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}"/><line class="edge${bad?" bad":""}" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" pointer-events="none"/></g>`});
+  nodes.forEach((n,i)=>{const f=n.c>=0?COLORS[n.c%COLORS.length]:"var(--node)",tc=n.c>=0?(lum(f)>150?"#111":"#fff"):"var(--ink)";
+    h+=`<g class="node" data-n="${i}">${i===sel||i===cur?`<circle class="ring" cx="${n.x}" cy="${n.y}" r="27" style="fill:none"/>`:""}<circle cx="${n.x}" cy="${n.y}" r="20" fill="${f}"/><text x="${n.x}" y="${n.y}" fill="${tc}">${i+1}</text></g>`});
+  layer.innerHTML=h;
+  const A=adj(),n=nodes.length,m=edges.length,delta=Math.max(0,...A.map(a=>a.length)),w=omega();
+  const used=new Set(nodes.map(x=>x.c).filter(c=>c>=0)).size,bad=conflicts(),full=n&&nodes.every(x=>x.c>=0);
+  $("sN").textContent=n+" / "+m;$("sU").textContent=n?delta+1:"–";$("sL").textContent=n?w:"–";$("sC").textContent=used;$("sB").textContent=bad;
+  let show=chi,note="chromatic number";
+  if(show===null&&full&&!bad&&used===w){show=used}
+  if(show!==null)note="chromatic number, proven";
+  else if(n&&full&&!bad){show="≤ "+used;note=`${used} colours work; could fewer? (at least ${w})`}
+  else if(n){show="?";note=`between ${w} and ${delta+1} — colour it to find out`}
+  else{show="–"}
+  $("chi").textContent=show;$("chiNote").textContent=note;
+}
+setTool("move");
+$("preset").value="c5";$("preset").onchange({target:$("preset")});
+</script>
+
+
+<script>
+(function(){var b=document.getElementById('psy-theme');function lab(){b.setAttribute('aria-label',document.documentElement.getAttribute('data-theme')==='light'?'Switch to dark mode':'Switch to light mode')}lab();
+b.addEventListener('click',function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('psykos-theme',t)}catch(e){}lab()});
+window.addEventListener('storage',function(e){if(e.key==='psykos-theme'&&e.newValue){document.documentElement.setAttribute('data-theme',e.newValue);lab()}});})();
+</script>
+</body></html>

@@ -63,7 +63,7 @@
       content.innerHTML = '<div class="tile-grid">' + SUBJECTS.map(function (s) {
         var mods = modulesOf(s), n = D.getTopicMap(s).filter(function (t) { return t.lesson; }).length;
         return '<a class="tile" href="#' + esc(s) + '"><span class="k">Subject</span><span class="n">' + esc(s) + '</span>' +
-          '<span class="c">' + (mods.length ? mods.length + ' modules · ' + n + ' lesson' + (n === 1 ? '' : 's') + ' ready' : 'Lessons coming soon') + '</span></a>';
+          '<span class="c">' + (mods.length ? mods.length + (mods.length === 1 ? ' module · ' : ' modules · ') + n + ' lesson' + (n === 1 ? '' : 's') + ' ready' : 'Lessons coming soon') + '</span></a>';
       }).join('') + '</div>';
       return;
     }
