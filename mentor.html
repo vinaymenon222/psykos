@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PSY:KOS · Mentor Dashboard</title>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="assets/logo-light.png">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<main id="main" class="wrap stack" style="padding-bottom:56px">
+  <div class="row" style="align-items:center;justify-content:space-between;gap:14px">
+    <div class="pill-tabs" role="tablist" aria-label="Classes" id="class-tabs"></div>
+    <div class="seg" role="group" aria-label="Subject" id="subject-seg"></div>
+  </div>
+  <div id="class-body" class="stack"></div>
+</main>
+
+<script src="vendor/xlsx.mini.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/data.js"></script>
+<script src="js/weak.js"></script>
+<script src="js/charts.js"></script>
+<script>
+(function () {
+  'use strict';
+  var P = Psy, D = PsyData, Wk = PsyWeak, esc = P.esc;
+  var state = { cls: '', subject: 'English', view: 'overview', roll: '', open: 0, showAllTopics: false };
+  var me, classes, cache = {};
+
+  function readHash() {
+    var h = new URLSearchParams(location.hash.slice(1));
+    ['cls', 'subject', 'view', 'roll'].forEach(function (k) { if (h.get(k)) state[k] = h.get(k); });
+  }
+  function writeHash() {
+    var h = new URLSearchParams();
+    h.set('cls', state.cls); h.set('subject', state.subject); h.set('view', state.view);
+    if (state.roll) h.set('roll', state.roll);
+    history.replaceState(null, '', '#' + h.toString());
+  }
+
+  D.load().then(function () {
+    me = D.getCurrentUser();
+    if (!me || me.role !== 'faculty') { location.replace('index.html'); return; }
+    P.renderHeader({ who: me.name, signOut: true });
+    classes = D.getClassesForFaculty(me.id);
+    if (!classes.length) { document.getElementById('class-body').innerHTML = '<div class="empty"><b>No classes assigned</b><span class="muted">Ask the admin to add your classes.</span></div>'; return; }
+    readHash();
+    if (!classes.some(function (c) { return c.cls === state.cls; })) state.cls = classes[0].cls;
+    render();
+  }).catch(function (err) { P.showError(err.message); });
+
+  /* ---------------- top controls ---------------- */
+  function render() {
+    var cur = classes.filter(function (c) { return c.cls === state.cls; })[0];
+    if (cur.subjects.indexOf(state.subject) < 0) state.subject = cur.subjects[0];
+    document.getElementById('class-tabs').innerHTML = classes.map(function (c) {
+      return '<button class="pill-tab" role="tab" type="button" data-cls="' + esc(c.cls) + '" aria-selected="' + (c.cls === state.cls) + '">' + esc(c.cls) + '</button>';
+    }).join('');
+    var seg = document.getElementById('subject-seg');
+    seg.innerHTML = cur.subjects.map(function (s) {
+      return '<button type="button" data-sub="' + esc(s) + '" aria-pressed="' + (s === state.subject) + '">' + esc(s === 'Mathematics' ? 'Math' : s) + '</button>';
+    }).join('');
+    seg.hidden = cur.subjects.length < 2;
+    writeHash();
+    renderBody();
+  }
+  document.getElementById('class-tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-cls]'); if (!b) return;
+    state.cls = b.getAttribute('data-cls'); state.roll = ''; state.view = 'overview'; state.open = 0; render();
+  });
+  document.getElementById('subject-seg').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-sub]'); if (!b) return;
+    state.subject = b.getAttribute('data-sub'); state.open = 0; render();
+  });
+
+  /* ---------------- class data ---------------- */
+  function classData() {
+    var key = state.cls + '|' + state.subject;
+    if (cache[key]) return cache[key];
+    var students = D.getStudentsForClass(state.cls);
+    var evals = D.getEvaluations(state.subject).filter(function (e) { return e.type !== 'attendance'; });
+    var perStudent = students.map(function (s) {
+      var res = evals.map(function (ev) { return D.evalResult(ev, s.roll); }).filter(function (r) { return !r.absent; });
+      return { s: s, avg: res.length ? res.reduce(function (a, r) { return a + r.pct; }, 0) / res.length : null, weak: Wk.getWeakTopics(s.roll, state.subject) };
+    });
+    var evAvg = evals.map(function (ev) {
+      var ps = students.map(function (s) { return D.evalResult(ev, s.roll); }).filter(function (r) { return !r.absent; });
+      return { ev: ev, n: ps.length, avg: ps.length ? ps.reduce(function (a, r) { return a + r.pct; }, 0) / ps.length : null };
+    }).filter(function (x) { return x.n; });
+    var avgs = perStudent.filter(function (p) { return p.avg != null; });
+    cache[key] = {
+      students: students, evAvg: evAvg,
+      weakCount: perStudent.filter(function (p) { return p.weak.length; }).length,
+      classAvg: avgs.length ? avgs.reduce(function (a, p) { return a + p.avg; }, 0) / avgs.length : null,
+      groups: Wk.getClassWeakByTopic(state.cls, state.subject)
+    };
+    return cache[key];
+  }
+
+  function renderBody() {
+    var body = document.getElementById('class-body');
+    var cd = classData();
+    if (!cd.students.length) {
+      body.innerHTML = '<div class="empty"><b>No data for ' + esc(state.cls) + ' yet</b><span class="muted">Marks will appear here once this class\'s file is added.</span></div>';
+      return;
+    }
+    if (!cd.evAvg.length) {
+      body.innerHTML = '<div class="empty"><b>No ' + esc(state.subject) + ' marks yet</b><span class="muted">This subject will fill in once its marks file is added.</span></div>';
+      return;
+    }
+    var pctTxt = cd.classAvg == null ? '–' : Math.round(cd.classAvg * 100) + '%';
+    body.innerHTML =
+      '<div class="stats">' +
+        '<div class="stat"><b>' + cd.students.length + '</b><span>Students</span></div>' +
+        '<div class="stat is-red"><b>' + cd.weakCount + '</b><span>Weak in at least one topic</span></div>' +
+        '<div class="stat"><b>' + cd.evAvg.length + '</b><span>Evaluations recorded</span></div>' +
+        '<div class="stat"><b>' + pctTxt + '</b><span>Class average</span></div>' +
+      '</div>' +
+      '<div class="view-tabs" role="tablist" aria-label="Views">' +
+        '<button class="view-tab" role="tab" type="button" data-view="overview" aria-selected="' + (state.view === 'overview') + '">Class overview</button>' +
+        '<button class="view-tab" role="tab" type="button" data-view="report" aria-selected="' + (state.view === 'report') + '">Student report</button>' +
+      '</div><div id="view"></div>';
+    body.querySelector('.view-tabs').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-view]'); if (!b) return;
+      state.view = b.getAttribute('data-view'); writeHash(); renderBody();
+    });
+    if (state.view === 'report') renderReport(cd); else renderOverview(cd);
+  }
+
+  /* ---------------- class overview ---------------- */
+  function renderOverview(cd) {
+    var cut = D.getSettings().weakCutoff;
+    var acc = cd.groups.length ? cd.groups.map(function (g, i) {
+      var open = state.open === i;
+      return '<div class="acc-item"><button class="acc-btn" type="button" data-acc="' + i + '" aria-expanded="' + open + '">' +
+        '<span><span class="t">' + esc(g.subtopic) + '</span><span class="m">' + esc(g.module + ' · ' + g.topic) + '</span></span>' +
+        '<span style="display:flex;align-items:center;gap:12px"><span class="badge badge-red">' + g.students.length + (g.students.length === 1 ? ' student' : ' students') + '</span>' + P.ICONS.chevron + '</span></button>' +
+        (open ? '<div class="acc-body">' + g.students.map(function (s) {
+          return '<button class="chip" type="button" data-roll="' + esc(s.roll) + '"><span>' + esc(s.name) + '</span><b>' + Math.round(s.pct * 100) + '%</b></button>';
+        }).join('') + '</div>' : '') + '</div>';
+    }).join('') : '<p class="muted">No weak topics in this class. Everyone is at or above ' + Math.round(cut * 100) + '%.</p>';
+    var bars = cd.evAvg.map(function (x) {
+      var weak = x.avg < cut, p = Math.round(x.avg * 100);
+      return '<div class="bar-row"><div class="bar-label' + (weak ? ' is-weak' : '') + '"><span>' + esc(x.ev.name) + '</span><b>' + p + '%</b></div>' +
+        '<div class="bar' + (weak ? ' is-weak' : '') + '"><span style="width:' + Math.max(p, 2) + '%"></span></div></div>';
+    }).join('');
+    document.getElementById('view').innerHTML =
+      '<div class="row">' +
+        '<section class="panel col-main" aria-labelledby="wk-h"><div style="margin-bottom:12px"><h2 id="wk-h">Weak students by topic</h2>' +
+          '<p class="small muted mt-8">Below ' + Math.round(cut * 100) + '% in the latest evaluation of that topic. Tap a name to open their report.</p></div>' + acc + '</section>' +
+        '<section class="panel col-side" aria-labelledby="av-h"><h2 id="av-h" style="margin-bottom:18px">Class average by evaluation</h2>' + bars + '</section>' +
+      '</div>';
+    var v = document.getElementById('view');
+    v.onclick = function (e) {
+      var a = e.target.closest('[data-acc]');
+      if (a) { var i = +a.getAttribute('data-acc'); state.open = state.open === i ? -1 : i; renderOverview(cd); return; }
+      var c = e.target.closest('[data-roll]');
+      if (c) { state.roll = c.getAttribute('data-roll'); state.view = 'report'; state.showAllTopics = false; writeHash(); renderBody(); window.scrollTo({ top: 0 }); }
+    };
+  }
+
+  /* ---------------- student report ---------------- */
+  function renderReport(cd) {
+    var cut = D.getSettings().weakCutoff;
+    if (!cd.students.some(function (s) { return s.roll === state.roll; })) state.roll = cd.students[0].roll;
+    writeHash();
+    var rec = D.getStudentRecord(state.roll, state.subject);
+    var s = rec.student;
+    var topics = Wk.getTopicScores(s.roll, state.subject).sort(Wk.sortWeakest);
+    var weakN = topics.filter(function (t) { return t.weak; }).length;
+    var SHOW = Math.max(8, weakN);
+    var psych = D.getPsychProfile(s.roll);
+    var options = cd.students.map(function (x) {
+      return '<option value="' + esc(x.roll) + '"' + (x.roll === s.roll ? ' selected' : '') + '>' + esc(x.name) + '</option>';
+    }).join('');
+
+    var marksRows = rec.evaluations.map(function (e) {
+      var val = e.absent ? '<span class="badge badge-muted">Absent</span>' :
+        '<b>' + P.fmtNum(e.display) + '</b><span class="muted"> / ' + e.max + '</span>' + (e.partial ? ' <span class="badge badge-muted">part absent</span>' : '');
+      return '<tr><td>' + esc(e.name) + '</td><td class="date">' + esc(P.fmtDate(e.date)) + '</td><td class="num">' + val + '</td></tr>';
+    }).join('');
+
+    var topicRows = topics.length ? topics.map(function (t, i) {
+      var p = Math.round(t.pct * 100);
+      return '<div class="bar-row' + (i >= SHOW ? ' extra' : '') + '"' + (i >= SHOW && !state.showAllTopics ? ' data-extra hidden' : '') + '>' +
+        '<div class="bar-label' + (t.weak ? ' is-weak' : '') + '"><span>' + esc(t.subtopic) + '</span><b>' + p + '%' + (t.weak ? ' · weak' : '') + '</b></div>' +
+        '<div class="bar' + (t.weak ? ' is-weak' : '') + '"><span style="width:' + Math.max(p, 2) + '%"></span></div></div>';
+    }).join('') + (topics.length > SHOW ? '<button class="btn btn-ghost btn-sm mt-8 no-print" type="button" id="more-topics" style="margin-top:16px">' +
+      (state.showAllTopics ? 'Show fewer' : 'Show all ' + topics.length + ' topics') + '</button>' : '') : '<p class="muted">No topic data yet.</p>';
+
+    var psychHtml = psych.taken ? psych.scales.map(function (sc) {
+      var w = sc.max ? Math.round((sc.score - sc.min) / (sc.max - sc.min) * 100) : 0;
+      return '<div style="padding:14px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px">' +
+        '<div class="bar-label"><span style="font-size:15px;font-weight:400">' + esc(sc.label) + '</span><span class="badge badge-accent">' + esc(sc.score + ' / ' + sc.max) + '</span></div>' +
+        '<div class="bar"><span style="width:' + Math.max(w, 2) + '%"></span></div>' +
+        '<span class="small muted" style="line-height:1.55">' + esc(sc.description) + '</span>' +
+        '<span class="small" style="line-height:1.55">' + esc(sc.tip) + '</span></div>';
+    }).join('') : '<div class="note-card"><span class="body">Not taken yet.</span></div>';
+
+    var fbHtml = rec.feedback.length ? rec.feedback.map(function (f) {
+      return '<div class="note-card"><span class="meta">' + esc(P.fmtDate(f.date) + ' · ' + f.by + (f.topic ? ' · ' + f.topic : '')) + '</span><span class="body">' + esc(f.comment) + '</span></div>';
+    }).join('') : '<p class="muted">No feedback yet.</p>';
+
+    document.getElementById('view').innerHTML =
+      '<div class="print-only" style="margin-bottom:16px"><h1 style="font-size:20pt">' + esc(s.name) + '</h1>' +
+        '<p class="muted">' + esc(s.roll + ' · ' + s.cls + ' · ' + state.subject + ' · Report generated ' + P.fmtDate(new Date().toISOString().slice(0, 10)) + ' ' + new Date().getFullYear()) + '</p>' +
+        '<p class="muted small">PSY:KOS first-year learning support · Weak = below ' + Math.round(cut * 100) + '% · ' + weakN + ' weak topic' + (weakN === 1 ? '' : 's') + '</p></div>' +
+      '<div class="stack">' +
+        '<div class="row no-print" style="align-items:center;justify-content:space-between;gap:18px">' +
+          '<div style="display:flex;align-items:center;gap:16px">' +
+            '<div style="width:60px;height:60px;border-radius:20px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;flex:none">' + esc(P.initials(s.name)) + '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:4px;min-width:0"><label for="pick" class="sr-only">Choose student</label>' +
+              '<select id="pick" style="border:0;background:transparent;color:var(--text);font-size:26px;font-weight:500;padding:0;max-width:100%">' + options + '</select>' +
+              '<span class="muted" style="font-size:14px">' + esc(s.roll + ' · ' + s.cls + ' · ' + state.subject) + '</span></div></div>' +
+          '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+            '<button class="btn btn-ghost" type="button" id="go-fb">Add feedback</button>' +
+            '<button class="btn" type="button" id="pdf">' + P.ICONS.download + 'Download PDF report</button></div>' +
+        '</div>' +
+        '<section class="panel" aria-labelledby="g-h"><div class="panel-head"><h2 id="g-h">Performance over the semester</h2>' +
+          '<span class="small muted">% of maximum · dashed line is the ' + Math.round(cut * 100) + '% cut-off</span></div>' +
+          '<div class="graph table-wrap">' + PsyCharts.performanceGraph(rec.evaluations, cut, s.name) + '</div></section>' +
+        '<div class="row">' +
+          '<section class="panel col-side" style="flex:1 1 300px" aria-labelledby="m-h"><h2 id="m-h" style="margin-bottom:6px">Marks by evaluation</h2>' +
+            '<div class="table-wrap"><table class="marks"><tbody>' + marksRows + '</tbody></table></div></section>' +
+          '<section class="panel col-side" style="flex:1 1 300px" aria-labelledby="t-h"><div class="panel-head"><h2 id="t-h">Topics</h2><span class="small muted">Weakest first</span></div>' + topicRows + '</section>' +
+        '</div>' +
+        '<div class="row">' +
+          '<section class="panel col-side" style="flex:1 1 300px" aria-labelledby="p-h"><h2 id="p-h">Psychological profile</h2>' +
+            '<p class="small muted" style="margin:6px 0 10px">Self-reported questionnaire. Placeholder until the counsellor finalises the tests. Not a diagnosis.</p>' + psychHtml + '</section>' +
+          '<section class="panel col-side" style="flex:1 1 300px" aria-labelledby="f-h"><h2 id="f-h" style="margin-bottom:14px">Feedback</h2><div id="fb-list">' + fbHtml + '</div>' +
+            '<div class="field no-print" style="margin-top:16px"><label for="fb-topic">Topic (optional)</label><input id="fb-topic" class="input" list="topic-list" placeholder="For example, Subject-verb agreement">' +
+            '<datalist id="topic-list">' + topics.map(function (t) { return '<option value="' + esc(t.subtopic) + '">'; }).join('') + '</datalist></div>' +
+            '<div class="field no-print" style="margin-top:12px"><label for="fb">New feedback</label><textarea id="fb" class="textarea" rows="3" placeholder="Write a note the student will see"></textarea></div>' +
+            '<div class="no-print" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-ink btn-sm" type="button" id="save-fb">Save feedback</button>' +
+            '<span class="small muted" id="fb-msg" aria-live="polite"></span></div></section>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('pick').addEventListener('change', function (e) { state.roll = e.target.value; state.showAllTopics = false; renderReport(cd); });
+    document.getElementById('pdf').addEventListener('click', function () {
+      document.querySelectorAll('[data-extra]').forEach(function (el) { el.hidden = false; });
+      var t = document.title; document.title = 'PSY:KOS report ' + s.roll + ' ' + s.name;
+      window.print();
+      document.title = t;
+      if (!state.showAllTopics) document.querySelectorAll('[data-extra]').forEach(function (el) { el.hidden = true; });
+    });
+    document.getElementById('go-fb').addEventListener('click', function () { var f = document.getElementById('fb'); f.scrollIntoView({ behavior: 'smooth', block: 'center' }); f.focus({ preventScroll: true }); });
+    var more = document.getElementById('more-topics');
+    if (more) more.addEventListener('click', function () { state.showAllTopics = !state.showAllTopics; renderReport(cd); });
+    document.getElementById('save-fb').addEventListener('click', function () {
+      var txt = document.getElementById('fb').value.trim();
+      var msg = document.getElementById('fb-msg');
+      if (!txt) { msg.textContent = 'Write a note first.'; return; }
+      D.addFeedback(s.roll, me.id, document.getElementById('fb-topic').value.trim(), txt);
+      renderReport(cd);
+      document.getElementById('fb-msg').textContent = 'Saved on this device for the demo.';
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Never publish the real-to-demo mapping or any raw data
+PRIVATE*
+*private*
+raw/
+.DS_Store

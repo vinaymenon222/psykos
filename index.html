@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PSY:KOS · Sign in</title>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="assets/logo-light.png">
+</head>
+<body class="landing">
+<header class="site-header" id="site-header"></header>
+
+<main id="main" class="wrap">
+  <div class="cards">
+    <section class="role-card" aria-labelledby="fac-h">
+      <div class="role-ic" id="fac-ic"></div>
+      <h1 id="fac-h">Faculty dashboard</h1>
+      <div class="actions" id="fac-actions"></div>
+    </section>
+    <section class="role-card" aria-labelledby="stu-h">
+      <div class="role-ic gold" id="stu-ic"></div>
+      <h1 id="stu-h">Student dashboard</h1>
+      <div class="actions">
+        <label for="stu" class="sr-only">Choose a student</label>
+        <select id="stu" class="select"><option>Loading…</option></select>
+        <button id="stu-go" class="btn btn-ink" type="button"><span>Open dashboard</span></button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">Demo · sign-in is simulated and all names are invented</footer>
+
+<script src="vendor/xlsx.mini.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/data.js"></script>
+<script>
+(function () {
+  var P = Psy, D = PsyData;
+  P.renderHeader({});
+  document.getElementById('fac-ic').innerHTML = P.ICONS.chart;
+  document.getElementById('stu-ic').innerHTML = P.ICONS.book;
+  document.getElementById('stu-go').insertAdjacentHTML('beforeend', P.ICONS.arrow);
+  D.signOut();
+  D.load().then(function () {
+    var fa = document.getElementById('fac-actions');
+    fa.innerHTML = D.listFaculty().map(function (f) {
+      var cls = D.getClassesForFaculty(f.id);
+      var label = D.listFaculty().length > 1 ? f.name : 'Open ' + (cls[0] ? cls[0].cls : 'dashboard');
+      return '<button class="btn" type="button" data-fid="' + P.esc(f.id) + '"><span>' + P.esc(label) + '</span>' + P.ICONS.arrow + '</button>';
+    }).join('');
+    fa.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-fid]');
+      if (!b) return;
+      D.setCurrentUser({ role: 'faculty', id: b.getAttribute('data-fid') });
+      location.href = 'mentor.html';
+    });
+    var sel = document.getElementById('stu');
+    sel.innerHTML = '<option value="">Select your name</option>' + D.listStudents().slice()
+      .sort(function (a, b) { return a.name < b.name ? -1 : 1; })
+      .map(function (s) { return '<option value="' + P.esc(s.roll) + '">' + P.esc(s.name + ' · ' + s.roll) + '</option>'; }).join('');
+    document.getElementById('stu-go').addEventListener('click', function () {
+      if (!sel.value) { sel.focus(); return; }
+      D.setCurrentUser({ role: 'student', id: sel.value });
+      location.href = 'student.html';
+    });
+  }).catch(function (err) { P.showError(err.message + '. If you opened this file directly, run it from a web server or GitHub Pages.'); });
+})();
+</script>
+</body>
+</html>

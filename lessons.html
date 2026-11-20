@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PSY:KOS · Lesson library</title>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="assets/logo-light.png">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<main id="main" class="wrap stack" style="padding-bottom:56px">
+  <nav class="crumbs" aria-label="Breadcrumb" id="crumbs"></nav>
+  <h1 id="title" style="font-size:clamp(28px,4.5vw,38px);font-weight:400;letter-spacing:-0.02em">Lesson library</h1>
+  <div id="content"></div>
+</main>
+
+<script src="vendor/xlsx.mini.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/data.js"></script>
+<script>
+(function () {
+  'use strict';
+  var P = Psy, D = PsyData, esc = P.esc;
+  var SUBJECTS = ['English', 'Mathematics'];
+
+  D.load().then(function () {
+    var u = D.getCurrentUser();
+    var back = u ? (u.role === 'faculty' ? 'mentor.html' : 'student.html') : 'index.html';
+    P.renderHeader({ backHref: back, backLabel: u ? 'My dashboard' : 'Home', homeHref: back });
+    window.addEventListener('hashchange', route);
+    route();
+  }).catch(function (err) { P.showError(err.message); });
+
+  function crumbs(parts) {
+    document.getElementById('crumbs').innerHTML = parts.map(function (p, i) {
+      return i === parts.length - 1 ? '<b>' + esc(p[0]) + '</b>' : '<a href="' + esc(p[1]) + '">' + esc(p[0]) + '</a><span aria-hidden="true">›</span>';
+    }).join(' ');
+  }
+
+  function modulesOf(subject) {
+    var mods = [], seen = {};
+    D.getTopicMap(subject).forEach(function (t) {
+      if (!seen[t.moduleNo]) { seen[t.moduleNo] = { no: t.moduleNo, name: t.module, rows: [] }; mods.push(seen[t.moduleNo]); }
+      seen[t.moduleNo].rows.push(t);
+    });
+    return mods;
+  }
+
+  function route() {
+    var parts = decodeURIComponent(location.hash.slice(1)).split('/').filter(Boolean);
+    var subject = parts[0], modNo = parts[1];
+    var title = document.getElementById('title'), content = document.getElementById('content');
+    window.scrollTo({ top: 0 });
+
+    if (!subject || SUBJECTS.indexOf(subject) < 0) {
+      crumbs([['Home', '#']]);
+      title.textContent = 'Lesson library';
+      content.innerHTML = '<div class="tile-grid">' + SUBJECTS.map(function (s) {
+        var mods = modulesOf(s), n = D.getTopicMap(s).filter(function (t) { return t.lesson; }).length;
+        return '<a class="tile" href="#' + esc(s) + '"><span class="k">Subject</span><span class="n">' + esc(s) + '</span>' +
+          '<span class="c">' + (mods.length ? mods.length + ' modules · ' + n + ' lesson' + (n === 1 ? '' : 's') + ' ready' : 'Lessons coming soon') + '</span></a>';
+      }).join('') + '</div>';
+      return;
+    }
+
+    var mods = modulesOf(subject);
+    if (!modNo) {
+      crumbs([['Home', '#'], [subject, '#' + subject]]);
+      title.textContent = subject;
+      if (!mods.length) { content.innerHTML = '<div class="empty"><b>No ' + esc(subject) + ' lessons yet</b><span class="muted">They will appear here once the syllabus and lessons are added.</span></div>'; return; }
+      content.innerHTML = '<div class="tile-grid">' + mods.map(function (m) {
+        var n = m.rows.filter(function (t) { return t.lesson; }).length;
+        return '<a class="tile" href="#' + esc(subject + '/' + m.no) + '"><span class="k">Module ' + esc(m.no) + '</span><span class="n">' + esc(m.name) + '</span>' +
+          '<span class="c">' + m.rows.length + ' topics · ' + (n ? n + ' lesson' + (n === 1 ? '' : 's') + ' ready' : 'lessons coming soon') + '</span></a>';
+      }).join('') + '</div>';
+      return;
+    }
+
+    var mod = mods.filter(function (m) { return m.no === modNo; })[0];
+    if (!mod) { location.hash = subject; return; }
+    crumbs([['Home', '#'], [subject, '#' + subject], ['Module ' + mod.no, '#' + subject + '/' + mod.no]]);
+    title.textContent = 'Module ' + mod.no + ': ' + mod.name;
+    var groups = [], seen = {};
+    mod.rows.forEach(function (t) { if (!seen[t.topic]) { seen[t.topic] = []; groups.push(t.topic); } seen[t.topic].push(t); });
+    content.innerHTML = groups.map(function (g) {
+      return '<section style="margin-bottom:24px"><h2 style="font-size:18px;margin:0 0 12px">' + esc(g) + '</h2><div class="list">' +
+        seen[g].map(function (t) {
+          return '<div class="list-row"><span class="t">' + esc(t.subtopic) + '</span>' +
+            (t.lesson ? '<a class="btn btn-sm" href="' + esc(t.lesson) + '">Open lesson</a>' : '<span class="badge badge-muted">Coming soon</span>') + '</div>';
+        }).join('') + '</div></section>';
+    }).join('');
+  }
+})();
+</script>
+</body>
+</html>

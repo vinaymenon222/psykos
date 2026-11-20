@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PSY:KOS · My Learning</title>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="assets/logo-light.png">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<main id="main" class="wrap" style="padding-bottom:56px;display:flex;flex-direction:column;gap:40px">
+  <div class="row" style="align-items:flex-end;justify-content:space-between;gap:16px">
+    <div>
+      <h1 id="hello" style="font-size:clamp(30px,5vw,42px);font-weight:400;letter-spacing:-0.02em">Hello</h1>
+      <p id="sub" class="muted" style="font-size:15px;margin-top:6px"></p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap" id="top-links"></div>
+  </div>
+
+  <section id="start" aria-labelledby="start-h" style="display:flex;flex-direction:column;gap:16px;scroll-margin-top:16px">
+    <div>
+      <h2 id="start-h" style="font-size:22px">Start here</h2>
+      <p class="muted" style="font-size:14px;margin-top:4px">Topics to revisit from your latest marks, weakest first</p>
+    </div>
+    <div id="topics"></div>
+  </section>
+
+  <div class="row">
+    <div class="col-main stack">
+      <section class="panel" aria-labelledby="marks-h">
+        <div class="panel-head" style="align-items:center"><h2 id="marks-h" style="font-size:22px">My marks</h2>
+          <div class="seg" role="group" aria-label="Subject" id="subject-seg"></div></div>
+        <div id="marks"></div>
+      </section>
+      <section class="panel" aria-labelledby="fb-h">
+        <h2 id="fb-h" style="font-size:22px;margin-bottom:14px">Feedback</h2>
+        <div id="feedback"></div>
+      </section>
+    </div>
+    <section class="panel col-side" aria-labelledby="req-h">
+      <h2 id="req-h" style="font-size:22px;margin-bottom:16px">Ask for a one-to-one</h2>
+      <form id="req" class="stack" style="gap:12px" novalidate>
+        <div class="field"><label for="to">With</label><select id="to" class="select"></select></div>
+        <div class="field"><label for="topic">Topic</label><input id="topic" class="input" list="topic-list" placeholder="For example, listening" autocomplete="off"><datalist id="topic-list"></datalist></div>
+        <div class="field"><label for="msg">Message</label><textarea id="msg" class="textarea" rows="4" placeholder="What would you like help with?"></textarea></div>
+        <button class="btn" type="submit" style="height:50px">Send request</button>
+        <p class="small muted" id="req-note">Opens your email with the request filled in.</p>
+      </form>
+    </section>
+  </div>
+</main>
+
+<div class="notice-layer" id="notice-layer" hidden>
+  <div class="notice" role="status">
+    <div class="ic" id="notice-ic"></div>
+    <div class="txt"><span id="notice-txt"></span><a class="btn btn-sm" href="#start" id="notice-go" style="align-self:flex-start">Show me</a></div>
+    <button class="close" type="button" id="notice-x" aria-label="Dismiss"></button>
+  </div>
+</div>
+
+<script src="vendor/xlsx.mini.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/data.js"></script>
+<script src="js/weak.js"></script>
+<script>
+(function () {
+  'use strict';
+  var P = Psy, D = PsyData, Wk = PsyWeak, esc = P.esc;
+  var me, subject = 'English';
+
+  D.load().then(function () {
+    me = D.getCurrentUser();
+    if (!me || me.role !== 'student') { location.replace('index.html'); return; }
+    P.renderHeader({ who: me.name, signOut: true });
+    document.getElementById('hello').textContent = 'Hello, ' + me.name.split(' ')[0];
+    document.getElementById('sub').textContent = me.id + ' · ' + me.cls;
+    document.getElementById('top-links').innerHTML =
+      '<a class="btn btn-ghost" href="lessons.html">' + P.ICONS.book + 'Lesson library</a>';
+    renderTopics();
+    renderMarks();
+    renderFeedback();
+    renderRequest();
+    showNotice();
+  }).catch(function (err) { P.showError(err.message); });
+
+  /* Only English has marks so far; any subject added to Classes shows up in the toggle. */
+  function subjects() { return D.getSubjectsForClass(me.cls); }
+
+  function renderTopics() {
+    var pops = Wk.getPopups(me.id, 'English');
+    var el = document.getElementById('topics');
+    if (!pops.length) {
+      el.innerHTML = '<div class="all-clear"><b style="font-weight:500">Nothing to revisit right now.</b> <span class="muted">You are at or above the mark in every topic so far. The lesson library is open for anything you want to explore.</span></div>';
+      return;
+    }
+    el.innerHTML = '<div class="topic-strip">' + pops.map(function (t) {
+      var action = t.lesson ? '<a class="btn" href="' + esc(t.lesson) + '">Open lesson</a>' : '<span class="soon">Lesson coming soon</span>';
+      return '<div class="topic-card"><span class="mod"><span class="dot" aria-hidden="true"></span>' + esc((t.module ? t.module + ' · ' : '') + t.topic) + '</span>' +
+        '<span class="name">' + esc(t.subtopic) + '</span>' + action + '</div>';
+    }).join('') + '</div>';
+  }
+
+  function renderMarks() {
+    var seg = document.getElementById('subject-seg');
+    seg.innerHTML = subjects().map(function (s) {
+      return '<button type="button" data-sub="' + esc(s) + '" aria-pressed="' + (s === subject) + '">' + esc(s === 'Mathematics' ? 'Math' : s) + '</button>';
+    }).join('');
+    seg.onclick = function (e) { var b = e.target.closest('[data-sub]'); if (b) { subject = b.getAttribute('data-sub'); renderMarks(); } };
+    var rec = D.getStudentRecord(me.id, subject);
+    var el = document.getElementById('marks');
+    if (!rec.evaluations.length) { el.innerHTML = '<p class="muted" style="padding:12px 0">No ' + esc(subject) + ' marks yet.</p>'; return; }
+    el.innerHTML = '<div class="table-wrap"><table class="marks"><thead><tr><th>Evaluation</th><th>Date</th><th class="num">Marks</th></tr></thead><tbody>' +
+      rec.evaluations.map(function (e) {
+        var val = e.absent ? '<span class="muted">Absent</span>' :
+          '<b>' + P.fmtNum(e.display) + '</b><span class="muted"> / ' + e.max + '</span>';
+        return '<tr><td>' + esc(e.name) + '</td><td class="date">' + esc(P.fmtDate(e.date)) + '</td><td class="num">' + val + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function renderFeedback() {
+    var fb = D.getFeedback(me.id);
+    document.getElementById('feedback').innerHTML = fb.length ? fb.map(function (f) {
+      return '<div class="note-card"><span class="meta">' + esc(P.fmtDate(f.date) + ' · ' + f.by + (f.topic ? ' · ' + f.topic : '')) + '</span><span class="body">' + esc(f.comment) + '</span></div>';
+    }).join('') : '<p class="muted">No feedback yet. Your teachers\' notes will appear here.</p>';
+  }
+
+  function renderRequest() {
+    var contacts = D.getContacts(me.id);
+    document.getElementById('to').innerHTML = contacts.map(function (c, i) { return '<option value="' + i + '">' + esc(c.label) + '</option>'; }).join('');
+    document.getElementById('topic-list').innerHTML = D.getTopicMap('English').map(function (t) { return '<option value="' + esc(t.subtopic) + '">'; }).join('');
+    document.getElementById('req').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var c = contacts[+document.getElementById('to').value];
+      var topic = document.getElementById('topic').value.trim() || 'General';
+      var msg = document.getElementById('msg').value.trim();
+      var subj = 'One-to-one session request: ' + topic;
+      var body = 'Hello,\n\nI would like a one-to-one session on ' + topic + '.\n\n' + (msg ? msg + '\n\n' : '') + 'Thank you,\n' + me.name + '\n' + me.id + ', ' + me.cls;
+      document.getElementById('req-note').textContent = 'Opening your email app. Send the email from there to finish.';
+      location.href = 'mailto:' + encodeURIComponent(c.email) + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
+    });
+  }
+
+  function showNotice() {
+    var n = Wk.getPopups(me.id, 'English').length;
+    if (!n) return;
+    var key = 'psykos-notice-' + me.id;
+    try { if (sessionStorage.getItem(key)) return; } catch (e) { /* show it anyway */ }
+    document.getElementById('notice-ic').innerHTML = P.ICONS.bell;
+    document.getElementById('notice-x').innerHTML = P.ICONS.close;
+    document.getElementById('notice-txt').textContent = 'You have ' + n + ' topic' + (n === 1 ? '' : 's') + ' to revisit';
+    var layer = document.getElementById('notice-layer');
+    layer.hidden = false;
+    function close() { layer.hidden = true; try { sessionStorage.setItem(key, '1'); } catch (e) { /* ignore */ } }
+    document.getElementById('notice-x').addEventListener('click', close);
+    document.getElementById('notice-go').addEventListener('click', close);
+  }
+})();
+</script>
+</body>
+</html>

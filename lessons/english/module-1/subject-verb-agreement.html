@@ -1,0 +1,808 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><title>Subject-verb agreement · PSY:KOS lesson</title><script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+
+
+
+<style>
+/* Layout: sticky nav, hero with a live singular/plural demo, a two-column rules workspace
+   (ordered rail + rule panel with practice), then the adaptive test and a remarks report. */
+:root, :root[data-theme="dark"] {
+  --bg: #141813; --surface: #1D221C; --ink: #EEE8DC; --muted: #A7AE9F; --line: #30382E;
+  --accent: #A3BC8E; --on-accent: #141813;
+  --subj-bg: #2B3A27; --subj-ink: #D3E6C2; --verb-bg: #3D3420; --verb-ink: #F0D08A;
+  --ok-bg: #24361F; --ok-ink: #CFE8BC; --bad-bg: #3F241D; --bad-ink: #F4C1B1;
+  --warn-bg: #3A3018; --warn-ink: #F0D08A; --warn-line: #D9A73E;
+  --good: #A3BC8E; --badmark: #E58A6E;
+  --l1: #24361F; --l2: #26302F; --l3: #333024; --l4: #3D3420; --l5: #3F241D;
+  --display: "Lexend", system-ui, sans-serif; --body: "Lexend", system-ui, sans-serif; color-scheme: dark; }
+:root[data-theme="light"] {
+  --bg: #F1ECE2; --surface: #FBF8F2; --ink: #1E281D; --muted: #5A6454; --line: #E3DBCB;
+  --accent: #4E6A44; --on-accent: #FBF8F2;
+  --subj-bg: #E3EBDA; --subj-ink: #2F4729; --verb-bg: #F3E6C6; --verb-ink: #6B4F12;
+  --ok-bg: #E3EBDA; --ok-ink: #2F4729; --bad-bg: #F4DDD5; --bad-ink: #8A3220;
+  --warn-bg: #F6EBCF; --warn-ink: #6B4F12; --warn-line: #B7862A;
+  --good: #4E6A44; --badmark: #B0432D;
+  --l1: #E3EBDA; --l2: #E3E9E5; --l3: #ECE6D6; --l4: #F3E6C6; --l5: #F4DDD5;
+  --display: "Lexend", system-ui, sans-serif; --body: "Lexend", system-ui, sans-serif; color-scheme: light; }
+
+
+
+* { box-sizing: border-box; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 1080px; margin: 0 auto; }
+h1, h2, h3, h4 { font-family: var(--display); line-height: 1.2; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding-block: 10px; display: flex; gap: 8px; overflow-x: auto; }
+.nav a { white-space: nowrap; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); padding: 6px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+.nav a:hover { border-color: var(--accent); }
+
+/* tokens for sentences */
+.s { background: var(--subj-bg); color: var(--subj-ink); font-weight: 600; padding: 0 5px; border-radius: 4px; border-bottom: 2px solid var(--subj-ink); }
+.v { background: var(--verb-bg); color: var(--verb-ink); font-weight: 600; padding: 0 5px; border-radius: 4px; border-bottom: 2px dotted var(--verb-ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--muted); align-items: center; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; align-items: center; padding-block: 28px 12px; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.hero h1 { font-size: clamp(2.1rem, 5.5vw, 3.4rem); font-weight: 700; letter-spacing: -.02em; }
+.hero .lead { margin-top: 14px; color: var(--muted); font-size: 1.08rem; max-width: 52ch; }
+.plan { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; max-width: 52ch; }
+.plan li { display: flex; gap: 12px; align-items: baseline; }
+.plan b { font-family: var(--display); color: var(--accent); min-width: 1.4em; }
+.demo { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 14px; }
+.demo .tag { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.demo-s { font-size: 1.35rem; font-weight: 500; line-height: 1.9; }
+.demo-n { color: var(--muted); font-size: .95rem; min-height: 3em; }
+
+.btn { background: var(--accent); color: var(--on-accent); border: 0; border-radius: 8px; padding: 10px 20px; font-weight: 600; justify-self: start; }
+.btn:hover { filter: brightness(1.1); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn.ghost:hover { border-color: var(--accent); filter: none; }
+.btn-sm { background: var(--ink); color: var(--bg); border: 0; border-radius: 6px; padding: 5px 12px; font-weight: 600; font-size: 14px; }
+
+section { padding-top: 48px; scroll-margin-top: 56px; }
+.sec-head { display: grid; gap: 6px; margin-bottom: 18px; }
+.sec-head h2 { font-size: clamp(1.5rem, 3.6vw, 2.1rem); font-weight: 700; }
+.sec-head p { color: var(--muted); max-width: 66ch; }
+
+/* rules workspace */
+.rules-wrap { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 60px); display: grid; gap: 6px; }
+.rb { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.rb:hover { border-color: var(--accent); }
+.rb[aria-current="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.rn { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-family: var(--display); font-weight: 700; color: var(--ink); }
+.rt { font-size: 14px; font-weight: 500; line-height: 1.3; }
+.rs { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rb.done .rs { color: var(--good); font-weight: 700; }
+.rail-note { font-size: 13px; color: var(--muted); padding: 2px 4px 6px; }
+.l1 { background: var(--l1); } .l2 { background: var(--l2); } .l3 { background: var(--l3); } .l4 { background: var(--l4); } .l5 { background: var(--l5); }
+.lvlpill { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 6px; color: var(--ink); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(16px, 3vw, 28px); display: grid; gap: 18px; min-width: 0; }
+.panel h3 { font-size: 1.5rem; }
+.r-text { font-size: 1.05rem; }
+.check { background: var(--bg); border-radius: 10px; padding: 12px 16px; font-size: .97rem; }
+.check b { display: block; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+.panel h4 { font-size: 1.05rem; }
+.ex { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ex li { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; overflow-wrap: anywhere; }
+.dom { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.ex p { font-size: 1.05rem; line-height: 1.8; }
+.pr-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+.pr-score { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); }
+.pr-list { display: grid; gap: 10px; }
+.pr-sum { border-radius: 10px; padding: 12px 16px; background: var(--ok-bg); color: var(--ok-ink); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; font-weight: 600; }
+.pr-sum.low { background: var(--warn-bg); color: var(--warn-ink); }
+.pr-sum .btn { background: var(--ink); color: var(--bg); }
+.pnav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 16px; }
+
+/* question */
+.q { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; background: var(--surface); }
+.q-text { font-size: 1.08rem; font-weight: 500; }
+.q-text .num { font-family: var(--display); color: var(--accent); font-weight: 700; margin-right: 4px; }
+.blank { display: inline-block; min-width: 4.6ch; text-align: center; border-bottom: 3px solid var(--accent); padding: 0 6px; font-weight: 700; }
+.blank.ok { background: var(--ok-bg); color: var(--ok-ink); border-bottom-color: transparent; border-radius: 4px; }
+.blank.bad { background: var(--bad-bg); color: var(--bad-ink); border-bottom-color: transparent; border-radius: 4px; text-decoration: line-through; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt { background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 6px 20px; font-weight: 600; min-width: 84px; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.opt.ok { background: var(--ok-bg); color: var(--ok-ink); border-color: transparent; }
+.opt.ok::before { content: "\2713\00a0"; }
+.opt.bad { background: var(--bad-bg); color: var(--bad-ink); border-color: transparent; }
+.opt.bad::before { content: "\2715\00a0"; }
+.why { font-size: .93rem; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 8px 12px; }
+
+/* test */
+.t-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(16px, 3vw, 28px); display: grid; gap: 16px; }
+.t-card.intro ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.t-top { display: flex; flex-wrap: wrap; gap: 10px 20px; justify-content: space-between; align-items: center; }
+.t-count { font-weight: 600; font-variant-numeric: tabular-nums; }
+.meter { height: 8px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+.meter span { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+.lvbar { display: flex; gap: 4px; align-items: center; }
+.lvbar i { width: 28px; height: 10px; border-radius: 3px; background: var(--line); display: block; }
+.lvbar i.on { height: 14px; }
+.lvbar i.on.l1 { background: #7FA46B; } .lvbar i.on.l2 { background: #6E8F86; } .lvbar i.on.l3 { background: #A89452; } .lvbar i.on.l4 { background: #D9A73E; } .lvbar i.on.l5 { background: #E58A6E; }
+.lvl-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.fb { display: grid; gap: 10px; }
+.fb .res { padding: 12px 16px; border-radius: 10px; font-weight: 500; }
+.fb .res.ok { background: var(--ok-bg); color: var(--ok-ink); }
+.fb .res.bad { background: var(--bad-bg); color: var(--bad-ink); }
+.alert { background: var(--warn-bg); color: var(--warn-ink); border: 2px solid var(--warn-line); border-radius: 10px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.alert .btn-sm { background: var(--warn-ink); color: var(--warn-bg); }
+.fb-next { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.fb-next span { color: var(--muted); font-size: .93rem; }
+
+/* remarks */
+.scorebar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.tile { background: var(--bg); border-radius: 12px; padding: 14px 16px; }
+.tile b { display: block; font-family: var(--display); font-size: 1.9rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile span { font-size: 13px; color: var(--muted); }
+.chart { width: 100%; height: auto; display: block; }
+.chart .gl { stroke: var(--line); stroke-width: 1; }
+.chart .tx { fill: var(--muted); font: 12px var(--body); }
+.chart .ln { fill: none; stroke: var(--accent); stroke-width: 2; opacity: .7; }
+.chart .good { fill: var(--good); }
+.chart .miss { fill: var(--badmark); }
+.rem h3 { font-size: 1.2rem; margin-top: 8px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.pcard { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
+.pcard.problem { border-color: var(--badmark); }
+.pcard.watch { border-color: var(--warn-line); }
+.pcard h4 { font-size: 1.02rem; }
+.stat { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pcard.problem .stat { color: var(--badmark); }
+.pcard p { font-size: .94rem; color: var(--muted); }
+.pcard .btn-sm { justify-self: start; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--ok-bg); color: var(--ok-ink); padding: 4px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; }
+.chip.nr { background: var(--bg); color: var(--muted); }
+.rev { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.rev li { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: grid; gap: 4px; }
+.rev mark { background: var(--ok-bg); color: var(--ok-ink); padding: 0 5px; border-radius: 4px; font-weight: 700; }
+.rev small { color: var(--muted); font-size: 13px; }
+
+/* dialog */
+.overlay { position: fixed; inset: 0; z-index: 50; background: rgba(10, 14, 9, .6); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.dlg { background: var(--surface); color: var(--ink); border-radius: 16px; max-width: 680px; width: 100%; max-height: 100%; overflow: auto; padding: 24px; display: grid; gap: 16px; position: relative; }
+.dlg .x { position: absolute; top: 10px; right: 10px; background: var(--bg); border: 1px solid var(--line); width: 34px; height: 34px; border-radius: 8px; font-size: 18px; line-height: 1; }
+.dlg-foot { display: flex; flex-wrap: wrap; gap: 10px; }
+.dlg h3 { font-size: 1.4rem; padding-right: 36px; }
+.foot { margin-top: 48px; color: var(--muted); font-size: 14px; }
+
+
+/* ---- PSY:KOS lesson bar and look ---- */
+.psy-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 6px; }
+.psy-back { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 14px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 400; }
+.psy-back svg, .psy-theme svg { width: 18px; height: 18px; }
+.psy-theme { width: 44px; height: 44px; border-radius: 999px; border: 0; background: var(--surface); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; }
+.psy-sun { display: block; } .psy-moon { display: none; }
+:root[data-theme="light"] .psy-sun { display: none; } :root[data-theme="light"] .psy-moon { display: block; }
+body { font-weight: 300; }
+h1, h2, h3, h4 { font-weight: 500 !important; letter-spacing: -0.01em; }
+b, strong { font-weight: 500; }
+
+.nav a { border-radius: 999px; border: 0; font-weight: 400; }
+.demo, .panel, .t-card { border: 0; border-radius: 24px; }
+.btn { border-radius: 12px; font-weight: 500; }
+.rb { border: 0; border-radius: 14px; } .rb[aria-current="true"] { box-shadow: inset 0 0 0 2px var(--accent); }
+.q, .ex li, .pcard, .rev li { border-color: var(--line); border-radius: 16px; }
+.dlg { border-radius: 24px; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 20px; }
+  .rules-wrap { grid-template-columns: 1fr; }
+  .rail { position: static; display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+  .rail-note { display: none; }
+  .rb { grid-template-columns: 30px auto; flex: 0 0 auto; }
+  .rt { display: none; }
+  .rs { grid-column: 2; }
+}
+</style>
+
+<div class="wrap">
+  <div class="psy-bar"><a class="psy-back" href="../../../lessons.html#English/1"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>Lesson library</a><button class="psy-theme" type="button" id="psy-theme" aria-label="Switch theme"><svg class="psy-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="psy-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div>
+  <nav class="nav" aria-label="Page sections">
+    <a href="#top">Start here</a>
+    <a href="#rules">Rules and practice</a>
+    <a href="#test">Adaptive test</a>
+    <a href="#remarks" id="nav-remarks" hidden>My remarks</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <p class="eyebrow">English for engineers</p>
+      <h1>Subject-verb agreement</h1>
+      <p class="lead">A verb must match its subject in number. Reports, lab sheets and project documents all depend on it. Learn eleven rules, from the basic to the tricky, and then take a test that adapts to your answers.</p>
+      <ol class="plan">
+        <li><b>1</b><span>Read the rules in order. Each has three examples from science and engineering.</span></li>
+        <li><b>2</b><span>Do the five-sentence practice under each rule. Aim for 5 out of 5 before moving on.</span></li>
+        <li><b>3</b><span>Take the 25-statement test. Right answers make the next one harder, wrong answers make it easier.</span></li>
+        <li><b>4</b><span>Read your remarks to see exactly which rules to learn again.</span></li>
+      </ol>
+    </div>
+    <div class="demo">
+      <span class="tag">Try it</span>
+      <p class="demo-s" id="demo-s"></p>
+      <button class="btn" type="button" id="demo-b">Make the subject plural</button>
+      <p class="demo-n" id="demo-n" aria-live="polite"></p>
+      <div class="legend"><span><span class="s">Subject</span> solid underline</span><span><span class="v">Verb</span> dotted underline</span></div>
+    </div>
+  </header>
+
+  <section id="rules">
+    <div class="sec-head">
+      <h2>Rules and practice</h2>
+      <p>Choose a rule on the left, or use the Next button. The colours show the level, from Level 1 (basic) to Level 5 (expert). The same levels are used in the test.</p>
+    </div>
+    <div class="rules-wrap">
+      <div class="rail" id="rail" aria-label="Rules in order"></div>
+      <div id="rule-panel"></div>
+    </div>
+  </section>
+
+  <section id="test">
+    <div class="sec-head">
+      <h2>Adaptive test</h2>
+      <p>Twenty-five statements. The test moves you up or down a level after every answer.</p>
+    </div>
+    <div id="test-area"></div>
+  </section>
+
+  <section id="remarks" hidden>
+    <div class="sec-head">
+      <h2>Your remarks</h2>
+      <p>Based on the 25 statements you answered.</p>
+    </div>
+    <div class="t-card rem" id="remarks-body"></div>
+  </section>
+
+  <p class="foot">Style note: some usage varies between British and American English, especially with collective nouns. These rules follow standard formal technical writing.</p>
+</div>
+
+<div class="overlay" id="ov" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+    <button class="x" type="button" id="dlg-x" aria-label="Close">&times;</button>
+    <div id="dlg-body"></div>
+    <div class="dlg-foot">
+      <button class="btn" type="button" id="dlg-back">Back to the test</button>
+      <button class="btn ghost" type="button" id="dlg-go">Practise this rule</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  var LEVELS = ["", "Foundation", "Core", "Intermediate", "Advanced", "Expert"];
+
+  /* ---------------- rule content ---------------- */
+  var RULES = [
+    { id: 1, lvl: 1, title: "Singular subject, singular verb",
+      rule: "A singular subject takes a singular verb, and a plural subject takes a plural verb. In the present tense a singular verb usually ends in -s (runs, measures) or is is/has. A plural verb uses the base form (run, measure) or are/have.",
+      check: "Find the subject first. Ask: who or what does the action, and is it one thing or more than one?",
+      ex: [["Mechanical", "The [engine] {runs} at a constant speed."], ["Electronics", "The [sensors] {measure} the temperature every second."], ["Civil", "The [beams] {were} tested under heavy load."]],
+      pr: [["The generator ___ electricity from motion.", "produces", "produce", "Generator is singular, so the verb takes -s."],
+           ["Transistors ___ small signals.", "amplify", "amplifies", "Transistors is plural, so use the base form."],
+           ["The circuit ___ a fault in the wiring.", "has", "have", "Circuit is singular, so use has."],
+           ["The engineers ___ the design on Monday.", "review", "reviews", "Engineers is plural, so use the base form."],
+           ["This alloy ___ resistant to corrosion.", "is", "are", "Alloy is singular, so use is."]] },
+    { id: 2, lvl: 1, title: "Subjects joined by and",
+      rule: "Two or more subjects joined by and take a plural verb. There is one exception: when the two words name a single idea or unit, such as 'health and safety', use a singular verb.",
+      check: "Ask: are these two separate things, or one combined idea?",
+      ex: [["Electrical", "[Voltage] and [current] {determine} the power in a circuit."], ["Chemical", "The [pump] and the [valve] {are} inspected every month."], ["Civil", "[Health and safety] {is} a priority at every construction site."]],
+      pr: [["The motor and the gearbox ___ mounted on the same frame.", "are", "is", "Two subjects joined by and take a plural verb."],
+           ["Heat and pressure ___ the rate of the reaction.", "affect", "affects", "Heat and pressure are two things, so the verb is plural."],
+           ["Research and development ___ the largest department in our company.", "is", "are", "Research and development is one department, treated as a single unit."],
+           ["Both the voltmeter and the ammeter ___ calibrated before use.", "were", "was", "Two instruments joined by and take a plural verb."],
+           ["Mass and volume ___ needed to calculate density.", "are", "is", "Two quantities joined by and take a plural verb."]] },
+    { id: 3, lvl: 2, title: "Or, nor, either...or, neither...nor",
+      rule: "When subjects are joined by or, nor, either...or or neither...nor, the verb agrees with the subject nearest to it. For a smoother sentence, put the plural subject second.",
+      check: "Look only at the subject closest to the verb. Ignore the first one.",
+      ex: [["Chemical", "Either the [technician] or the [engineers] {are} responsible for the calibration."], ["Mechanical", "Neither the [sensors] nor the [controller] {was} damaged in the test."], ["Electrical", "A [fuse] or two [circuit breakers] {protect} the system."]],
+      pr: [["Either the pump or the valves ___ causing the leak.", "are", "is", "The nearest subject is valves, which is plural."],
+           ["Neither the students nor the instructor ___ surprised by the result.", "was", "were", "The nearest subject is instructor, which is singular."],
+           ["Neither the manager nor the engineers ___ satisfied with the prototype.", "were", "was", "The nearest subject is engineers, which is plural."],
+           ["Either the battery or the charger ___ faulty.", "is", "are", "The nearest subject is charger, which is singular."],
+           ["The wire or the connectors ___ to be replaced.", "need", "needs", "The nearest subject is connectors, which is plural."]] },
+    { id: 4, lvl: 2, title: "Words between the subject and the verb",
+      rule: "Phrases that sit between the subject and the verb, such as of the..., in the..., along with..., as well as... and together with..., do not change the subject. Find the main noun, ignore the phrase, and match the verb to the main noun.",
+      check: "Cross out the phrase in your head, then match the verb to the noun that is left.",
+      ex: [["Computer", "The [list] of required components {is} attached to the report."], ["Mechanical", "The [motor], along with its two controllers, {was} replaced yesterday."], ["Chemical", "The [temperatures] inside the furnace {exceed} 1,000 °C."]],
+      pr: [["The bank of capacitors ___ fully charged.", "is", "are", "The subject is bank (singular). Of capacitors is only a phrase."],
+           ["The readings from the thermometer ___ consistent.", "are", "is", "The subject is readings (plural)."],
+           ["The professor, together with her students, ___ visiting the plant.", "is", "are", "Together with does not make the subject plural. The subject is professor."],
+           ["The speed of the electrons ___ close to the speed of light.", "is", "are", "The subject is speed (singular)."],
+           ["Layers of insulation ___ heat loss.", "reduce", "reduces", "The subject is layers (plural)."]] },
+    { id: 5, lvl: 3, title: "Indefinite pronouns",
+      rule: "Each, every, either, neither, one, and the words ending in -one, -body and -thing (everyone, nobody, everything) take a singular verb. Both, few, many and several take a plural verb. Some, all, most, any and none depend on the noun after of: singular noun, singular verb; plural noun, plural verb.",
+      check: "Memorise two lists: the singular group (each, every, neither...) and the plural group (both, few, many, several).",
+      ex: [["Electrical", "[Each] of the sensors {has} a unique serial number."], ["Chemical", "[Everyone] in the laboratory {wears} safety goggles."], ["Materials", "[Several] of the samples {were} contaminated."]],
+      pr: [["Each of the wires ___ insulated.", "is", "are", "Each is singular."],
+           ["Neither of the two designs ___ the safety standard.", "meets", "meet", "Neither is singular."],
+           ["Both of the transformers ___ overheating.", "are", "is", "Both is plural."],
+           ["Everyone in the team ___ a copy of the manual.", "has", "have", "Everyone is singular."],
+           ["Few of the prototypes ___ passed the stress test.", "have", "has", "Few is plural."]] },
+    { id: 6, lvl: 3, title: "Collective nouns",
+      rule: "Collective nouns such as team, committee, group, crew, staff and department take a singular verb when the group acts as one unit. They take a plural verb when the members act separately, for example when they disagree. In technical writing the singular is the safer choice.",
+      check: "Ask: is the group acting together (singular) or are the members acting on their own (plural)?",
+      ex: [["Mechanical", "The design [team] {meets} every Friday to review progress."], ["Civil", "The [committee] {has} approved the safety plan."], ["Computer", "The software [team] {are} divided over the choice of programming language."]],
+      pr: [["The research group ___ publishing its findings next month.", "is", "are", "The group acts as one unit. Note the word its."],
+           ["The committee ___ submitted its report.", "has", "have", "The committee acts as one unit."],
+           ["The engineering team ___ arguing among themselves about the design.", "are", "is", "The members act individually (themselves), so the verb is plural."],
+           ["The maintenance crew ___ finished its inspection.", "has", "have", "The crew acts as one unit."],
+           ["The department ___ planning a new laboratory.", "is", "are", "The department acts as one unit."]] },
+    { id: 7, lvl: 4, title: "Singular nouns ending in -s, and plural-only nouns",
+      rule: "Some subjects end in -s but are singular: physics, mathematics, electronics, mechanics, statistics (the subject), thermodynamics. Some nouns are always plural: pliers, tongs, tweezers, goggles, scissors. With 'a pair of', the verb agrees with pair.",
+      check: "Learn the list. Names of subjects are singular; tools that come in two parts are plural.",
+      ex: [["Physics", "[Thermodynamics] {is} the study of heat and energy."], ["Electronics", "[Electronics] {has} transformed the way machines are controlled."], ["Mechanical", "The [pliers] {are} on the workbench, and a [pair] of safety goggles {is} beside them."]],
+      pr: [["Mathematics ___ the language of engineering.", "is", "are", "A subject name ending in -s is singular."],
+           ["The pliers ___ on the workbench.", "are", "is", "Pliers is always plural."],
+           ["Fluid mechanics ___ difficult for many first-year students.", "is", "are", "A subject name ending in -s is singular."],
+           ["A pair of tongs ___ needed to lift the hot crucible.", "is", "are", "The subject is pair (singular)."],
+           ["The safety goggles ___ stored in the locker.", "are", "is", "Goggles is always plural."]] },
+    { id: 8, lvl: 4, title: "Quantities: amounts, fractions, and 'the number of'",
+      rule: "An amount of measurement, time or money treated as one unit takes a singular verb (Five volts is enough). With fractions and percentages (half, a third, 40 per cent, most) the verb agrees with the noun after of. 'The number of' takes a singular verb. 'A number of' takes a plural verb.",
+      check: "For fractions, look at the noun after of. For 'number', check whether the word before it is the or a.",
+      ex: [["Electronics", "[Five volts] {is} enough to power the sensor."], ["Mechanical", "Forty per cent of the [power] {is} lost as heat."], ["Computer", "The [number] of faulty units {is} small, but a [number] of them {need} repair."]],
+      pr: [["Five volts ___ enough to run the sensor.", "is", "are", "An amount treated as one unit takes a singular verb."],
+           ["Half of the samples ___ contaminated.", "were", "was", "The noun after of is samples (plural)."],
+           ["Sixty per cent of the energy ___ lost as heat.", "is", "are", "The noun after of is energy (singular)."],
+           ["The number of students in the lab ___ increased.", "has", "have", "The number of takes a singular verb."],
+           ["A number of components ___ failed the test.", "have", "has", "A number of takes a plural verb."]] },
+    { id: 9, lvl: 4, title: "Latin and Greek plurals",
+      rule: "Many technical words keep their Latin or Greek plurals: criterion/criteria, phenomenon/phenomena, analysis/analyses, hypothesis/hypotheses, matrix/matrices, medium/media. Use a singular verb with the singular form and a plural verb with the plural form. The word 'data' is formally plural, but many style guides accept it as singular when it means a body of information. Follow your department's style.",
+      check: "Keep a short list of singular/plural pairs. If the word ends in -a, -i or -es, check whether it is the plural.",
+      ex: [["Materials", "This [criterion] {is} used to select the material."], ["Physics", "These [phenomena] {are} explained by quantum theory."], ["Computer", "The two [matrices] {have} different dimensions."]],
+      pr: [["The main criterion ___ cost.", "is", "are", "Criterion is singular."],
+           ["These phenomena ___ difficult to observe.", "are", "is", "Phenomena is the plural of phenomenon."],
+           ["The analyses ___ that the beam is safe.", "show", "shows", "Analyses is the plural of analysis."],
+           ["This hypothesis ___ to be tested.", "has", "have", "Hypothesis is singular."],
+           ["The matrices ___ multiplied to obtain the result.", "were", "was", "Matrices is the plural of matrix."]] },
+    { id: 10, lvl: 5, title: "There is / there are, and inverted sentences",
+      rule: "When a sentence begins with there or here, or starts with a place phrase, the subject comes after the verb. Find the real subject and agree with it, not with there. In speech people say 'there's' with plurals, but avoid this in writing.",
+      check: "Turn the sentence around in your head: 'Three stages are in the cycle.' The real subject decides the verb.",
+      ex: [["Mechanical", "There {are} three [stages] in the combustion cycle."], ["Materials", "There {is} a [crack] in the weld."], ["Electrical", "Attached to the frame {are} four [sensors]."]],
+      pr: [["There ___ several errors in the program.", "are", "is", "The real subject is errors (plural)."],
+           ["Here ___ the results of the test.", "are", "is", "The real subject is results (plural)."],
+           ["At the bottom of the tank ___ a small valve.", "is", "are", "The real subject is valve (singular)."],
+           ["In the box ___ a voltmeter and two ammeters.", "are", "is", "A voltmeter and two ammeters are two items joined by and."],
+           ["There ___ only one solution to this equation.", "is", "are", "The real subject is solution (singular)."]] },
+    { id: 11, lvl: 5, title: "Relative pronouns: who, which, that",
+      rule: "After who, which and that, the verb agrees with the noun the pronoun refers to (its antecedent). In 'one of the engineers who...' the antecedent is the plural noun, so use a plural verb. In 'the only one of the engineers who...' the antecedent is one, so use a singular verb.",
+      check: "Find the noun that who, which or that points back to, and match the verb to it.",
+      ex: [["Civil", "She is one of the [engineers] who {design} bridges in the city."], ["Electrical", "He is the only [one] of the students who {has} completed the project."], ["Mechanical", "The [sensors] that {monitor} the boiler are very reliable."]],
+      pr: [["This is one of the machines that ___ made in our workshop.", "are", "is", "The antecedent is machines (plural)."],
+           ["She is the only one of the interns who ___ a patent.", "holds", "hold", "With the only one, the antecedent is one (singular)."],
+           ["The engineer who ___ the lab keys is Dr Rao.", "has", "have", "The antecedent is engineer (singular)."],
+           ["Circuits that ___ too much current can overheat.", "carry", "carries", "The antecedent is circuits (plural)."],
+           ["He is one of those scientists who always ___ their results twice.", "check", "checks", "The antecedent is scientists (plural)."]] }
+  ];
+  var ADVICE = {
+    1: "Always find the subject first, then decide if it is one thing or more. Singular subjects take -s verbs (runs, has, is). Plural subjects take the base form (run, have, are).",
+    2: "Treat 'A and B' as plural, unless the pair names one single idea such as health and safety.",
+    3: "With or and nor, match the verb to the subject closest to it.",
+    4: "Ignore phrases between the subject and the verb (of..., in..., along with...). Match the verb to the main noun.",
+    5: "Memorise the singular group (each, every, either, neither, everyone, nothing) and the plural group (both, few, many, several).",
+    6: "Ask if the group acts as one unit (singular) or its members act separately (plural). Technical writing mostly uses the singular.",
+    7: "Learn the lists: physics, mathematics and electronics are singular. Pliers, tongs, goggles and tweezers are plural.",
+    8: "Amounts are one unit. For fractions, look at the noun after of. 'The number' is singular and 'a number of' is plural.",
+    9: "Keep a list of pairs: criterion/criteria, phenomenon/phenomena, analysis/analyses, hypothesis/hypotheses, matrix/matrices.",
+    10: "When a sentence starts with there, here or a place phrase, find the real subject after the verb and agree with it.",
+    11: "After who, which and that, find the noun it points back to. 'One of the...' is plural. 'The only one of the...' is singular."
+  };
+  RULES.forEach(function (r) {
+    r.advice = ADVICE[r.id];
+    r.items = r.pr.map(function (p) { return { q: p[0], c: p[1], w: p[2], why: p[3], opts: shuffle([p[1], p[2]]) }; });
+  });
+
+  /* ---------------- test bank: [level, rule, sentence, correct, wrong, reason] ---------------- */
+  var T = [
+    [1,1,"The thermometer ___ the temperature of the liquid.","measures","measure","Thermometer is singular, so the verb takes -s."],
+    [1,1,"Batteries ___ chemical energy into electrical energy.","convert","converts","Batteries is plural, so use the base form."],
+    [1,1,"My laptop ___ a faulty charger.","has","have","Laptop is singular, so use has."],
+    [1,1,"The wheels ___ freely.","turn","turns","Wheels is plural, so use the base form."],
+    [1,1,"Copper ___ a good conductor.","is","are","Copper is singular, so use is."],
+    [1,1,"The students ___ working in the laboratory.","were","was","Students is plural, so use were."],
+    [1,2,"The lens and the mirror ___ part of the telescope.","are","is","Two subjects joined by and take a plural verb."],
+    [1,2,"Speed and direction together ___ velocity.","define","defines","Two subjects joined by and take a plural verb."],
+    [1,2,"Health and safety ___ the first lesson in the workshop.","is","are","Health and safety is one idea, so the verb is singular."],
+    [1,2,"The anode and the cathode ___ placed in the solution.","were","was","Two subjects joined by and take a plural verb."],
+    [2,3,"Either the fan or the filter ___ clogged.","is","are","The nearest subject is filter (singular)."],
+    [2,3,"Neither the wires nor the switch ___ working.","is","are","The nearest subject is switch (singular)."],
+    [2,3,"Neither the switch nor the wires ___ working.","are","is","The nearest subject is wires (plural)."],
+    [2,3,"A resistor or two capacitors ___ needed here.","are","is","The nearest subject is capacitors (plural)."],
+    [2,3,"Either the professor or the assistants ___ available for questions.","are","is","The nearest subject is assistants (plural)."],
+    [2,4,"The box of components ___ on the table.","is","are","The subject is box (singular)."],
+    [2,4,"The cables beside the server ___ labelled.","are","is","The subject is cables (plural)."],
+    [2,4,"The control panel, as well as the sensors, ___ replaced last week.","was","were","As well as does not change the subject, which is control panel."],
+    [2,4,"The pressure inside the tanks ___ monitored continuously.","is","are","The subject is pressure (singular)."],
+    [2,4,"Pictures from the satellite ___ used to study the weather.","are","is","The subject is pictures (plural)."],
+    [3,5,"Every student in the class ___ a lab coat.","needs","need","Every takes a singular verb."],
+    [3,5,"Each of the circuits ___ tested separately.","was","were","Each takes a singular verb."],
+    [3,5,"Neither of the pumps ___ working.","is","are","Neither takes a singular verb."],
+    [3,5,"Several of the readings ___ unusual.","were","was","Several takes a plural verb."],
+    [3,5,"Everything on the shelves ___ been calibrated.","has","have","Everything takes a singular verb."],
+    [3,5,"Some of the water ___ leaked out.","has","have","With some of, the noun after of decides. Water is singular."],
+    [3,6,"The management team ___ reviewing the budget.","is","are","The team acts as one unit."],
+    [3,6,"The committee ___ announced its decision.","has","have","The committee acts as one unit."],
+    [3,6,"The project group ___ handed in its report on time.","has","have","The group acts as one unit."],
+    [3,6,"The team ___ divided in their opinions about the design.","were","was","The members have separate opinions (their), so the verb is plural."],
+    [4,7,"Statistics ___ a branch of mathematics.","is","are","As a subject name, statistics is singular."],
+    [4,7,"The tweezers ___ made of stainless steel.","are","is","Tweezers is always plural."],
+    [4,7,"Mechanics ___ the study of forces and motion.","is","are","As a subject name, mechanics is singular."],
+    [4,7,"A pair of calipers ___ used to measure the diameter.","is","are","The subject is pair (singular)."],
+    [4,8,"Two hours ___ enough to complete the experiment.","is","are","A period of time treated as one unit takes a singular verb."],
+    [4,8,"A third of the students ___ chosen the robotics project.","have","has","The noun after of is students (plural)."],
+    [4,8,"The number of components ___ large.","is","are","The number of takes a singular verb."],
+    [4,8,"A number of sensors ___ failed during the test.","have","has","A number of takes a plural verb."],
+    [4,9,"The criteria for selection ___ clear.","are","is","Criteria is the plural of criterion."],
+    [4,9,"This phenomenon ___ called resonance.","is","are","Phenomenon is singular."],
+    [5,10,"There ___ two possible causes of the failure.","are","is","The real subject is causes (plural)."],
+    [5,10,"Next to the generator ___ a large fuel tank.","is","are","The real subject is tank (singular)."],
+    [5,10,"On the screen ___ the graphs of voltage and current.","are","is","The real subject is graphs (plural)."],
+    [5,10,"There ___ a gauge and a valve on the pipe.","are","is","A gauge and a valve are two items joined by and."],
+    [5,10,"Here ___ the circuit diagram.","is","are","The real subject is diagram (singular)."],
+    [5,11,"She is one of the researchers who ___ this method.","use","uses","The antecedent is researchers (plural)."],
+    [5,11,"He is the only one of the engineers who ___ a licence.","holds","hold","With the only one, the antecedent is one (singular)."],
+    [5,11,"Alloys that ___ chromium resist rust.","contain","contains","The antecedent is alloys (plural)."],
+    [5,11,"The system, which ___ three modules, is complex.","has","have","The antecedent is system (singular)."],
+    [5,11,"This is one of the experiments that ___ difficult to repeat.","are","is","The antecedent is experiments (plural)."]
+  ];
+  var BANK = T.map(function (t, i) { return { id: i, l: t[0], r: t[1], q: t[2], c: t[3], w: t[4], why: t[5] }; });
+  var TOTAL = 25, START = 2;
+
+  /* ---------------- helpers ---------------- */
+  function markup(s) {
+    return s.replace(/\[(.+?)\]/g, '<span class="s">$1</span>').replace(/\{(.+?)\}/g, '<span class="v">$1</span>');
+  }
+  function ruleBy(id) { return RULES[id - 1]; }
+  function ruleBody(r) {
+    return '<span class="lvlpill l' + r.lvl + '">Level ' + r.lvl + ' &middot; ' + LEVELS[r.lvl] + '</span>' +
+      '<h3 id="dlg-title">Rule ' + r.id + ': ' + r.title + '</h3>' +
+      '<p class="r-text">' + r.rule + '</p>' +
+      '<div class="check"><b>Quick check</b>' + r.advice + '</div>' +
+      '<h4>Three examples</h4><ol class="ex" style="list-style:none;padding:0;margin:0;display:grid;gap:10px">' +
+      r.ex.map(function (e) { return '<li><span class="dom">' + e[0] + '</span><p>' + markup(e[1]) + '</p></li>'; }).join('') + '</ol>';
+  }
+  function makeQuestion(item, num, chosen, onAnswer, inlineWhy) {
+    var el = document.createElement('div');
+    el.className = 'q';
+    el.innerHTML = '<p class="q-text"><span class="num">' + num + '.</span> ' + item.q.replace('___', '<span class="blank">___</span>') +
+      '</p><div class="opts" role="group" aria-label="Choose the correct verb"></div><p class="why" hidden></p>';
+    var opts = $('.opts', el), blank = $('.blank', el), why = $('.why', el);
+    item.opts.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'opt'; b.textContent = o; b.dataset.v = o;
+      opts.appendChild(b);
+    });
+    function lock(ch) {
+      var right = ch === item.c;
+      opts.querySelectorAll('.opt').forEach(function (b) {
+        b.disabled = true;
+        if (b.dataset.v === item.c) b.classList.add('ok');
+        else if (b.dataset.v === ch) b.classList.add('bad');
+      });
+      blank.textContent = ch;
+      blank.className = 'blank ' + (right ? 'ok' : 'bad');
+      if (inlineWhy) { why.hidden = false; why.textContent = (right ? 'Correct. ' : 'The answer is “' + item.c + '”. ') + item.why; }
+      return right;
+    }
+    if (chosen) lock(chosen);
+    opts.addEventListener('click', function (e) {
+      var b = e.target.closest('.opt');
+      if (!b || b.disabled) return;
+      var ch = b.dataset.v, right = lock(ch);
+      if (onAnswer) onAnswer(right, ch, el);
+    });
+    return el;
+  }
+
+  /* ---------------- hero demo ---------------- */
+  var plural = false;
+  function renderDemo() {
+    $('#demo-s').innerHTML = 'The <span class="s">' + (plural ? 'sensors' : 'sensor') + '</span> <span class="v">' + (plural ? 'measure' : 'measures') + '</span> the coolant temperature.';
+    $('#demo-n').textContent = plural ? 'More than one sensor: the verb loses its -s.' : 'One sensor: the verb ends in -s.';
+    $('#demo-b').textContent = plural ? 'Make the subject singular' : 'Make the subject plural';
+  }
+  $('#demo-b').addEventListener('click', function () { plural = !plural; renderDemo(); });
+  renderDemo();
+
+  /* ---------------- rules workspace ---------------- */
+  var pstate = {};
+  RULES.forEach(function (r) { pstate[r.id] = { ans: [null, null, null, null, null] }; });
+  var cur = 0;
+  function pscore(r) {
+    var s = 0;
+    pstate[r.id].ans.forEach(function (a, i) { if (a && a === r.items[i].c) s++; });
+    return s;
+  }
+  function pdone(r) { return pstate[r.id].ans.filter(Boolean).length; }
+
+  function renderRail() {
+    $('#rail').innerHTML = '<p class="rail-note">Rules run from basic to advanced.</p>' + RULES.map(function (r, i) {
+      var d = pdone(r), st = d === 5 ? '✓ ' + pscore(r) + '/5' : (d ? d + '/5' : '');
+      return '<button type="button" class="rb' + (d === 5 ? ' done' : '') + '" data-i="' + i + '"' + (i === cur ? ' aria-current="true"' : '') + ' aria-label="Rule ' + r.id + ': ' + r.title + '">' +
+        '<span class="rn l' + r.lvl + '">' + r.id + '</span><span class="rt">' + r.title + '</span><span class="rs">' + st + '</span></button>';
+    }).join('');
+  }
+
+  function showRule(i, keepScroll) {
+    cur = i;
+    var r = RULES[i];
+    $('#rule-panel').innerHTML = '<article class="panel">' + ruleBody(r).replace('id="dlg-title"', '') +
+      '<div class="pr-head"><h4>Practice: five sentences</h4><span class="pr-score" id="pr-score" aria-live="polite"></span></div>' +
+      '<div class="pr-list" id="pr-list"></div><div id="pr-sum"></div>' +
+      '<div class="pnav"><button type="button" class="btn ghost" id="p-prev"' + (i === 0 ? ' disabled' : '') + '>Previous rule</button>' +
+      '<button type="button" class="btn" id="p-next"' + (i === RULES.length - 1 ? ' disabled' : '') + '>Next rule</button></div></article>';
+    var list = $('#pr-list');
+    r.items.forEach(function (it, n) {
+      list.appendChild(makeQuestion(it, n + 1, pstate[r.id].ans[n], function (right, ch) {
+        pstate[r.id].ans[n] = ch;
+        updatePractice(r);
+        renderRail();
+      }, true));
+    });
+    updatePractice(r);
+    renderRail();
+    $('#p-prev').addEventListener('click', function () { showRule(cur - 1); scrollToRules(); });
+    $('#p-next').addEventListener('click', function () { showRule(cur + 1); scrollToRules(); });
+  }
+  function scrollToRules() { $('#rules').scrollIntoView({ block: 'start' }); }
+  function updatePractice(r) {
+    var d = pdone(r), s = pscore(r);
+    $('#pr-score').textContent = d === 0 ? 'Not started' : s + ' correct, ' + d + ' of 5 answered';
+    var sum = $('#pr-sum');
+    if (d === 5) {
+      var good = s === 5;
+      sum.innerHTML = '<div class="pr-sum' + (good ? '' : ' low') + '"><span>' + (good ? 'Well done. ' + s + ' out of 5. You can move on.' : s + ' out of 5. Reread the rule above, then try the set again.') + '</span><button type="button" class="btn" id="p-retry">Try this set again</button></div>';
+      $('#p-retry').addEventListener('click', function () {
+        pstate[r.id].ans = [null, null, null, null, null];
+        r.items.forEach(function (it) { it.opts = shuffle(it.opts); });
+        showRule(cur);
+      });
+    } else sum.innerHTML = '';
+  }
+  $('#rail').addEventListener('click', function (e) {
+    var b = e.target.closest('.rb');
+    if (b) showRule(parseInt(b.dataset.i, 10));
+  });
+
+  function goToRule(i) {
+    showRule(i);
+    scrollToRules();
+  }
+
+  /* ---------------- dialog ---------------- */
+  var lastFocus = null, dlgRule = 0;
+  function openDialog(i, intro) {
+    dlgRule = i;
+    lastFocus = document.activeElement;
+    $('#dlg-body').innerHTML = (intro ? '<div class="alert" role="note">' + intro + '</div>' : '') + ruleBody(RULES[i]);
+    $('#ov').hidden = false;
+    $('#dlg-back').focus();
+  }
+  function closeDialog() {
+    $('#ov').hidden = true;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  $('#dlg-x').addEventListener('click', closeDialog);
+  $('#dlg-back').addEventListener('click', closeDialog);
+  $('#dlg-go').addEventListener('click', function () { $('#ov').hidden = true; goToRule(dlgRule); });
+  $('#ov').addEventListener('click', function (e) { if (e.target === $('#ov')) closeDialog(); });
+  document.addEventListener('keydown', function (e) {
+    if ($('#ov').hidden) return;
+    if (e.key === 'Escape') { closeDialog(); return; }
+    if (e.key === 'Tab') {
+      var f = Array.prototype.slice.call($('#ov').querySelectorAll('button')).filter(function (b) { return !b.disabled; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ---------------- adaptive test ---------------- */
+  var area = $('#test-area');
+  var S = null;
+
+  function renderIntro() {
+    area.innerHTML = '<div class="t-card intro"><h3>How the test works</h3><ul>' +
+      '<li>You answer 25 statements by choosing the correct verb form.</li>' +
+      '<li>The test starts at Level 2. A right answer takes you up one level. A wrong answer takes you down one level.</li>' +
+      '<li>If you make two mistakes on the same rule, or three wrong answers in a row, you are asked to revisit the rule.</li>' +
+      '<li>At the end you receive remarks that name your problem areas and the rules to learn again.</li></ul>' +
+      '<button type="button" class="btn" data-act="start">Start the test</button></div>';
+  }
+  function startTest() {
+    S = { level: START, used: {}, hist: [], miss: {}, consec: 0, cur: null, recent: [] };
+    $('#remarks').hidden = true;
+    $('#nav-remarks').hidden = true;
+    nextQ();
+  }
+  function pick(level) {
+    for (var d = 0; d < 5; d++) {
+      var cands = d === 0 ? [level] : [level - d, level + d];
+      for (var k = 0; k < cands.length; k++) {
+        var lv = cands[k];
+        if (lv < 1 || lv > 5) continue;
+        var pool = BANK.filter(function (q) { return q.l === lv && !S.used[q.id]; });
+        if (pool.length) return pool[Math.floor(Math.random() * pool.length)];
+      }
+    }
+    return null;
+  }
+  function nextQ() {
+    if (S.hist.length >= TOTAL) { finish(); return; }
+    var q = pick(S.level);
+    S.used[q.id] = true;
+    S.cur = { q: q, opts: shuffle([q.c, q.w]) };
+    renderQuestion();
+  }
+  function renderQuestion() {
+    var n = S.hist.length + 1, q = S.cur.q;
+    var bars = [1, 2, 3, 4, 5].map(function (l) { return '<i class="' + (l === q.l ? 'on l' + l : '') + '"></i>'; }).join('');
+    area.innerHTML = '<div class="t-card"><div class="t-top"><div class="t-count">Question ' + n + ' of ' + TOTAL + '</div>' +
+      '<div class="lvl-row"><span class="lvlpill l' + q.l + '">Level ' + q.l + ' &middot; ' + LEVELS[q.l] + '</span><div class="lvbar" aria-hidden="true">' + bars + '</div></div></div>' +
+      '<div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="' + TOTAL + '" aria-valuenow="' + S.hist.length + '"><span style="width:' + (S.hist.length / TOTAL * 100) + '%"></span></div>' +
+      '<div id="qwrap"></div><div class="fb" id="fb" aria-live="polite"></div></div>';
+    $('#qwrap').appendChild(makeQuestion({ q: q.q, c: q.c, w: q.w, opts: S.cur.opts }, n, null, handleAnswer, false));
+  }
+  function handleAnswer(right, chosen) {
+    var q = S.cur.q;
+    S.hist.push({ q: q, lvl: q.l, rule: q.r, chosen: chosen, right: right });
+    var alerts = [];
+    if (right) { S.consec = 0; }
+    else {
+      S.consec++;
+      S.miss[q.r] = (S.miss[q.r] || 0) + 1;
+      if (S.miss[q.r] >= 2 && S.miss[q.r] % 2 === 0) {
+        var rr = ruleBy(q.r);
+        alerts.push('<strong>Please revisit Rule ' + rr.id + '.</strong><span>You have now missed ' + S.miss[q.r] + ' questions on “' + rr.title + '”.</span><button type="button" class="btn-sm" data-rev="' + (rr.id - 1) + '" data-why="' + S.miss[q.r] + '">Review Rule ' + rr.id + '</button>');
+      }
+      if (S.consec >= 3 && S.consec % 3 === 0) {
+        var seen = {}, btns = '';
+        S.hist.slice(-3).forEach(function (h) {
+          if (!seen[h.rule]) { seen[h.rule] = 1; btns += '<button type="button" class="btn-sm" data-rev="' + (h.rule - 1) + '">Rule ' + h.rule + '</button>'; }
+        });
+        alerts.push('<strong>Three wrong answers in a row.</strong><span>Pause and look again at:</span>' + btns);
+      }
+    }
+    var old = S.level;
+    S.level = right ? Math.min(5, S.level + 1) : Math.max(1, S.level - 1);
+    var dir;
+    if (right) dir = old < 5 ? 'The next statement moves up to Level ' + S.level + '.' : 'You are at the top level, so the next statement stays at Level 5.';
+    else dir = old > 1 ? 'The next statement moves down to Level ' + S.level + '.' : 'You are at the first level, so the next statement stays at Level 1.';
+    var rr2 = ruleBy(q.r);
+    var res = right
+      ? '<div class="res ok"><b>Correct.</b> ' + q.why + '</div>'
+      : '<div class="res bad"><b>Not quite.</b> The correct answer is “' + q.c + '”. ' + q.why + ' (Rule ' + rr2.id + ': ' + rr2.title + ')</div>';
+    var last = S.hist.length >= TOTAL;
+    $('#fb').innerHTML = res + alerts.map(function (a) { return '<div class="alert" role="alert">' + a + '</div>'; }).join('') +
+      '<div class="fb-next"><button type="button" class="btn" data-act="next" id="t-next">' + (last ? 'See my remarks' : 'Next statement') + '</button>' + (last ? '' : '<span>' + dir + '</span>') + '</div>';
+    $('#t-next').focus();
+    var m = $('.meter span', area);
+    if (m) { m.style.width = (S.hist.length / TOTAL * 100) + '%'; }
+  }
+  area.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.act === 'start') startTest();
+    else if (b.dataset.act === 'next') nextQ();
+    else if (b.dataset.act === 'restart') { renderIntro(); $('#test').scrollIntoView({ block: 'start' }); startTest(); }
+    else if (b.dataset.act === 'toremarks') $('#remarks').scrollIntoView({ block: 'start' });
+    else if (b.dataset.rev) {
+      var i = parseInt(b.dataset.rev, 10), c = parseInt(b.dataset.why || '0', 10);
+      openDialog(i, c ? 'You have missed ' + c + ' questions on this rule. Read it again, then go back to the test.' : 'Read this rule again, then go back to the test.');
+    }
+  });
+
+  /* ---------------- remarks ---------------- */
+  function chart(h) {
+    var W = 640, H = 220, L = 44, R = 14, Tp = 14, B = 34;
+    var xs = function (i) { return L + (W - L - R) * i / (TOTAL - 1); };
+    var ys = function (l) { return Tp + (H - Tp - B) * (5 - l) / 4; };
+    var g = '';
+    for (var l = 1; l <= 5; l++) g += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(l) + '" y2="' + ys(l) + '"/><text class="tx" x="' + (L - 10) + '" y="' + (ys(l) + 4) + '" text-anchor="end">L' + l + '</text>';
+    [1, 5, 10, 15, 20, 25].forEach(function (n) { g += '<text class="tx" x="' + xs(n - 1) + '" y="' + (H - 12) + '" text-anchor="middle">' + n + '</text>'; });
+    g += '<text class="tx" x="' + (L + (W - L - R) / 2) + '" y="' + (H - 0) + '" text-anchor="middle" dy="-0">Question number</text>';
+    var pts = h.map(function (x, i) { return xs(i) + ',' + ys(x.lvl); }).join(' ');
+    g += '<polyline class="ln" points="' + pts + '"/>';
+    h.forEach(function (x, i) {
+      var cx = xs(i), cy = ys(x.lvl);
+      g += x.right ? '<circle class="good" cx="' + cx + '" cy="' + cy + '" r="5"/>' : '<rect class="miss" x="' + (cx - 5) + '" y="' + (cy - 5) + '" width="10" height="10" transform="rotate(45 ' + cx + ' ' + cy + ')"/>';
+    });
+    return '<svg class="chart" viewBox="0 0 ' + W + ' ' + (H + 4) + '" role="img" aria-label="Line chart of the level of each of the 25 questions, with correct and incorrect answers marked">' + g + '</svg>';
+  }
+
+  function finish() {
+    var h = S.hist, total = h.length, right = h.filter(function (x) { return x.right; }).length;
+    var pct = Math.round(right / total * 100);
+    var maxL = Math.max.apply(null, h.map(function (x) { return x.lvl; }));
+    var lastN = h.slice(-8), work = Math.round(lastN.reduce(function (a, x) { return a + x.lvl; }, 0) / lastN.length);
+    var stats = RULES.map(function (r) {
+      var a = h.filter(function (x) { return x.rule === r.id; });
+      var c = a.filter(function (x) { return x.right; }).length;
+      return { r: r, a: a.length, c: c, acc: a.length ? c / a.length : null };
+    });
+    var problems = stats.filter(function (s) { return s.a && s.acc < 0.6; }).sort(function (x, y) { return x.acc - y.acc || y.a - x.a; });
+    var watch = stats.filter(function (s) { return s.a && s.acc >= 0.6 && s.acc < 0.8; });
+    var secure = stats.filter(function (s) { return s.a && s.acc >= 0.8; });
+    var notReached = stats.filter(function (s) { return !s.a; });
+    var msgs = {
+      1: 'Your answers settled at Level 1. Start again from Rule 1 and work forward in order, scoring 5 out of 5 in each practice set before you move on.',
+      2: 'Your answers settled at Level 2. The basics are mostly in place. Strengthen Rules 3 and 4 and the problem areas below.',
+      3: 'Your answers settled at Level 3. You handle the common patterns well. Polish the problem areas below and the special cases in Rules 7 to 9.',
+      4: 'Your answers settled at Level 4. This is strong work. A few special cases remain, listed below.',
+      5: 'Your answers settled at Level 5. You handle even the difficult patterns. Revise only the areas listed below.'
+    };
+    function card(s, cls) {
+      return '<div class="pcard ' + cls + '"><span class="lvlpill l' + s.r.lvl + '" style="justify-self:start">Level ' + s.r.lvl + '</span><h4>Rule ' + s.r.id + ': ' + s.r.title + '</h4>' +
+        '<span class="stat">' + s.c + ' of ' + s.a + ' correct (' + Math.round(s.acc * 100) + '%)</span><p>' + s.r.advice + '</p>' +
+        '<button type="button" class="btn-sm" data-go="' + (s.r.id - 1) + '">' + (cls === 'problem' ? 'Learn Rule ' + s.r.id + ' again' : 'Revise Rule ' + s.r.id) + '</button></div>';
+    }
+    var wrong = h.filter(function (x) { return !x.right; });
+    var html =
+      '<div class="scorebar"><div class="tile"><b>' + right + ' / ' + total + '</b><span>Correct answers (' + pct + '%)</span></div>' +
+      '<div class="tile"><b>Level ' + work + '</b><span>Where you settled: ' + LEVELS[work] + '</span></div>' +
+      '<div class="tile"><b>Level ' + maxL + '</b><span>Highest level reached</span></div>' +
+      '<div class="tile"><b>' + problems.length + '</b><span>Problem areas found</span></div></div>' +
+      '<p>' + msgs[work] + '</p>' +
+      '<h3>Your path through the levels</h3>' + chart(h) +
+      '<div class="legend"><span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="var(--good)"/></svg> Correct</span><span><svg width="12" height="12" aria-hidden="true"><rect x="2" y="2" width="8" height="8" fill="var(--badmark)" transform="rotate(45 6 6)"/></svg> Incorrect</span></div>';
+    if (problems.length) {
+      html += '<h3>Problem areas: learn these rules again</h3><div class="cards">' + problems.map(function (s) { return card(s, 'problem'); }).join('') + '</div>';
+    } else {
+      html += '<h3>Problem areas</h3><p>No rule fell below 60%. Well done.</p>';
+    }
+    if (watch.length) html += '<h3>Revise soon</h3><div class="cards">' + watch.map(function (s) { return card(s, 'watch'); }).join('') + '</div>';
+    if (secure.length) html += '<h3>Secure</h3><div class="chips">' + secure.map(function (s) { return '<span class="chip">Rule ' + s.r.id + ' &middot; ' + s.r.title + '</span>'; }).join('') + '</div>';
+    if (notReached.length) html += '<h3>Not tested this time</h3><p>The test did not reach these rules. Practise them in the Rules section, or retake the test.</p><div class="chips">' + notReached.map(function (s) { return '<span class="chip nr">Rule ' + s.r.id + ' &middot; ' + s.r.title + '</span>'; }).join('') + '</div>';
+    if (wrong.length) {
+      html += '<h3>Statements to review</h3><ul class="rev">' + wrong.map(function (x) {
+        return '<li><span>' + x.q.q.replace('___', '<mark>' + x.q.c + '</mark>') + '</span><small>You chose “' + x.chosen + '”. ' + x.q.why + ' (Rule ' + x.rule + ')</small></li>';
+      }).join('') + '</ul>';
+    }
+    html += '<div><button type="button" class="btn" id="retake">Retake the test</button></div>';
+    $('#remarks-body').innerHTML = html;
+    $('#remarks').hidden = false;
+    $('#nav-remarks').hidden = false;
+    area.innerHTML = '<div class="t-card"><h3>Test complete</h3><p>You answered ' + total + ' statements and scored ' + right + '. Your remarks are ready.</p>' +
+      '<div class="fb-next"><button type="button" class="btn" data-act="toremarks">Read my remarks</button><button type="button" class="btn ghost" data-act="restart">Retake the test</button></div></div>';
+    $('#remarks').scrollIntoView({ block: 'start' });
+  }
+  $('#remarks-body').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.go) goToRule(parseInt(b.dataset.go, 10));
+    else if (b.id === 'retake') { renderIntro(); $('#remarks').hidden = true; $('#nav-remarks').hidden = true; $('#test').scrollIntoView({ block: 'start' }); startTest(); }
+  });
+
+  showRule(0);
+  renderIntro();
+})();
+</script>
+
+<script>
+(function(){var b=document.getElementById('psy-theme');function lab(){b.setAttribute('aria-label',document.documentElement.getAttribute('data-theme')==='light'?'Switch to dark mode':'Switch to light mode')}lab();
+b.addEventListener('click',function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('psykos-theme',t)}catch(e){}lab()});})();
+</script>
+</body></html>
