@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FocusWell · PSY:KOS</title><script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('psykos-theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap"><link rel="icon" href="assets/logo-light.png">
+<style>
+:root{--bg:#f3f0ff;--card:#fff;--text:#1e2433;--muted:#5d667a;--line:#dfe3ee;--accent:#6c5ce7;--mild:#2e9e5b;--mod:#c98512;--high:#d64545;--ca:#6c5ce7;--ch:#ff7a45;--cg:#14b8a6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151f;--card:#1b2030;--text:#e8ebf5;--muted:#9aa3ba;--line:#2c3350;--accent:#8193ff;--mild:#4cc27f;--mod:#f0b13a;--high:#ff6b6b}}
+:root[data-theme="dark"]{--bg:#12151f;--card:#1b2030;--text:#e8ebf5;--muted:#9aa3ba;--line:#2c3350;--accent:#8193ff;--mild:#4cc27f;--mod:#f0b13a;--high:#ff6b6b}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:0}h2{font-size:1.1rem;margin:0 0 10px}h3{font-size:1rem;margin:0 0 6px}
+.sub{color:var(--muted);font-size:.9rem;margin:2px 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 4px 16px rgba(108,92,231,.10)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:760px){.grid,.grid3{grid-template-columns:1fr}}
+input[type=text]{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-size:1rem;width:100%;max-width:300px}
+.q{padding:10px 0;border-top:1px solid var(--line)}
+.q p{margin:0 0 6px;font-size:.93rem}
+.tag{font-size:.7rem;padding:1px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted);margin-left:6px;white-space:nowrap}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts label{flex:1;min-width:64px}
+.opts input{position:absolute;opacity:0}
+.opts span{display:block;text-align:center;font-size:.76rem;padding:6px 2px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg)}
+.opts input:checked+span{background:var(--accent);color:#fff;border-color:var(--accent)}
+.opts input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;padding:9px 16px;border-radius:9px;border:1px solid var(--accent);cursor:pointer}
+.primary{background:linear-gradient(135deg,#6c5ce7,#ff5d8f);color:#fff;border-color:transparent;font-weight:600}.ghost{background:transparent;color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 16px}
+.badge{display:inline-block;padding:3px 12px;border-radius:99px;color:#fff;font-weight:600;font-size:.85rem}
+.big{font-size:2.1rem;font-weight:700;line-height:1}
+.bar{height:14px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;width:0;transition:width .6s}
+.scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+ul{margin:6px 0 0;padding-left:20px}li{margin-bottom:8px;font-size:.92rem}
+a{color:var(--accent)}
+.note{font-size:.8rem;color:var(--muted)}
+#results{display:none}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button{background:transparent;color:var(--accent)}
+.tabs button[aria-selected=true]{background:var(--accent);color:#fff}
+.lvl{font-size:.85rem;padding:8px 10px;border-radius:8px;background:var(--bg);margin:0 0 8px;border-left:4px solid var(--c)}
+.steps{counter-reset:s;list-style:none;padding:0}.steps li{counter-increment:s;padding-left:28px;position:relative}
+.steps li:before{content:counter(s);position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:.75rem;text-align:center;line-height:20px}
+.links a{display:block;margin-bottom:6px;font-size:.92rem}
+
+.hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#fff;border-radius:26px;padding:26px 24px 0;margin-bottom:18px;background:linear-gradient(120deg,#6c5ce7 0%,#ff5d8f 55%,#ffa94d 100%);box-shadow:0 10px 28px rgba(108,92,231,.3)}
+.hero h1{font-size:2.3rem;letter-spacing:.5px}
+.hero p{margin:6px 0 12px;max-width:430px;opacity:.95}
+.chips span{display:inline-block;background:rgba(255,255,255,.22);border-radius:99px;padding:4px 12px;font-size:.82rem;margin:0 6px 8px 0}
+.hero-txt{padding-bottom:18px;position:relative;z-index:1}
+.hero-art{display:flex;align-items:flex-end;gap:2px;position:relative;z-index:1}
+.kid{animation:bob 3s ease-in-out infinite}.kid:nth-child(2){animation-delay:-1s}.kid:nth-child(3){animation-delay:-2s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.fl{position:absolute;font-size:1.6rem;opacity:.85;animation:bob 4s ease-in-out infinite}
+.f1{left:46%;top:12px}.f2{left:60%;top:60px;animation-delay:-1s}.f3{left:36%;top:90px;animation-delay:-2s}.f4{right:6px;top:10px;animation-delay:-.5s}
+.card h2 small{font-weight:400;font-size:.75rem;color:var(--muted);margin-left:6px}
+.qa{border-top:6px solid var(--ca)}.qh{border-top:6px solid var(--ch)}
+.opts em{display:block;font-style:normal;font-size:1.25rem;line-height:1.3}
+.prog{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:4px 0 16px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6c5ce7,#ff5d8f,#ffa94d);transition:width .3s}
+.sc{position:relative;overflow:hidden}.sc.a{border-top:6px solid var(--ca)}.sc.h{border-top:6px solid var(--ch)}
+.mood{position:absolute;right:14px;top:10px;font-size:2.6rem;animation:bob 3s ease-in-out infinite}
+.tc-a{border-top:6px solid var(--ca)}.tc-h{border-top:6px solid var(--ch)}.tc-g{border-top:6px solid var(--cg)}
+li.tp{display:flex;gap:10px;list-style:none;margin-left:-20px;align-items:flex-start}
+.ic{flex:none;width:34px;height:34px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.banner{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-radius:20px;padding:12px 18px;margin-bottom:16px;background:linear-gradient(120deg,rgba(108,92,231,.16),rgba(20,184,166,.16));border:1px solid var(--line)}
+.banner.fac{background:linear-gradient(120deg,rgba(255,122,69,.16),rgba(108,92,231,.16))}
+.banner p{margin:0;font-weight:600;flex:1;min-width:200px}
+.breath{position:relative;height:140px;display:flex;align-items:center;justify-content:center;margin:2px 0 10px}
+.orb{width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#9be7ff,#6c5ce7);animation:br 8s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(.8)}50%{transform:scale(1.5)}}
+.bi,.bo{position:absolute;bottom:0;font-weight:600;font-size:.85rem;animation:tx 8s infinite}
+.bo{animation-delay:-4s}
+@keyframes tx{0%,45%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.bo{display:none}}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.apps{grid-template-columns:1fr}}
+.app{border:1px solid var(--line);border-radius:18px;padding:14px;background:var(--bg)}
+.app .ai{font-size:2.2rem;line-height:1}
+.app h4{margin:6px 0 0;font-size:1rem}
+.app .tg{font-size:.75rem;color:var(--muted);margin:0 0 6px}
+.app p{font-size:.88rem;margin:0}
+.app a.go{display:inline-block;margin-top:10px;padding:6px 14px;border-radius:99px;background:linear-gradient(135deg,#6c5ce7,#ff5d8f);color:#fff;text-decoration:none;font-size:.82rem;font-weight:600}
+
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+:root{--l0:#2e9e5b;--l1:#8bb92f;--l2:#d99a12;--l3:#e8692f;--l4:#cc3333}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--l0:#4cc27f;--l1:#a6d04f;--l2:#f0b13a;--l3:#ff8a4f;--l4:#ff6b6b}}
+:root[data-theme="dark"]{--l0:#4cc27f;--l1:#a6d04f;--l2:#f0b13a;--l3:#ff8a4f;--l4:#ff6b6b}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:19;background:var(--card)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(108,92,231,.12)}
+.bar2{max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:8px 12px}
+.brand{font-weight:800;text-decoration:none;color:var(--accent);white-space:nowrap}
+#nav{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
+#nav a{white-space:nowrap;text-decoration:none;color:var(--text);padding:7px 12px;border-radius:99px;font-size:.88rem}
+#nav a.on{background:linear-gradient(135deg,#6c5ce7,#ff5d8f);color:#fff;font-weight:600}
+@media(max-width:600px){#nav a span{display:none}#nav a.on span{display:inline}.brand{font-size:0}.brand:before{content:"🌟";font-size:1.3rem}}
+.view{display:none}.view.on{display:block}
+.vhead{display:flex;gap:14px;align-items:center;border-radius:22px;padding:18px 20px;margin-bottom:16px;color:#fff}
+.vhead h1{font-size:1.5rem}.vhead p{margin:4px 0 0;font-size:.92rem;opacity:.95}.vi{font-size:2.6rem}
+.va{background:linear-gradient(120deg,#6c5ce7,#a29bfe)}.vm{background:linear-gradient(120deg,#0ea5e9,#6c5ce7)}.vw{background:linear-gradient(120deg,#14b8a6,#84cc16)}.vs{background:linear-gradient(120deg,#ff7a45,#ff5d8f)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+@media(max-width:760px){.tiles{grid-template-columns:1fr}}
+.tile{display:block;text-decoration:none;color:var(--text);border-radius:20px;padding:18px;border:1px solid var(--line);background:var(--card);box-shadow:0 4px 16px rgba(108,92,231,.10);transition:transform .15s}
+.tile:hover{transform:translateY(-3px)}.tile .ti{font-size:2.6rem;line-height:1}.tile h3{margin:8px 0 4px}.tile p{margin:0 0 8px;font-size:.88rem;color:var(--muted)}
+.tile.a{border-top:6px solid var(--ca)}.tile.m{border-top:6px solid #0ea5e9}.tile.w{border-top:6px solid var(--cg)}
+.st{font-size:.78rem;padding:2px 10px;border-radius:99px;background:var(--bg)}
+.sc h2{padding-right:56px}
+.sc.s{border-top:6px solid #0ea5e9}.sc.w{border-top:6px solid #a78bfa}.sc.t{border-top:6px solid #ff7a45}.sc.g{border-top:6px solid var(--cg)}
+.tc-s{border-top:6px solid #0ea5e9}.tc-w{border-top:6px solid #a78bfa}.tc-t{border-top:6px solid #ff7a45}
+.care{border-left:5px solid var(--l3);background:var(--card);border:1px solid var(--line);border-left:5px solid var(--l3);border-radius:14px;padding:12px 16px;margin:0 0 16px;font-size:.92rem}
+.btnlink{display:inline-block;padding:9px 18px;border-radius:99px;background:linear-gradient(135deg,#6c5ce7,#ff5d8f);color:#fff;text-decoration:none;font-weight:600}
+.btnlink.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.chk label{display:block;padding:6px 0;font-size:.95rem}
+.sm{display:block;text-decoration:none;color:var(--text)}.sm .big{font-size:1.6rem}
+.badge{text-transform:none}
+.empty{text-align:center;padding:30px 10px}
+.hero .f3{left:56%;top:118px}.hero .f2{left:64%;top:40px}@media(max-width:760px){.fl{display:none}}
+
+.vr{background:linear-gradient(120deg,#0ea5e9,#14b8a6)}.vp{background:linear-gradient(120deg,#ff9f1c,#ff5d8f)}
+.pane{display:none}.pane.on{display:block}
+.stage{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:center;border-radius:20px;padding:14px;background:linear-gradient(160deg,rgba(14,165,233,.16),rgba(108,92,231,.16));margin:10px 0}
+@media(max-width:640px){.stage{grid-template-columns:1fr}.figure{text-align:center}}
+.figure svg{width:200px;height:auto;max-width:100%}
+.phase{font-size:1.6rem;font-weight:800}.cd{font-size:3rem;font-weight:800;line-height:1.1;color:var(--accent)}.cap{font-size:1.05rem;margin:6px 0 0;min-height:3.2em}
+.reg{fill:transparent;pointer-events:none;transition:fill .4s}.reg.tense{fill:rgba(255,94,58,.62);animation:shk .2s infinite alternate}.reg.relax{fill:rgba(20,184,166,.5)}
+@keyframes shk{from{opacity:.55}to{opacity:1}}
+.ctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}.ctl label{font-size:.9rem}
+.psteps{list-style:none;padding:0;margin:8px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}.psteps li{font-size:.82rem;padding:6px 10px;border-radius:10px;background:var(--bg);margin:0;cursor:pointer}.psteps li.on{background:var(--accent);color:#fff}.psteps li.done{opacity:.65}.psteps li.done:before{content:"✓ "}
+.chips2{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.chips2 button{background:transparent;color:var(--accent);padding:6px 14px}.chips2 button[aria-pressed=true]{background:var(--accent);color:#fff}
+.breath2{position:relative;height:230px;display:flex;align-items:center;justify-content:center}
+.orb2{width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#9be7ff,#6c5ce7);box-shadow:0 0 40px rgba(108,92,231,.5);transform:scale(.75)}
+.blabel{position:absolute;bottom:0;font-size:1.3rem;font-weight:700}
+.ftime{font-size:3.4rem;font-weight:800;text-align:center;color:var(--accent)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);max-width:min(92vw,520px);background:#2b2350;color:#fff;padding:12px 18px;border-radius:16px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:60;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}#toast.big{background:linear-gradient(135deg,#6c5ce7,#ff5d8f)}
+#conf{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}#conf i{position:absolute;top:-16px;width:9px;height:14px;animation:fall 2.4s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}@media(max-width:700px){.stat4{grid-template-columns:repeat(2,1fr)}}
+.stat4 .card{margin:0;text-align:center;padding:14px}.stat4 .n{font-size:1.7rem;font-weight:800}
+.coach{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.bubble{flex:1;min-width:200px;background:var(--bg);border-radius:16px;padding:12px 16px;font-weight:600}
+.hrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}.hrow label{display:flex;gap:10px;align-items:center;flex:1;cursor:pointer}.hrow input{width:22px;height:22px;accent-color:#14b8a6}.hrow.done b{text-decoration:line-through;opacity:.7}
+button.x{padding:2px 8px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted)}
+button.add{margin-top:6px;padding:4px 12px;border-radius:99px;font-size:.8rem;background:transparent;color:var(--accent)}button.add.on{background:var(--cg);border-color:var(--cg);color:#fff}
+.week{display:flex;gap:8px;justify-content:space-between}.wd{flex:1;text-align:center;font-size:.78rem}.wd i{display:flex;margin:4px auto 0;width:34px;height:34px;border-radius:50%;align-items:center;justify-content:center;font-style:normal;background:var(--bg);border:2px solid var(--line)}.wd.on i{background:var(--cg);color:#fff;border-color:var(--cg)}.wd.perf i{background:#ffb703;border-color:#ffb703}.wd.today i{outline:2px solid var(--accent);outline-offset:2px}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.bd{border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;background:var(--bg)}.bd .bi2{font-size:2rem;filter:grayscale(1);opacity:.45}.bd.got{background:linear-gradient(135deg,rgba(255,183,3,.2),rgba(255,93,143,.15))}.bd.got .bi2{filter:none;opacity:1}.bd p{margin:4px 0 0;font-size:.78rem;color:var(--muted)}
+.mini{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}.mini span{background:var(--bg);padding:4px 12px;border-radius:99px;font-weight:600;font-size:.9rem}
+.arow{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}.arow>div{flex:1}
+details.dm{margin-top:16px;font-size:.88rem}details.dm button{margin:6px 6px 0 0}
+@media (prefers-reduced-motion:reduce){#conf{display:none}}
+/* roles, students, support loop */
+select,textarea,input[type=date],input[type=time]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text)}
+.rolew select{padding:6px 8px;font-size:.85rem;border-radius:99px;border-color:var(--accent);color:var(--accent);font-weight:600}
+textarea{width:100%;min-height:80px;resize:vertical;margin-top:4px}
+.frm{display:grid;grid-template-columns:2fr 1.3fr 1fr auto;gap:10px;align-items:end}
+@media(max-width:700px){.frm{grid-template-columns:1fr 1fr}.frm .full{grid-column:1/-1}}
+.frm label,.fl2 label,.lbl{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--muted)}
+.frm input[type=text],.fl2 input[type=text]{max-width:none}
+.fl2{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:10px 0}
+.tblw{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:.88rem}
+.tbl th,.tbl td{padding:8px 6px;border-top:1px solid var(--line);text-align:left;vertical-align:middle}
+.tbl th{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-top:0}
+button.sm2{padding:4px 10px;font-size:.8rem;border-radius:99px}
+.nb{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;border-radius:99px;background:var(--high);color:#fff;font-size:.7rem;margin-left:4px;text-align:center}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.75rem;font-weight:600;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
+.pill.sent{background:#ff5d8f;color:#fff;border-color:transparent}.pill.ack,.pill.prog{background:#0ea5e9;color:#fff;border-color:transparent}.pill.meet{background:#6c5ce7;color:#fff;border-color:transparent}.pill.conf{background:#f0b13a;color:#222;border-color:transparent}.pill.closed{background:var(--mild);color:#fff;border-color:transparent}.pill.urg{background:var(--high);color:#fff;border-color:transparent}
+.stepper{list-style:none;display:flex;padding:0;margin:12px 0;counter-reset:st}
+.stepper li{flex:1;text-align:center;font-size:.72rem;color:var(--muted);position:relative;padding-top:28px;margin:0;counter-increment:st}
+.stepper li:before{content:counter(st);position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid var(--line);line-height:18px;font-size:.72rem;z-index:1;box-sizing:border-box}
+.stepper li:after{content:"";position:absolute;top:10px;right:50%;width:100%;height:2px;background:var(--line)}
+.stepper li:first-child:after{display:none}
+.stepper li.done:before{content:"✓";background:var(--mild);border-color:var(--mild);color:#fff}
+.stepper li.done:after,.stepper li.cur:after{background:var(--mild)}
+.stepper li.cur{color:var(--text);font-weight:700}.stepper li.cur:before{background:var(--accent);border-color:var(--accent);color:#fff}
+.thread{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.msg{max-width:85%;padding:8px 12px;border-radius:14px;font-size:.9rem;background:var(--bg);border:1px solid var(--line);align-self:flex-start}
+.msg.me{align-self:flex-end;background:rgba(108,92,231,.14)}
+.msg.sys{align-self:center;max-width:100%;font-size:.8rem;color:var(--muted);background:transparent;border:1px dashed var(--line)}
+.msg small{display:block;font-size:.7rem;color:var(--muted)}
+.case{cursor:pointer;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:8px;background:var(--bg)}
+.case:hover,.case:focus-visible{border-color:var(--accent);outline:none}.case>div{flex:1;min-width:180px}.case.un{border-left:4px solid var(--mod)}
+.prio{color:var(--high);font-weight:700}
+.swo-card{border-left:6px solid #14b8a6}.swo-card .btnlink{margin:10px 8px 0 0}
+.box{background:var(--bg);border-radius:14px;padding:12px 14px;margin:10px 0}.box h3{margin-bottom:6px}
+.vf{background:linear-gradient(120deg,#3b82f6,#6c5ce7)}.vo{background:linear-gradient(120deg,#14b8a6,#0ea5e9)}.vt{background:linear-gradient(120deg,#a78bfa,#ff5d8f)}.vsp{background:linear-gradient(120deg,#ff5d8f,#ffa94d)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+details.card>summary{cursor:pointer;font-size:1rem}
+@media(max-width:1200px){#nav a{padding:7px 8px;font-size:.82rem}}
+@media(max-width:1000px){#nav a span{display:none}#nav a.on span{display:inline}}
+
+/* ================= PSY:KOS look (appended; overrides the original colours and shapes) ================= */
+:root, :root[data-theme="dark"] {
+  --bg:#141813; --card:#1D221C; --text:#EEE8DC; --muted:#A7AE9F; --line:#30382E; --accent:#A3BC8E; --on-accent:#141813;
+  --mild:#A3BC8E; --mod:#D9A73E; --high:#E58A6E; --ca:#A3BC8E; --ch:#D9A73E; --cg:#7FA6A0; --sky:#8FB0A8; --sand:#B9A27A;
+  --l0:#8FB27A; --l1:#B8C46A; --l2:#E0B54F; --l3:#E79A6F; --l4:#E07A6A;
+  --soft:rgba(163,188,142,.14); --gsoft:rgba(217,167,62,.16); --rsoft:rgba(229,138,110,.14); --notice:#283026; color-scheme:dark;
+}
+:root[data-theme="light"] {
+  --bg:#F1ECE2; --card:#FBF8F2; --text:#1E281D; --muted:#5A6454; --line:#E3DBCB; --accent:#4E6A44; --on-accent:#FBF8F2;
+  --mild:#4E6A44; --mod:#9A6F1C; --high:#B0432D; --ca:#4E6A44; --ch:#B7862A; --cg:#4F7F78; --sky:#5E8780; --sand:#8C7650;
+  --soft:rgba(78,106,68,.10); --gsoft:rgba(183,134,42,.14); --rsoft:rgba(176,67,45,.10); --notice:#FFFFFF; color-scheme:light;
+}
+body { font-family:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:300; }
+h1,h2,h3,h4,b,strong { font-weight:500; letter-spacing:-0.01em; }
+a { color:var(--accent); }
+/* surfaces */
+.card,.tile,.stat4 .card { border:0; border-radius:28px; box-shadow:none; }
+.app,.bd,.case,.box { border:0; border-radius:20px; }
+.hero { background:var(--card); color:var(--text); box-shadow:none; border-radius:28px; padding:28px 28px 22px; }
+.hero h1 { font-size:2.2rem; letter-spacing:-0.02em; }
+.hero p { opacity:1; color:var(--muted); }
+.chips span { background:var(--bg); color:var(--text); }
+.hero-art,.fl { display:none; }
+.vhead,.va,.vm,.vw,.vs,.vr,.vp,.vf,.vo,.vt,.vsp { background:var(--card) !important; color:var(--text); }
+.vhead p { color:var(--muted); opacity:1; }
+.banner,.banner.fac { background:var(--soft); border:0; }
+.banner svg,.coach svg,.card.empty svg { display:none; }
+.tile:hover { transform:none; box-shadow:inset 0 0 0 1px var(--line); }
+.tile.m,.sc.s,.tc-s { border-top-color:var(--sky); }
+.sc.w,.tc-w { border-top-color:var(--sand); }
+.sc.t,.tc-t,.tile.a { border-top-color:var(--ch); }
+.tile.a,.qa,.tc-a,.sc.a { border-top-color:var(--ca); }
+/* top bar */
+body::before { background:var(--bg); }
+.top { background:var(--bg); box-shadow:none; border-bottom:1px solid var(--line); }
+.bar2 { max-width:1040px; padding:12px 16px; }
+#nav a { color:var(--muted); }
+#nav a.on { font-weight:500; }
+.psy-back { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:12px; border:1px solid var(--line); color:var(--text); text-decoration:none; font-size:14px; white-space:nowrap; flex:none; }
+.psy-back svg,.psy-theme svg { width:18px; height:18px; }
+.psy-theme { width:40px; height:40px; padding:0; border-radius:999px; border:0; background:var(--card); color:var(--text); display:inline-flex; align-items:center; justify-content:center; flex:none; }
+.psy-sun { display:block; } .psy-moon { display:none; }
+:root[data-theme="light"] .psy-sun { display:none; } :root[data-theme="light"] .psy-moon { display:block; }
+@media (max-width:600px) { .psy-back span { display:none; } .psy-back { padding:0 10px; } }
+.rolew select { border-color:var(--line); color:var(--text); font-weight:400; }
+/* buttons and controls */
+button { border-radius:12px; font-weight:400; }
+.primary,.btnlink,.app a.go,#nav a.on { background:var(--accent) !important; color:var(--on-accent) !important; border-color:transparent; font-weight:500; }
+.btnlink { border-radius:14px; }
+.btnlink.alt,.ghost,.chips2 button,.tabs button { background:transparent !important; color:var(--text) !important; border:1px solid var(--line); }
+.tabs button[aria-selected=true],.chips2 button[aria-pressed=true] { background:var(--soft) !important; color:var(--accent) !important; border-color:transparent; font-weight:500; }
+.opts span { border-radius:12px; }
+.opts input:checked+span { background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+input[type=text],select,textarea,input[type=date],input[type=time] { border-radius:12px; }
+.hrow input { accent-color:var(--accent); }
+.steps li:before,.psteps li.on { color:var(--on-accent); }
+/* progress, levels, badges */
+.prog i { background:var(--accent); }
+.badge { color:#141813; font-weight:500; }
+.orb,.orb2 { background:radial-gradient(circle at 30% 30%,#E4EED8,var(--accent)); box-shadow:none; }
+.reg.relax { fill:rgba(163,188,142,.55); }
+.bd.got { background:var(--gsoft); }
+.wd.on i { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+.wd.perf i { background:var(--mod); border-color:var(--mod); }
+.care { border:0; border-left:4px solid var(--high); background:var(--rsoft); border-radius:18px; }
+/* support loop */
+.pill { border:0; background:var(--bg); }
+.pill.sent { background:var(--rsoft); color:var(--high); }
+.pill.ack,.pill.prog,.pill.closed { background:var(--soft); color:var(--accent); }
+.pill.meet { background:var(--accent); color:var(--on-accent); }
+.pill.conf { background:var(--gsoft); color:var(--mod); }
+.pill.urg,.nb { background:var(--high); color:var(--bg); }
+.case.un { border-left:4px solid var(--mod); }
+.msg { border:0; }
+.msg.me { background:var(--soft); }
+.stepper li.cur:before { color:var(--on-accent); }
+/* toast and confetti */
+#toast { background:var(--notice); color:var(--text); box-shadow:0 18px 40px rgba(0,0,0,.3); font-weight:400; border-radius:18px; }
+#toast.big { background:var(--accent); color:var(--on-accent); }
+.tile,.sc,.qa,.qh,[class*="tc-"] { border-top-width:3px !important; }
+
+/* embedded in the PSY:KOS student view */
+.embed .rolew,.embed .psy-back,.embed .psy-theme,.embed .card:has(#prof){display:none !important;}
+.embed body::before{display:none;}
+</style>
+</head>
+<body>
+<header class="top"><div class="bar2"><a class="psy-back" href="student.html" aria-label="Back to my dashboard"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg><span>My dashboard</span></a>
+<nav id="nav"></nav><label class="rolew"><span class="sr">View as</span><select id="role" aria-label="Choose dashboard"><option value="student">🎓 Student</option><option value="faculty">👩‍🏫 Faculty</option><option value="swo">🩺 SWO</option></select></label><button class="psy-theme" type="button" id="psy-theme" aria-label="Switch theme"><svg class="psy-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="psy-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></header>
+<main class="wrap">
+
+<section class="view on" id="v-home">
+ <section class="hero"><span class="fl f1">📚</span><span class="fl f2">💡</span><span class="fl f3">🎧</span><span class="fl f4">⚡</span>
+ <div class="hero-txt"><h1>🌟 FocusWell</h1><p>Check how your focus, mood and wellbeing are doing, then get simple tips that really help.</p>
+ <div class="chips"><span>🎯 Know your focus</span><span>💙 Check your mood</span><span>🌿 Boost your wellbeing</span></div><a class="btnlink" href="#attention">Start now ✨</a></div>
+ <div class="hero-art" id="heroArt" aria-hidden="true"></div></section>
+ <div class="card"><h2>👤 Who are you?</h2><div id="prof"></div><p class="note">Your answers and rewards are saved in this browser, on this device. Your scores are shared with the Student Welfare Officer or your faculty only if you choose to.</p></div>
+ <div id="hr"></div>
+ <h2>Choose an area</h2>
+ <div class="tiles">
+  <a class="tile a" href="#attention"><div class="ti">🎯</div><h3>Attention &amp; Activity</h3><p>How well you focus, and how restless or impulsive you feel. 18 questions, about 4 minutes.</p><span class="st" id="st-att">Not started</span></a>
+  <a class="tile m" href="#mood"><div class="ti">💙</div><h3>Mood</h3><p>Check your sadness, worry and stress over the past week. 21 questions, about 5 minutes.</p><span class="st" id="st-mood">Not started</span></a>
+  <a class="tile w" href="#wellbeing"><div class="ti">🌿</div><h3>General Wellbeing</h3><p>A quick look at how you have been coping lately. 12 questions, about 3 minutes.</p><span class="st" id="st-well">Not started</span></a>
+ </div>
+ <div class="card"><h2>🚀 Your progress</h2><p class="note" id="jn"></p><div class="prog"><i id="jb"></i></div><a class="btnlink alt" href="#summary">See my summary 📊</a></div>
+ <div class="card"><h2>How it works</h2><ul><li><b>1. Answer</b> honestly. There are no right or wrong answers.</li><li><b>2. See your scores</b> on colourful score cards.</li><li><b>3. Get tips</b> in simple language, with one set for students and one for faculty.</li><li><b>4. Ask for support</b> from the Student Welfare Officer in the Support tab, and confirm when you have been helped.</li></ul><p class="note">This dashboard is a self-check and not a diagnosis. If you are worried, please talk to a counsellor or doctor.</p></div>
+ <div id="home-swo"></div>
+</section>
+
+<section class="view" id="v-attention">
+ <div class="vhead va"><span class="vi">🎯</span><div><h1>Attention &amp; Activity</h1><p>Tell us how often these things happened in the past 6 months.</p></div></div>
+ <p class="note" id="pc-att"></p><div class="prog" aria-hidden="true"><i id="pb-att"></i></div>
+ <div class="grid"><div class="card qa"><h2>🧩 Inattention assessment<small>focus &amp; follow-through</small></h2><div id="q-a"></div></div><div class="card qh"><h2>⚡ Overactivity/impulsivity assessment<small>energy &amp; impulses</small></h2><div id="q-h"></div></div></div>
+ <div class="row"><button class="primary" data-calc="att">✨ Calculate my scores</button><button class="ghost" data-demo="att">Fill sample answers</button><button class="ghost" data-reset="att">Reset</button></div>
+ <p class="note" id="m-att" role="alert"></p>
+ <div id="r-att" style="display:none"></div>
+</section>
+
+<section class="view" id="v-mood">
+ <div class="vhead vm"><span class="vi">💙</span><div><h1>Mood check</h1><p>Think about the past week. How much did each statement apply to you?</p></div></div>
+ <p class="note" id="pc-mood"></p><div class="prog" aria-hidden="true"><i id="pb-mood"></i></div>
+ <div class="card"><h2>💬 Sadness, worry and stress<small>21 statements</small></h2><div id="q-m"></div></div>
+ <div class="row"><button class="primary" data-calc="mood">✨ Calculate my scores</button><button class="ghost" data-demo="mood">Fill sample answers</button><button class="ghost" data-reset="mood">Reset</button></div>
+ <p class="note" id="m-mood" role="alert"></p>
+ <div id="r-mood" style="display:none"></div>
+</section>
+
+<section class="view" id="v-wellbeing">
+ <div class="vhead vw"><span class="vi">🌿</span><div><h1>General Wellbeing</h1><p>Think about the last few weeks compared with how you usually feel.</p></div></div>
+ <p class="note" id="pc-well"></p><div class="prog" aria-hidden="true"><i id="pb-well"></i></div>
+ <div class="card"><h2>🌈 How have you been lately?<small>12 questions</small></h2><div id="q-w"></div></div>
+ <div class="row"><button class="primary" data-calc="well">✨ Calculate my scores</button><button class="ghost" data-demo="well">Fill sample answers</button><button class="ghost" data-reset="well">Reset</button></div>
+ <p class="note" id="m-well" role="alert"></p>
+ <div id="r-well" style="display:none"></div>
+</section>
+
+<section class="view" id="v-relax"><div class="vhead vr"><span class="vi">🧘</span><div><h1>Relax</h1><p>A 5-minute muscle relaxation video, breathing audio and a focus timer, all inside this page.</p></div></div>
+<div class="tabs" id="rtabs"><button data-rtab="pmr" aria-selected="true">🎬 Muscle relaxation video</button><button data-rtab="breath" aria-selected="false">🌬️ Breathing audio</button><button data-rtab="focus" aria-selected="false">🍅 Focus timer</button></div>
+<div class="pane on" id="pane-pmr"><div class="card"><h2>🎬 5-minute progressive muscle relaxation</h2>
+<p class="note">Sit or lie down comfortably. For each body part, tighten the muscles for 5 seconds (not to the point of pain), then let go for 15 seconds and notice the difference. Skip any area that is injured or sore. Turn on your sound for the voice and chimes.</p>
+<div class="stage"><div class="figure" id="pf"></div><div><div class="phase" id="pph">Ready</div><div class="cd" id="pcd">5:00</div><p class="cap" id="pcap">Press play to begin.</p></div></div>
+<div class="prog"><i id="ppb"></i></div>
+<div class="ctl"><button class="primary" data-act="pplay" id="pbtn">▶ Play</button><button class="ghost" data-act="prst">↺ Restart</button><label><input type="checkbox" id="pvoice" checked> 🗣️ Voice</label><label><input type="checkbox" id="pchime" checked> 🔔 Chimes</label><span class="note" id="ptime">0:00 / 5:00</span></div>
+<ol class="psteps" id="psteps"></ol>
+<p class="note">Finish the full session to earn 30 points once a day. If you feel dizzy or have a medical condition, check with your doctor first.</p></div></div>
+<div class="pane" id="pane-breath"><div class="card"><h2>🌬️ Guided breathing audio</h2>
+<p class="note">Pick a style and a length, press Start, and follow the circle and the sound. The tone rises as you breathe in and falls as you breathe out.</p>
+<div class="chips2" id="btypes"><button data-bt="belly" aria-pressed="true">Belly (diaphragmatic)</button><button data-bt="box" aria-pressed="false">Box breathing</button><button data-bt="fe" aria-pressed="false">4-7-8 breathing</button></div>
+<p class="note" id="bdesc"></p>
+<div class="chips2" id="bdurs"><button data-bd="1" aria-pressed="false">1 min</button><button data-bd="3" aria-pressed="true">3 min</button><button data-bd="5" aria-pressed="false">5 min</button></div>
+<div class="breath2"><div class="orb2" id="orb"></div><div class="blabel" id="blabel">Ready</div></div>
+<p class="note" style="text-align:center" id="bstat">Breaths: 0</p>
+<div class="ctl"><button class="primary" data-act="bstart" id="bbtn">▶ Start</button><label><input type="checkbox" id="btone" checked> 🔔 Tone</label><label><input type="checkbox" id="bvoice"> 🗣️ Voice</label></div>
+<h3>How to do belly breathing</h3><ol class="steps" id="bsteps"></ol>
+<p class="note">If you feel dizzy, stop and breathe normally. If you have asthma, a lung or heart problem, or strong anxiety, check with your doctor first. Finish a session to earn 15 points.</p></div></div>
+<div class="pane" id="pane-focus"><div class="card"><h2>🍅 Focus timer</h2>
+<p class="note">Work in short blocks, then rest. Start small: even 10 minutes counts!</p>
+<div class="chips2" id="fdurs"><button data-fd="10" aria-pressed="false">10 min</button><button data-fd="15" aria-pressed="false">15 min</button><button data-fd="25" aria-pressed="true">25 min</button></div>
+<div class="ftime" id="ftime">25:00</div><p class="note" style="text-align:center" id="fstat">Ready to focus</p>
+<div class="ctl" style="justify-content:center"><button class="primary" data-act="fstart" id="fbtn">▶ Start</button><button class="ghost" data-act="freset">↺ Reset</button></div>
+<p class="note">Put your phone away or on silent while you focus. Each finished block earns 5 points.</p></div></div>
+</section>
+
+<section class="view" id="v-plan"><div class="vhead vp"><span class="vi">🏆</span><div><h1>My Plan &amp; Rewards</h1><p>Turn tips into daily habits and earn points, badges and cheers for every step.</p></div></div><div id="plan"></div></section>
+
+<section class="view" id="v-summary"><div class="vhead vs"><span class="vi">📊</span><div><h1>My Summary</h1><p>All your scores in one place, with the areas to focus on first.</p></div></div><div id="sum"></div></section>
+
+<section class="view" id="v-support"><div class="vhead vsp"><span class="vi">💬</span><div><h1>Support</h1><p>Ask the Student Welfare Officer for help, follow the replies, and close the loop when you feel supported.</p></div></div><div id="sup"></div></section>
+
+<section class="view" id="v-faculty"><div class="vhead vf"><span class="vi">👩‍🏫</span><div><h1>Faculty Dashboard</h1><p>See your class, refer students to the Student Welfare Officer and find classroom strategies.</p></div></div><div id="fac"></div></section>
+
+<section class="view" id="v-swo"><div class="vhead vo"><span class="vi">🩺</span><div><h1>Student Welfare Officer Dashboard</h1><p>Student requests and faculty referrals, from the first message to a closed loop.</p></div></div><div id="swo"></div></section>
+
+<section class="view" id="v-students"><div class="vhead vt"><span class="vi">👥</span><div><h1>Students</h1><p>Enter student names with their class and semester. Students then pick their name on the Home page.</p></div></div><div id="stu"></div></section>
+<datalist id="clsList"></datalist>
+
+<p class="note" style="margin-top:24px">Student Welfare Officer: ✉️ <a href="mailto:psyconsult@rajagiritech.edu.in">psyconsult@rajagiritech.edu.in</a> · Tele-MANAS <a href="tel:14416">14416</a> (free, 24 hours) · Emergency <a href="tel:112">112</a></p>
+<p class="note">Tips on attention and activity are adapted from <i>Helping Every Learner Thrive: A Teacher’s Guide</i> by Dr. Silvy Mathew, Student Welfare Officer, Rajagiri School of Engineering &amp; Technology. Mood questions follow the DASS-21 (public domain). Wellbeing questions are original and inspired by the GHQ-12.</p>
+</main>
+<div id="toast" role="status" aria-live="polite"></div><div id="conf" aria-hidden="true"></div>
+<script>
+const $=id=>document.getElementById(id);
+const first=n=>String(n||"").trim().split(/\s+/)[0];
+const nm=()=>{const s=curStu();return s?first(s.name):"Friend"};
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const S={att:null,mood:null,well:null},TAB={att:"stu",mood:"stu",well:"stu"},DC=[0,0,0,0,0];
+const LC=["var(--l0)","var(--l1)","var(--l2)","var(--l3)","var(--l4)"];
+const FACE=["😎","🙂","🤔","🤗","🤗"];
+const MSG=["Doing great!","Looking okay","Worth some attention","Please reach out for support","Please reach out for support"];
+const LAB={att:["Mild","","Moderate","","High"],dass:["Normal","Mild","Moderate","Severe","Extremely severe"],well:["Good wellbeing","","Some concerns","","Needs support"]};
+const SCALES={
+ f:{o:["Never","Rarely","Sometimes","Often"],e:["😌","🙂","😅","😵"]},
+ d:{o:["Not at all","Some of the time","A good part of the time","Most of the time"],e:["😌","🙂","😟","😣"]},
+ gp:{o:["Better than usual","Same as usual","Less than usual","Much less than usual"],e:["😄","🙂","😕","😞"]},
+ gn:{o:["Not at all","No more than usual","More than usual","Much more than usual"],e:["😄","🙂","😕","😞"]}};
+const QA=["Fail to give close attention to details or make careless mistakes in coursework.","Have difficulty sustaining attention in lectures, reading or homework.","Seem not to listen when spoken to directly.","Do not follow through on instructions and fail to finish assignments.","Have difficulty organising tasks, notes, materials and time.","Avoid or dislike tasks needing sustained mental effort (reports, long readings, forms).","Lose things needed for tasks (books, phone, wallet, keys).","Am easily distracted by outside noise or unrelated thoughts.","Am forgetful in daily activities (deadlines, messages, chores)."];
+const QH=["Fidget, tap or squirm, or shake my legs.","Leave my seat when expected to stay seated (lectures, meetings).","Feel restless or unable to settle in places where it is not appropriate.","Have trouble doing leisure activities quietly.","Feel “on the go”, as if driven by a motor.","Talk excessively.","Blurt out answers before questions are finished.","Have difficulty waiting for my turn (queues, conversations).","Interrupt or intrude on others’ conversations or activities."];
+// DASS-21 items: s = sadness scale, w = worry scale, t = stress scale
+const DS=[["I found it hard to wind down","t"],["I was aware of dryness of my mouth","w"],["I couldn’t seem to experience any positive feeling at all","s"],["I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness in the absence of physical exertion)","w"],["I found it difficult to work up the initiative to do things","s"],["I tended to over-react to situations","t"],["I experienced trembling (e.g. in the hands)","w"],["I felt that I was using a lot of nervous energy","t"],["I was worried about situations in which I might panic and make a fool of myself","w"],["I felt that I had nothing to look forward to","s"],["I found myself getting agitated","t"],["I found it difficult to relax","t"],["I felt down-hearted and blue","s"],["I was intolerant of anything that kept me from getting on with what I was doing","t"],["I felt I was close to panic","w"],["I was unable to become enthusiastic about anything","s"],["I felt I wasn’t worth much as a person","s"],["I felt that I was rather touchy","t"],["I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)","w"],["I felt scared without any good reason","w"],["I felt that life was meaningless","s"]];
+const TH={s:[9,13,20,27],w:[7,9,14,19],t:[14,18,25,33]};
+// Wellbeing items (12, own wording, GHQ-12 style): true = positive item
+const GS=[["Kept your mind on what you were doing",1],["Felt that you are useful and doing something worthwhile",1],["Felt able to make up your mind about things",1],["Enjoyed your normal daily activities",1],["Been able to deal with problems as they came",1],["Felt fairly happy, all things considered",1],["Had trouble sleeping because of worries",0],["Felt under pressure all the time",0],["Felt that your problems were piling up too much to handle",0],["Felt unhappy or low",0],["Lost confidence in yourself",0],["Thought of yourself as a person of little value",0]];
+const CD={
+ a:{
+  stu:[
+   ["Study in short blocks (Pomodoro)","Study for 25 minutes, then rest for 5 minutes. Drink water or walk, but do not scroll your phone. After four rounds, take a longer break. A big task feels easier in small parts. Use the focus timer in the Relax section.","https://arc.duke.edu/pomodoro-technique","Pomodoro guide (Duke)"],
+   ["Park stray thoughts","Keep a paper next to you. When a random thought comes, write it down and go back to work. Read it after you finish."],
+   ["Write things down","Use a small notebook for your to-do list and deadlines. A wall clock with hands and phone alarms help you see the time."],
+   ["Plan your day","Make a timetable from wake-up to bedtime in one-hour slots. At the end of the week, check how you spent your time."],
+   ["Do the important things first","Sort your tasks. Important and urgent: do it now. Important but not urgent: plan a time (studying, projects, exercise). Urgent but not important: keep it short. Neither: skip it, like scrolling social media."],
+   ["Set clear goals","Make each goal clear, easy to measure, doable, useful and with a date. Example: pass the Fluid Mechanics exam in April by studying 30 minutes daily, taking a test after each chapter and meeting your teacher every week."],
+   ["Study with a friend","Pair up with a helpful, organised friend to share notes, remind each other of deadlines and go through assignments. A group of 3–4 with fixed study times works well."],
+   ["Start early and practise","Begin each assignment on the day you get it. Practise writing answers within the exam time. What you write is easier to remember in the exam."]],
+  fac:[
+   ["Seat near the front","Let the student sit in the front row or near you. It cuts distractions and makes it easier to help."],
+   ["Give short instructions","Break long instructions into small steps, both spoken and written."],
+   ["Share samples and templates","Give a format for assignments so the student does not miss key points."],
+   ["Teach in different ways","Use diagrams, flowcharts, short videos and hands-on work. Many students learn better this way than by reading alone."],
+   ["Bring attention back gently","If the student drifts, say their name softly, make brief eye contact and check if they followed. Do it quietly so they do not feel embarrassed."],
+   ["Check in often","Ask briefly how their work is going. Regular check-ins keep the student on track and help early."],
+   ["Buddy and study groups","Pair the student with a helpful classmate, or a group of 3–4 with one organised student. Share notes and fix study times."],
+   ["Help in exams","Give practice tests. Extra exam time is possible with a valid certificate. Project work can replace some theory exams if the rules allow."]]},
+ h:{
+  stu:[
+   ["Belly breathing","Practise every day to feel calm. Follow the guided audio in the Relax section.","https://my.clevelandclinic.org/health/articles/9445-diaphragmatic-breathing","Belly (diaphragmatic) breathing guide"],
+   ["Calm down and relax","Try box breathing, 4-7-8 breathing or the muscle relaxation video in the Relax section when you feel restless.","https://health.clevelandclinic.org/breathwork","More breathing methods"],
+   ["Move quietly","Use a small fidget toy or doodle. You can also ask to step out for water or the washroom. A little movement helps you focus again."],
+   ["Pause before you speak","Count to three before you answer. Write down your thought to share later, let others finish, and wait for your turn."],
+   ["Use screens less","Try to stay under 30 minutes of screen time a day. To relax, listen to music, take a short walk, talk to someone, play with a pet or do a small chore."],
+   ["Mix active and quiet work","Switch between active tasks (labs, group work, walking while revising) and quiet study so your energy is used well."]],
+  fac:[
+   ["Explain the rules","Explain class rules clearly at the start. It helps students stay calm and not disturb others."],
+   ["Allow short breaks","Let students step out quickly for water or the washroom. They come back calmer and more focused."],
+   ["Give active tasks","Use activities, demos and workshops, and small jobs like handing out papers, so their energy is used well."],
+   ["Teach turn-taking","Set simple rules for answering and discussion. If a student blurts out or interrupts, correct them kindly in private."],
+   ["Praise, with firm limits","Appreciate small tasks done well. Avoid punishment, but do not ignore deadlines or behaviour either."],
+   ["Avoid labels","Do not call a student careless, irresponsible or lazy. They are often already trying hard, and labels take away their motivation."]]},
+ g:{
+  stu:[
+   ["Eat well","Eat regular, healthy meals and do not skip breakfast. Include protein, whole grains, fruits, vegetables, fish, nuts and seeds. Have fewer sweets, energy drinks and strong coffee or tea. <b>Why it helps:</b> steady energy keeps you alert and focused, and good food helps your memory."],
+   ["Drink enough water","Keep a water bottle on your desk and sip all day, not only when you feel thirsty. Light yellow urine means you are drinking enough. <b>Why it helps:</b> even a small lack of water makes you tired and weakens focus and memory."],
+   ["Sleep well","Sleep 7–8 hours at the same time each night and keep your phone away before bed. <b>Why it helps:</b> sleep rests the brain, improves mood and helps you remember what you studied. Too little sleep makes you drowsy and easily distracted."],
+   ["Move every day","Do about an hour of sport or exercise (brisk walk, cycling, games, gym). <b>Why it helps:</b> exercise makes you more alert, focused and happy, and helps you learn and remember."],
+   ["Success jar","Write each small win on a slip of paper and put it in a jar (one hour of study, work done on time). Read them when you feel low."],
+   ["Picture your goal","Imagine yourself getting your degree on convocation day with family and friends. It keeps you going on tough days."],
+   ["Ask for help","Talk to your mentor, a faculty member you are comfortable with, or the Student Welfare Officer (counsellor) of the college for further help."]],
+  fac:[
+   ["Listen kindly","Do not judge feelings of failure, worry or guilt. Tell the student it is hard, that the right help works, and that other students have improved a lot."],
+   ["Make asking for help normal","Say, “Many hard-working students find it hard to focus. Let’s try some ways that help.” This lowers shame."],
+   ["Focus on strengths","Notice effort, creativity and progress, not only weak points. These students are often smart but find planning and focus hard."],
+   ["Make healthy habits easy","Allow water bottles in class, plan short breaks in long sessions and avoid very late deadlines when possible. Regular meals, water, sleep and exercise help students stay alert, focus and remember."],
+   ["Send to the Student Welfare Officer","Teachers can send a student to the Student Welfare Officer for a full check. The officer can advise or refer to a counsellor or doctor. Keep it respectful and private."]]}
+};
+const TECH={
+ title:"Calming and focus methods",
+ dia:["Sit or lie down comfortably with your shoulders relaxed.","Put one hand on your chest and the other on your belly.","Breathe in slowly through your nose. Your belly should rise while your chest stays still.","Breathe out slowly through your lips, pulling your belly in gently.","Start with 5–10 minutes a few times a day. Slowly build up to about 20 minutes a day. It is easier lying down at first."]
+};
+
+CD.g.stu.push(["Spend time with people","Meet friends, call home or join a club. Good company is one of the best protections for your mind and mood."],["Do something you enjoy","Make time every week for music, sport, art or a hobby, just because you like it."]);
+CD.s={stu:[
+ ["Talk to someone","Share how you feel with a friend, family member, mentor or counsellor. Talking can make a heavy feeling lighter."],
+ ["Do one small thing","Pick one small task today: make your bed, take a 10-minute walk or reply to a friend. Small wins slowly bring energy back."],
+ ["Get outside and move","Walk outdoors for 20–30 minutes in daylight. Sunshine and movement lift the mood of many people."],
+ ["Keep a routine","Wake up, eat, study and sleep at regular times. A steady day gives your mind something solid to hold on to."],
+ ["Enjoy small pleasures","Even 10 minutes of music, art, sport or a favourite show can help. You do not have to feel like it first; start, and the feeling often follows."],
+ ["Be kind to yourself","Talk to yourself the way you would talk to a good friend. Each night, write down three small things that went okay."],
+ ["Stay connected","Do not stay alone for too long. Sit with friends, join a club or study group, or call someone at home."],
+ ["Use social media wisely","Comparing yourself with other people’s posts can make you feel worse. Take breaks and follow people who make you feel good."],
+ ["Get help early","If you feel low for more than two weeks, or it stops you from studying, eating or sleeping, please see your mentor, a faculty member you trust, the Student Welfare Officer (counsellor) or a doctor. If you ever feel like hurting yourself, tell someone right away and call 112. In India, Tele-MANAS (14416) is free and open 24 hours."]],
+ fac:[
+ ["Notice the signs","Look for a student who is quiet, often absent, tired, losing interest, or whose marks suddenly drop."],
+ ["Talk privately and kindly","Ask gently, “I have noticed you seem low. How are you doing?” Listen without judging, advising or rushing."],
+ ["Avoid “just cheer up”","Saying “cheer up” or “think positive” can make a student feel worse. Say that you understand it is hard and that help is available."],
+ ["Be flexible where you can","Allow a little extra time or a catch-up plan, so the student does not fall far behind."],
+ ["Connect to support","Introduce the Student Welfare Officer (counsellor) and tell the student about Tele-MANAS (14416). Offer to walk with them to the first meeting."],
+ ["Act at once if there is a risk","If a student talks about hurting themselves, stay with them, stay calm, and call the Student Welfare Officer or emergency services (112) immediately. Do not keep it a secret."],
+ ["Follow up","Check in again after a few days. Knowing that someone cares makes a big difference."]]};
+CD.w={stu:[
+ ["Write your worries down","List what is on your mind. Mark each as “I can do something” or “I cannot control this”. Make a small plan for the first group and let the second group go."],
+ ["Set a worry time","Choose 15 minutes a day to think about worries. If a worry comes at other times, tell yourself “not now, later”."],
+ ["Slow your breathing","Try belly breathing or box breathing for a few minutes. Slow breaths tell your body it is safe. Use the guided breathing audio in the Relax section.","https://health.clevelandclinic.org/breathwork","More breathing methods"],
+ ["Ground yourself (5-4-3-2-1)","Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell and 1 you can taste. It brings your mind back to now."],
+ ["Face fears in small steps","Avoiding what scares you makes it grow. Practise in small steps, such as speaking in a small group first and a bigger one later."],
+ ["Prepare, then rest","Make a simple plan for exams or presentations, practise a little each day, and stop at night so your mind can rest."],
+ ["Cut back on caffeine","Strong coffee, tea and energy drinks can make your heart race and your hands shake, which feels like worry. Have less, especially in the evening."],
+ ["Relax your muscles","Tense each muscle group for a few seconds and then let go, from your toes up to your face. Try the 5-minute video in the Relax section.","https://health.clevelandclinic.org/progressive-muscle-relaxation-pmr","Muscle relaxation guide"],
+ ["Talk about it","Telling a friend, mentor or counsellor often shrinks a worry. If worry is on your mind most days or stops you from doing things, please ask for help."]],
+ fac:[
+ ["Be clear and predictable","Share the exam pattern, marking and deadlines early. Knowing what to expect lowers worry."],
+ ["Give a safe way to practise","Offer practice tests, mock vivas or small-group presentations before the real one."],
+ ["Break big tasks into steps","Give a simple plan with small milestones for projects and presentations."],
+ ["Stay calm and encouraging","Use a calm voice. Avoid saying “do not worry” or “relax”; try “let us take it one step at a time”."],
+ ["Allow a short pause","Let a very anxious student take a short break or step out for water before an oral task."],
+ ["Do not call students out","Avoid surprise questions or embarrassing a student in front of the class."],
+ ["Point to support","Share the counsellor’s details and Tele-MANAS (14416), and make it normal to use them."]]};
+CD.t={stu:[
+ ["Plan and put first things first","List your tasks, pick the top three for today and do the hardest first. Break big tasks into small steps."],
+ ["Take real breaks","Take 5 minutes every hour: stand up, stretch, drink water or look out of the window. Rest helps you work better, not worse."],
+ ["Sleep, eat and move","Sleep 7–8 hours, eat regular meals and be active every day. These three protect you from stress more than any trick."],
+ ["Relax in your own way","Listen to music, draw, play a sport, pray or meditate, or spend time with friends. Pick what really calms you."],
+ ["Learn to say no","You do not have to say yes to everything. Protect time for study, rest and fun."],
+ ["Talk it out","Share the pressure with a friend, family member or mentor. A problem shared is often lighter."],
+ ["Try muscle relaxation","Tense and relax your muscles one group at a time, or do belly breathing, when you feel tight. The Relax section has a 5-minute guided video.","https://health.clevelandclinic.org/progressive-muscle-relaxation-pmr","Muscle relaxation guide"],
+ ["Ask for more time","If you are overloaded, talk politely to your teacher about deadlines. Most teachers prefer to know early."]],
+ fac:[
+ ["Spread out the workload","Avoid many deadlines in the same week where possible, and share the plan early."],
+ ["Give clear instructions","Say exactly what is expected, how it will be marked and where to get help."],
+ ["Allow short breaks in long sessions","A 5-minute pause in a long class helps everyone focus again."],
+ ["Praise effort","Notice hard work and progress, not just marks."],
+ ["Give feedback in private","Correct mistakes quietly and kindly, not in front of the class."],
+ ["Share healthy habits","Remind students that sleep, meals, water and exercise protect them from stress. Be a good example."],
+ ["Know where to send students","Keep the Student Welfare Officer’s details handy, and share Tele-MANAS (14416) for after-hours support."]]};
+Object.values(CD).forEach(r=>[r.stu,r.fac].forEach(a=>a&&a.forEach(t=>{t.length=2})));
+CD.g.fac.push(["Cheer on their plan","Ask how their daily habits are going and appreciate small wins, such as a 3-day streak. Praise effort, not just results."]);
+const SWO={name:"Dr. Silvy Mathew",role:"Student Welfare Officer",org:"Rajagiri School of Engineering &amp; Technology",mail:"psyconsult@rajagiritech.edu.in"};
+const SWOL=`<a href="mailto:${SWO.mail}">${SWO.mail}</a>`;
+["Ask for help","Get help early","Send to the Student Welfare Officer","Connect to support","Point to support","Know where to send students"].forEach(n=>Object.values(CD).forEach(r=>[r.stu,r.fac].forEach(a=>a.forEach(t=>{if(t[0]===n)t[1]+=` Email the Student Welfare Officer: ${SWOL}.`}))));
+const NOADD=["Get help early","Ask for help"];
+const IC={"Study in short blocks (Pomodoro)":"⏱️","Park stray thoughts":"💭","Write things down":"📝","Plan your day":"🗓️","Do the important things first":"🎯","Set clear goals":"🏆","Study with a friend":"🤝","Start early and practise":"🚀","Seat near the front":"🪑","Give short instructions":"✂️","Share samples and templates":"📄","Teach in different ways":"🎨","Bring attention back gently":"👋","Check in often":"💬","Buddy and study groups":"👥","Help in exams":"📋","Belly breathing":"🌬️","Calm down and relax":"🧘","Move quietly":"🤸","Pause before you speak":"⏸️","Use screens less":"📵","Mix active and quiet work":"⚖️","Explain the rules":"📣","Allow short breaks":"☕","Give active tasks":"🎬","Teach turn-taking":"🔁","Praise, with firm limits":"👏","Avoid labels":"🏷️","Eat well":"🥗","Drink enough water":"💧","Sleep well":"😴","Move every day":"🏃","Success jar":"🏅","Picture your goal":"🎓","Ask for help":"🙋","Listen kindly":"👂","Make asking for help normal":"💙","Focus on strengths":"💪","Make healthy habits easy":"🍎","Send to the Student Welfare Officer":"🤝"};
+
+Object.assign(IC,{"Cheer on their plan":"🎉","Talk to someone":"🗣️","Do one small thing":"🌱","Get outside and move":"☀️","Keep a routine":"⏰","Enjoy small pleasures":"🎶","Be kind to yourself":"💛","Stay connected":"👫","Use social media wisely":"📱","Get help early":"🆘","Notice the signs":"👀","Talk privately and kindly":"💬","Avoid “just cheer up”":"🚫","Be flexible where you can":"🕰️","Connect to support":"🧭","Act at once if there is a risk":"🚨","Follow up":"📅","Write your worries down":"✍️","Set a worry time":"⏳","Slow your breathing":"🫁","Ground yourself (5-4-3-2-1)":"🖐️","Face fears in small steps":"🪜","Prepare, then rest":"📚","Cut back on caffeine":"☕","Relax your muscles":"💆","Talk about it":"🗨️","Be clear and predictable":"🗺️","Give a safe way to practise":"🎤","Break big tasks into steps":"🧱","Stay calm and encouraging":"🕊️","Allow a short pause":"🧃","Do not call students out":"🙈","Point to support":"📞","Plan and put first things first":"🗂️","Take real breaks":"🛋️","Sleep, eat and move":"💚","Relax in your own way":"🎧","Learn to say no":"✋","Talk it out":"🫶","Try muscle relaxation":"🧘","Ask for more time":"🗓️","Spread out the workload":"📆","Give clear instructions":"📌","Allow short breaks in long sessions":"🔔","Praise effort":"🌟","Give feedback in private":"🔒","Share healthy habits":"🥦","Know where to send students":"📇","Spend time with people":"🫂","Do something you enjoy":"🎨"});
+function tipCard(title,items,k,lead,plan){
+ return `<div class="card tc-${k}"><h3>${title}</h3>${lead?`<p class="lvl" style="--c:var(--cg)">${lead}</p>`:""}<ul>`+
+ items.map(t=>{const id=k+"|"+t[0],can=plan&&!NOADD.includes(t[0]),on=inPlan(id);return `<li class="tp"><span class="ic">${IC[t[0]]||"✨"}</span><div><b>${t[0]}.</b> ${t[1]}${can?`<div><button class="add ${on?"on":""}" data-add="${id}">${on?"✓ In my plan":"➕ Add to my plan"}</button></div>`:""}</div></li>`}).join("")+`</ul></div>`;
+}
+function teen(o){
+ const a=o.acc||[],h=o.hair,sk=o.skin,H=o.style,has=k=>a.includes(k),T=o.blazer||o.tee,R=o.wave?-140:-12;
+ let s=`<svg class="kid" viewBox="0 0 100 165" width="86" height="142"><ellipse cx="50" cy="163" rx="30" ry="3" fill="#000" opacity=".12"/>`;
+ if(has("backpack"))s+=`<rect x="66" y="66" width="16" height="34" rx="7" fill="#6c5ce7"/><rect x="69" y="74" width="10" height="9" rx="3" fill="#4c3fd1"/>`;
+ if(has("skate"))s+=`<rect x="86" y="96" width="8" height="58" rx="4" fill="#ff5d8f"/><circle cx="90" cy="104" r="3" fill="#333"/><circle cx="90" cy="146" r="3" fill="#333"/>`;
+ if(H==="pony"||H==="bun")s+=`<path d="M64 26Q90 24 84 62Q80 46 64 42Z" fill="${h}"/>`;
+ if(H==="long")s+=`<path d="M28 40Q22 80 32 88L68 88Q78 80 72 40Z" fill="${h}"/>`;
+ s+=`<rect x="31" y="100" width="17" height="54" rx="6" fill="${o.jeans}"/><rect x="52" y="100" width="17" height="54" rx="6" fill="${o.jeans}"/><path d="M39.5 108V148M60.5 108V148" stroke="#fff" stroke-opacity=".28" stroke-dasharray="3 3"/>`;
+ if(o.rip)s+=`<rect x="34" y="124" width="11" height="6" rx="2" fill="#fff" opacity=".8"/>`;
+ s+=`<rect x="26" y="150" width="25" height="12" rx="6" fill="#fff" stroke="#ddd"/><rect x="26" y="157" width="25" height="5" rx="2.5" fill="${o.sole}"/><rect x="49" y="150" width="25" height="12" rx="6" fill="#fff" stroke="#ddd"/><rect x="49" y="157" width="25" height="5" rx="2.5" fill="${o.sole}"/>`;
+ const arm=(x,r)=>`<g transform="rotate(${r} ${x} 68)"><rect x="${x-5}" y="66" width="10" height="30" rx="5" fill="${sk}"/></g>`;
+ const sl=(x,r)=>`<g transform="rotate(${r} ${x} 68)"><rect x="${x-7}" y="62" width="14" height="${o.blazer?30:16}" rx="5" fill="${T}"/></g>`;
+ s+=arm(27,12)+arm(73,R)+`<rect x="29" y="62" width="42" height="46" rx="10" fill="${T}"/>`+sl(27,12)+sl(73,R);
+ if(o.blazer)s+=`<path d="M44 62L50 84L56 62Z" fill="${o.tee}"/><path d="M50 84V108" stroke="#0003" stroke-width="2"/>`;
+ else s+={bolt:'<path d="M53 74L44 88H50L47 100L58 84H52Z" fill="#ffd166"/>',star:'<path d="M50 74l3.5 7.5 8 1-6 5.5 1.7 8L50 92l-7.2 3.9 1.7-8-6-5.5 8-1z" fill="#fff"/>',smile:'<circle cx="50" cy="86" r="9" fill="#ffd166"/><circle cx="47" cy="84" r="1.5" fill="#333"/><circle cx="53" cy="84" r="1.5" fill="#333"/><path d="M45 89Q50 94 55 89" stroke="#333" fill="none" stroke-width="1.5"/>',stripes:'<rect x="29" y="80" width="42" height="5" fill="#fff" opacity=".8"/><rect x="29" y="90" width="42" height="5" fill="#fff" opacity=".8"/>'}[o.gfx]||"";
+ if(has("backpack"))s+=`<path d="M38 64L37 104M62 64L63 104" stroke="#4c3fd1" stroke-width="4" stroke-linecap="round"/>`;
+ s+=`<rect x="44" y="52" width="12" height="14" rx="4" fill="${sk}"/><circle cx="29" cy="40" r="4" fill="${sk}"/><circle cx="71" cy="40" r="4" fill="${sk}"/><circle cx="50" cy="38" r="21" fill="${sk}"/>`;
+ if(has("neckphones"))s+=`<path d="M35 60Q50 78 65 60" fill="none" stroke="#2d2d44" stroke-width="4"/><circle cx="35" cy="62" r="5" fill="#ff5d8f"/><circle cx="65" cy="62" r="5" fill="#ff5d8f"/>`;
+ s+=`<circle cx="34" cy="46" r="4" fill="#ff8fab" opacity=".45"/><circle cx="66" cy="46" r="4" fill="#ff8fab" opacity=".45"/><path d="M43 47Q50 54 57 47" stroke="#222" fill="none" stroke-width="2.4" stroke-linecap="round"/>`;
+ if(has("shades"))s+=`<rect x="35" y="35" width="14" height="9" rx="4" fill="#222"/><rect x="51" y="35" width="14" height="9" rx="4" fill="#222"/><path d="M49 39h2" stroke="#222" stroke-width="2"/>`;
+ else s+=`<circle cx="43" cy="40" r="2.6" fill="#222"/><circle cx="57" cy="40" r="2.6" fill="#222"/>`;
+ if(has("glasses"))s+=`<g fill="none" stroke="#2d2d44" stroke-width="2"><circle cx="43" cy="40" r="6"/><circle cx="57" cy="40" r="6"/><path d="M49 40h2"/></g>`;
+ const F={cap:`<path d="M29 40Q28 24 50 20Q72 24 71 40Q62 30 50 30Q38 30 29 40Z" fill="${h}"/><path d="M28 34Q28 11 50 11Q72 11 72 34Z" fill="${o.cap}"/><path d="M48 32Q78 27 85 36L50 38Z" fill="${o.cap2}"/>`,
+  pony:`<path d="M29 40Q27 16 50 16Q73 16 71 40Q62 26 50 28Q38 26 29 40Z" fill="${h}"/><circle cx="66" cy="30" r="3.5" fill="#ff5d8f"/>`,
+  bun:`<path d="M29 40Q27 16 50 16Q73 16 71 40Q62 26 50 28Q38 26 29 40Z" fill="${h}"/><circle cx="50" cy="11" r="8" fill="${h}"/>`,
+  quiff:`<path d="M29 38Q26 14 52 14Q76 16 71 38Q64 26 52 26Q40 26 29 38Z" fill="${h}"/><circle cx="58" cy="14" r="8" fill="${h}"/>`,
+  long:`<path d="M29 40Q27 15 50 15Q73 15 71 40Q60 24 50 26Q40 24 29 40Z" fill="${h}"/>`,
+  curly:[[33,28],[42,19],[54,17],[64,22],[69,32]].map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="9" fill="${h}"/>`).join(""),
+  beanie:`<path d="M28 34Q28 10 50 10Q72 10 72 34Z" fill="${o.cap}"/><rect x="27" y="29" width="46" height="9" rx="4.5" fill="${o.cap2}"/><circle cx="50" cy="9" r="4" fill="${o.cap2}"/>`};
+ return s+(F[H]||"")+`</svg>`;
+}
+const BOY={skin:"#8d5a3b",hair:"#1c1c1c",style:"cap",cap:"#e63946",cap2:"#b5232f",tee:"#14b8a6",gfx:"bolt",jeans:"#3b6aa8",sole:"#ff5d8f",acc:["neckphones"],wave:1};
+const GIRL={skin:"#f1c27d",hair:"#5b3a1e",style:"pony",tee:"#ffd166",gfx:"star",jeans:"#7aa5d6",rip:1,sole:"#6c5ce7",acc:["backpack"]};
+const COOL={skin:"#ffd7b5",hair:"#2d1b0e",style:"quiff",tee:"#ff7a45",gfx:"stripes",jeans:"#243b6b",sole:"#14b8a6",acc:["shades","skate"]};
+const TCH1={skin:"#e0ac69",hair:"#2b2b2b",style:"quiff",tee:"#fff",blazer:"#3b82f6",jeans:"#6b7280",sole:"#333",acc:["glasses"]};
+const TCH2={skin:"#ffd7b5",hair:"#8b4513",style:"long",tee:"#fff",blazer:"#ec4899",jeans:"#374151",sole:"#333",acc:["glasses"]};
+
+
+function banner(T){
+ return T==="stu"
+ ?`<div class="banner">${teen(BOY)}${teen(GIRL)}<p>Small habits, big wins! 💪 Pick two or three tips and try them this week.</p></div>`
+ :`<div class="banner fac">${teen(TCH1)}${teen(TCH2)}<p>Small changes in class make a big difference. 🌱 Try one or two ideas this week.</p></div>`;
+}
+function relaxCTA(){
+ return `<div class="card tc-g"><h3>🧘 Try a guided session</h3><p class="note">A muscle relaxation video, breathing audio and a focus timer are waiting in the Relax section.</p><a class="btnlink" href="#relax">Open Relax 🧘</a></div>`;
+}
+function planCallout(T){
+ return T==="stu"?`<div class="card tc-g"><h3>🏆 Turn tips into daily habits</h3><p>Tap “➕ Add to my plan” on any tip, then tick it off each day to earn points, badges and cheers!</p><a class="btnlink" href="#plan">Open my plan 🏆</a></div>`
+ :`<div class="card"><h3>🎉 Encourage the plan</h3><p style="margin:0">Students can turn tips into daily habits and earn rewards in the My Plan section. A word of appreciation from you means a lot.</p></div>`;
+}
+function dailyFive(){
+ const L=["💧 Drank enough water","🥗 Ate regular meals","😴 Slept well last night","🏃 Moved my body","🫂 Spoke to someone I like"];
+ return `<div class="card tc-g"><h3>✅ My daily five</h3><div class="chk">${L.map((t,i)=>`<label><input type="checkbox" class="dc" data-i="${i}" ${DC[i]?"checked":""}> ${t}</label>`).join("")}</div><p class="note" id="dcount">${DC.reduce((a,b)=>a+b,0)} of 5 done today</p></div>`;
+}
+// ---------- levels and cards
+const lvAtt=x=>x<=9?0:x<=18?2:4;
+const lvD=(x,k)=>{const i=TH[k].findIndex(t=>x<=t);return i<0?4:i};
+function scard(o){
+ return `<div class="card sc ${o.k}"><div class="mood">${FACE[o.li]}</div><h2>${o.title}</h2><div class="big">${o.val}<span class="note"> / ${o.max}</span></div>
+ <div style="margin:8px 0"><span class="badge" style="background:${LC[o.li]}">${o.label}</span> <span class="note">${MSG[o.li]}</span></div>
+ <div class="bar" role="img" aria-label="${o.label}"><i style="background:${LC[o.li]}" data-w="${Math.round(o.pct*100)}"></i></div>
+ <div class="scale">${o.leg.map(x=>`<span>${x}</span>`).join("")}</div></div>`;
+}
+function careHTML(){
+ return `<div class="care">💙 <b>You are not alone.</b> If these feelings are heavy, please talk to someone today: a friend, your mentor, a faculty member you trust, or the Student Welfare Officer (counsellor) at ${SWOL}, or send a request in the <a href="#support">Support</a> tab. In India you can call Tele-MANAS free, any time, on <a href="tel:14416">14416</a> (or 1-800-891-4416). If you ever feel unsafe or think about hurting yourself, call <a href="tel:112">112</a> or go to the nearest hospital, and please do not stay alone.</div>`;
+}
+const careMood=()=>S.mood&&(S.mood.l.s>=3||S.mood.l.w>=3||S.mood.l.t>=3||S.mood.q21>=2);
+// ---------- build questionnaires
+function qb(p,items,start,scaleOf){
+ return items.map((q,i)=>{const n=start+i,sc=SCALES[scaleOf(q)];
+  return `<div class="q"><p>${i+1}. ${q[0]||q}</p><div class="opts">`+sc.o.map((o,v)=>`<label><input type="radio" name="${p}${n}" value="${v}"><span><em>${sc.e[v]}</em>${o}</span></label>`).join("")+`</div></div>`}).join("");
+}
+$("q-a").innerHTML=qb("t",QA,0,()=>"f");$("q-h").innerHTML=qb("t",QH,9,()=>"f");
+$("q-m").innerHTML=qb("m",DS,0,()=>"d");
+$("q-w").innerHTML=qb("w",GS,0,q=>q[1]?"gp":"gn");
+const META={t:["att",18],m:["mood",21],w:["well",12]};
+function upd(p){const [k,n]=META[p];const c=document.querySelectorAll(`input[name^="${p}"]:checked`).length;$("pc-"+k).textContent=c+" of "+n+" answered";$("pb-"+k).style.width=(c/n*100)+"%"}
+["t","m","w"].forEach(upd);
+// ---------- calculate
+function vals(p,n){const v=[];for(let i=0;i<n;i++){const c=document.querySelector(`input[name="${p}${i}"]:checked`);v.push(c?+c.value:null)}return v}
+function calc(k){
+ const p={att:"t",mood:"m",well:"w"}[k],n=META[p][1],v=vals(p,n),done=v.filter(x=>x!==null).length;
+ if(done<n){$("m-"+k).textContent=`Please answer all questions (${done} of ${n} answered).`;return}
+ $("m-"+k).textContent="";
+ S[k]=score(k,v);
+ const s=curStu();if(s){s.res[k]=S[k];s.res[k+"At"]=Date.now();saveDB()}else toast("Tip: choose your name on Home so your results are saved.");
+ TAB[k]="stu";showRes(k);refresh();
+}
+function score(k,v){
+ if(k==="att"){const a=v.slice(0,9).reduce((x,y)=>x+y,0),h=v.slice(9).reduce((x,y)=>x+y,0);return {a,h,la:lvAtt(a),lh:lvAtt(h),v}}
+ if(k==="mood"){const r={s:0,w:0,t:0};DS.forEach((q,i)=>r[q[1]]+=v[i]);for(const x in r)r[x]*=2;return {r,l:{s:lvD(r.s,"s"),w:lvD(r.w,"w"),t:lvD(r.t,"t")},q21:v[20],v}}
+ if(k==="well"){let strain=0,flag=0;GS.forEach((q,i)=>{strain+=v[i];if(v[i]>=2)flag++});return {strain,wb:36-strain,li:strain<=11?0:strain<=23?2:4,flag,v}}
+}
+function showRes(k,quiet){
+ const R=S[k];let cards="",cols="grid",extra="",overall="",next="",disc="";
+ if(k==="att"){
+  const L=[["a","🧩 Inattention score",R.a,R.la],["h","⚡ Overactivity/impulsivity score",R.h,R.lh]];
+  cards=L.map(x=>scard({k:x[0],title:x[1],val:x[2],max:27,li:x[3],label:LAB.att[x[3]],pct:x[2]/27,leg:["Mild 0–9","Moderate 10–18","High 19–27"]})).join("");
+  const d=Math.abs(R.a-R.h);
+  overall=(R.a===R.h||d<=3?"Both areas score at similar levels, which suggests inattention and overactivity are both affecting you.":(R.a>R.h?"Inattention":"Overactivity/impulsivity")+" is the stronger area.")+` Inattention: ${LAB.att[R.la].toLowerCase()}. Overactivity/impulsivity: ${LAB.att[R.lh].toLowerCase()}. `+(R.la===4||R.lh===4?"A high score is worth discussing with the Student Welfare Officer or a qualified professional.":"The tips below can help with everyday focus and restlessness.");
+  next=`<a class="btnlink" href="#mood">Next: Mood 💙</a>`;
+  disc="This is a self-report screening demo, not a diagnosis. Each area is scored out of 27 (0–9 mild, 10–18 moderate, 19–27 high), a simple scale used by this dashboard. Many people show some of these signs because of stress, worry, low mood or tiredness. Only a qualified professional can make a diagnosis.";
+ }
+ if(k==="mood"){
+  cols="grid3";
+  const L=[["s","🌧️ Sadness score"],["w","🌀 Worry score"],["t","🔥 Stress score"]];
+  cards=L.map(x=>scard({k:x[0],title:x[1],val:R.r[x[0]],max:42,li:R.l[x[0]],label:LAB.dass[R.l[x[0]]],pct:R.r[x[0]]/42,leg:["Normal","Mild","Moderate","Severe","Extreme"]})).join("");
+  const top=L.slice().sort((a,b)=>R.l[b[0]]-R.l[a[0]]||R.r[b[0]]-R.r[a[0]])[0];
+  overall=R.l[top[0]]===0?"Your sadness, worry and stress scores are all in the normal range this week. Keep up your healthy habits!":`The area that needs the most care right now is ${top[1].split(" ")[1].toLowerCase()} (${LAB.dass[R.l[top[0]]].toLowerCase()}). The tips below start with it.`;
+  if(careMood())extra=careHTML();
+  next=`<a class="btnlink" href="#wellbeing">Next: Wellbeing 🌿</a>`;
+  disc="Questions follow the DASS-21 (Lovibond & Lovibond, 1995) for the past week. Each item is scored 0–3 and each scale total is doubled (maximum 42). Sadness, worry and stress match the three DASS-21 scales. This is a self-check, not a diagnosis.";
+ }
+ if(k==="well"){
+  cards=scard({k:"g",title:"🌿 Wellbeing score",val:R.wb,max:36,li:R.li,label:LAB.well[R.li],pct:R.wb/36,leg:["Needs support 0–12","Some concerns 13–24","Good 25–36"]})+
+  `<div class="card sc g"><div class="mood">🩺</div><h2>🩺 Quick check-in</h2><div class="big">${R.flag}<span class="note"> / 12 items</span></div><p style="margin:8px 0 0;font-size:.92rem">${R.flag>=4?"Several answers were worse than usual. It may help to talk to someone you trust or the Student Welfare Officer.":"Fewer than 4 answers were worse than usual, which is within the usual range."}</p></div>`;
+  overall=R.li===0?"Your general wellbeing looks good. Keep protecting it with sleep, food, movement and good company.":R.li===2?"Some things are weighing on you lately. Small daily habits and talking to someone can lift your wellbeing.":"Your wellbeing needs care right now. Please talk to someone you trust and use the tips below.";
+  if(R.li===4)extra=careHTML();
+  next=`<a class="btnlink" href="#summary">See my summary 📊</a>`;
+  disc="Inspired by the 12-item General Health Questionnaire (GHQ-12). The questions here are written in our own words and are not the official, licensed GHQ-12. Each answer scores 0–3 (higher means more strain); the wellbeing score is 36 minus the total. This is a simple demo, not a diagnosis.";
+ }
+ const el=$("r-"+k);
+ el.innerHTML=`<h2>Results for ${nm()}</h2><div class="${cols}">${cards}</div>${extra}<div class="card"><h2>📊 Overall profile</h2><p style="margin:0">${overall}</p></div>
+ <h2>💡 Tips and strategies</h2><div class="tabs" role="tablist"><button role="tab" data-tab="stu" data-view="${k}">🎓 For students</button><button role="tab" data-tab="fac" data-view="${k}">👩‍🏫 For faculty</button></div><div id="tips-${k}"></div>
+ <div class="row">${next}<a class="btnlink alt" href="#home">Home 🏠</a></div><p class="note">${disc}</p>`;
+ el.style.display="block";renderTips(k);
+ requestAnimationFrame(()=>el.querySelectorAll(".bar i").forEach(e=>e.style.width=e.dataset.w+"%"));
+ if(!quiet)el.scrollIntoView({behavior:"smooth"});
+}
+function renderTips(k){
+ const R=S[k];if(!R)return;const T=TAB[k],pl=T==="stu";let h=banner(T);
+ if(k==="att"){
+  const o=R.a>=R.h?["a","h"]:["h","a"],lab={a:"🧩 Tips for improving attention",h:"⚡ Tips for managing overactivity/impulsivity"};
+  h+='<div class="grid">'+o.map(x=>tipCard(lab[x],CD[x][T],x,"",pl)).join("")+"</div>";
+  if(pl)h+=relaxCTA();
+ }
+ if(k==="mood"){
+  const lab={s:"🌧️ Tips for managing sadness",w:"🌀 Tips for managing worry",t:"🔥 Tips for managing stress"};
+  const o=["s","w","t"].sort((a,b)=>R.l[b]-R.l[a]||R.r[b]-R.r[a]);
+  h+=o.map(x=>tipCard(lab[x],CD[x][T],x,"",pl)).join("");
+  if(pl)h+=relaxCTA();
+ }
+ if(k==="well"){
+  h+=tipCard(pl?"🌈 Healthy habits for a happy brain":"💛 Supporting the whole student",CD.g[T],"g",pl?"Healthy food, water, sleep and exercise help your brain stay alert, focus and remember.":"",pl);
+  if(pl)h+=dailyFive();
+ }
+ $("tips-"+k).innerHTML=h+planCallout(T)+swoCard(pl?"stu":"mail");
+ document.querySelectorAll(`[data-view="${k}"]`).forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===T));
+}
+// ---------- storage and rewards
+const SKEY="focuswell-v3";
+const NEWGAME=()=>({habits:[],log:{},badges:{},lvl:0,demo:false});
+let DB={role:"student",cur:null,students:[],cases:[],seq:1,guest:NEWGAME(),facName:""};
+try{const r=localStorage.getItem(SKEY);if(r){const o=JSON.parse(r);if(o&&typeof o==="object")DB=Object.assign(DB,o)}else{const r2=localStorage.getItem("focuswell-v2");if(r2){const o=JSON.parse(r2);if(o&&typeof o==="object")DB.guest=Object.assign(NEWGAME(),o)}}}catch(e){}
+function curStu(){return DB.students.find(s=>s.id===DB.cur)||null}
+let ST=curStu()?curStu().game:DB.guest;
+function saveDB(){try{localStorage.setItem(SKEY,JSON.stringify(DB))}catch(e){}}
+function save(){const s=curStu();if(s)s.game=ST;else DB.guest=ST;saveDB()}
+let SPEED=1,AC=null;
+const dkey=d=>{const x=d||new Date();return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const dayLog=k=>ST.log[k]||(ST.log[k]={h:[],pmr:0,breath:0,pomo:0,bonus:0});
+const active=k=>{const l=ST.log[k];return !!l&&(l.h.length>0||l.pmr>0||l.breath>0||l.pomo>0)};
+function stats(){
+ let pts=0,perfect=0,days=0,pmr=0,breath=0,pomo=0,habits=0;
+ for(const k in ST.log){const l=ST.log[k];pts+=l.h.length*10+(l.bonus?20:0)+l.pmr*30+l.breath*15+l.pomo*5;if(l.bonus)perfect++;if(active(k))days++;pmr+=l.pmr;breath+=l.breath;pomo+=l.pomo;habits+=l.h.length}
+ let streak=0,d=new Date();if(!active(dkey(d)))d=addDays(d,-1);while(active(dkey(d))){streak++;d=addDays(d,-1)}
+ const ks=Object.keys(ST.log).filter(active).sort();let best=0,run=0,prev=null;
+ ks.forEach(k=>{const dt=new Date(k+"T00:00:00");run=(prev&&Math.round((dt-prev)/864e5)===1)?run+1:1;best=Math.max(best,run);prev=dt});
+ return {pts,perfect,days,pmr,breath,pomo,habits,streak,best};
+}
+const LEVELS=[[0,"Seedling","🌱"],[50,"Sprout","🌿"],[150,"Sapling","🌳"],[300,"Strong Tree","🌲"],[600,"Forest Guardian","🏞️"]];
+function level(p){let i=0;LEVELS.forEach((l,j)=>{if(p>=l[0])i=j});const nx=LEVELS[i+1];return {i,name:LEVELS[i][1],ico:LEVELS[i][2],next:nx?nx[0]:null,pct:nx?(p-LEVELS[i][0])/(nx[0]-LEVELS[i][0]):1}}
+const BADGES=[
+ ["first","🌱","First Step","Complete your first habit or activity",x=>x.habits+x.pmr+x.breath+x.pomo>=1,"You started, and that is the hardest part!"],
+ ["spark","⚡","3-Day Spark","3 days in a row",x=>x.best>=3,"Three days in a row! A habit is being born."],
+ ["star","⭐","7-Day Star","7 days in a row",x=>x.best>=7,"A full week! You are proving that you can do this."],
+ ["champ","🏆","14-Day Champion","14 days in a row",x=>x.best>=14,"Two weeks of effort. Your future self says thank you."],
+ ["master","👑","21-Day Habit Master","21 days in a row",x=>x.best>=21,"21 days: this is now part of who you are!"],
+ ["perfect","🌟","Perfect Day","Finish every habit in one day",x=>x.perfect>=1,"A perfect day! Look at what you can do."],
+ ["calm","🧘","Calm Master","Finish the 5-minute relaxation video",x=>x.pmr>=1,"You gave your body 5 minutes of calm. Well done!"],
+ ["breath","🌬️","Breath Buddy","Finish 3 breathing sessions",x=>x.breath>=3,"Slow breaths are your superpower."],
+ ["focus","🍅","Focus Hero","Finish 5 focus timers",x=>x.pomo>=5,"Five focus blocks! Your attention is getting stronger."],
+ ["pts100","💯","100 Points","Earn 100 points",x=>x.pts>=100,"100 points of caring for yourself!"]];
+const PRAISE=["Great job, {n}! 🎉","You did it, {n}! Keep going! 💪","Small step, big win, {n}! 🌟","Proud of you, {n}! 👏","You showed up, {n}, and that counts! 🙌","Look at you go, {n}! 🚀"];
+const DAYMSG=["Every small step counts. Start with just one habit today.","Missed a day? That is okay. Today is a fresh start!","You are not behind. You are building something.","Progress, not perfection.","Be kind to yourself. You are doing your best."];
+const AREA_MSG={a:"Every focus block trains your attention like a muscle.",h:"Moving and pausing before you act builds self-control.",s:"Small kind steps can make heavy days feel lighter.",w:"Calm breaths and clear steps shrink worries.",t:"Rest is part of success. You are looking after yourself.",g:"Healthy habits feed your brain."};
+const praise=()=>PRAISE[Math.floor(Math.random()*PRAISE.length)].replace("{n}",nm());
+let TQ=[],TB=false;
+function toast(m,big){TQ.push([m,big]);if(!TB)nextToast()}
+function nextToast(){const x=TQ.shift(),t=$("toast");if(!x){TB=false;t.className="";return}TB=true;t.textContent=x[0];t.className="show"+(x[1]?" big":"");if(x[1])confetti();setTimeout(nextToast,x[1]?4200:2600)}
+function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;const c=$("conf"),co=["#6c5ce7","#ff5d8f","#ffa94d","#14b8a6","#ffd166","#0ea5e9"];for(let i=0;i<40;i++){const e=document.createElement("i");e.style.left=Math.random()*100+"%";e.style.background=co[i%6];e.style.animationDelay=Math.random()*.6+"s";c.appendChild(e);setTimeout(()=>e.remove(),3400)}}
+const inPlan=id=>ST.habits.includes(id);
+const AREAS={a:{n:"Attention",ico:"🧩",tips:CD.a.stu},h:{n:"Overactivity/impulsivity",ico:"⚡",tips:CD.h.stu},s:{n:"Sadness",ico:"🌧️",tips:CD.s.stu},w:{n:"Worry",ico:"🌀",tips:CD.w.stu},t:{n:"Stress",ico:"🔥",tips:CD.t.stu},g:{n:"Wellbeing",ico:"🌿",tips:CD.g.stu}};
+function areaLevel(a){if(a==="a")return S.att?S.att.la:-1;if(a==="h")return S.att?S.att.lh:-1;if(a==="g")return S.well?S.well.li:-1;return S.mood?S.mood.l[a]:-1}
+function habitInfo(id){const [a,t]=id.split("|");const x=AREAS[a].tips.find(z=>z[0]===t);return {a,t,txt:x?x[1]:"",ico:IC[t]||"✨",area:AREAS[a]}}
+function togglePlan(id){
+ if(inPlan(id)){ST.habits=ST.habits.filter(x=>x!==id);toast("Removed from your plan.")}
+ else{if(ST.habits.length>=6){toast("Your plan is full (6 habits). Fewer habits are easier to keep, so remove one first.");return}ST.habits.push(id);toast(ST.habits.length===1?"Added! Tick it off each day to earn points ⭐":"Added to your plan ✅")}
+ save();rerender();
+}
+function toggleDone(id){
+ const l=dayLog(dkey()),was=stats(),i=l.h.indexOf(id);
+ if(i>=0)l.h.splice(i,1);else{l.h.push(id);toast(praise())}
+ const all=ST.habits.length>0&&ST.habits.every(h=>l.h.includes(h));
+ if(all&&!l.bonus){l.bonus=1;toast(`🌟 Perfect day, ${nm()}! All habits done: +20 bonus points. Small steps add up to big change!`,true)}
+ if(!all)l.bonus=0;
+ save();afterChange(was);
+}
+function afterChange(was){
+ const s=stats();
+ BADGES.forEach(b=>{if(!ST.badges[b[0]]&&b[4](s)){ST.badges[b[0]]=dkey();toast(`🎖️ New badge: ${b[2]}! ${b[5]}`,true)}});
+ const lv=level(s.pts);if(lv.i>(ST.lvl||0)){ST.lvl=lv.i;toast(`🎉 Level up! You are now a ${lv.name} ${lv.ico}`,true)}
+ [3,7,14,21].forEach(n=>{if(s.streak===n&&was.streak<n)toast(`🔥 ${n}-day streak! Keep the fire going, ${nm()}!`,true)});
+ save();rerender();
+}
+function rewardActivity(kind){
+ const l=dayLog(dkey()),was=stats();
+ if(kind==="pmr"){if(l.pmr>=1){toast("Lovely practice again! Points for the video are earned once a day.");return}l.pmr=1;toast(`🧘 Relaxation complete, ${nm()}! +30 points. Your body thanks you.`,true)}
+ if(kind==="breath"){l.breath++;toast(`🌬️ Breathing session done! +15 points, ${nm()}.`,true)}
+ if(kind==="pomo"){l.pomo++;toast(`🍅 Focus block finished! +5 points. Well done, ${nm()}!`)}
+ save();afterChange(was);
+}
+function rerender(){["att","mood","well"].forEach(k=>S[k]&&renderTips(k));if($("v-plan").classList.contains("on"))renderPlan();refresh()}
+let FOCUS=null,ARM=false;
+function renderPlan(){
+ const s=stats(),lv=level(s.pts),k=dkey(),l=ST.log[k]||{h:[],pmr:0,breath:0,pomo:0};
+ const total=ST.habits.length,done=ST.habits.filter(h=>l.h.includes(h)).length;
+ const ord=Object.keys(AREAS).sort((x,y)=>areaLevel(y)-areaLevel(x));
+ if(!FOCUS)FOCUS=ord[0];
+ const msg=!total?`Let us pick your first habit, ${nm()}! Choose a focus area below.`:done===total?`All done for today! Amazing, ${nm()}! 🌟`:`You have ${total-done} habit${total-done>1?"s":""} left today. You can do it, ${nm()}! `+(AREA_MSG[ST.habits[0].split("|")[0]]||"");
+ const day=new Date().getDate()%DAYMSG.length;
+ let h=`<div class="stat4"><div class="card"><div class="n">🔥 ${s.streak}</div><div class="note">day streak</div></div><div class="card"><div class="n">⭐ ${s.pts}</div><div class="note">points</div></div><div class="card"><div class="n">${lv.ico}</div><div class="note">${lv.name}</div><div class="bar" style="margin:6px 0 0"><i style="width:${Math.round(lv.pct*100)}%;background:var(--cg)"></i></div><div class="note">${lv.next?(lv.next-s.pts)+" points to next level":"Top level!"}</div></div><div class="card"><div class="n">🎖️ ${Object.keys(ST.badges).length}/${BADGES.length}</div><div class="note">badges</div></div></div>`;
+ h+=`<div class="card"><div class="coach">${teen(BOY)}<div class="bubble">${msg}<div class="note" style="font-weight:400;margin-top:4px">${DAYMSG[day]}</div></div></div></div>`;
+ h+=`<div class="card tc-g"><h2>✅ Today’s habits<small>${done} of ${total} done</small></h2><div class="bar"><i style="width:${total?Math.round(done/total*100):0}%;background:var(--cg)"></i></div>`;
+ h+=total?ST.habits.map(id=>{const i=habitInfo(id),dn=l.h.includes(id);return `<div class="hrow ${dn?"done":""}"><label><input type="checkbox" data-done="${id}" ${dn?"checked":""}><span class="ic">${i.ico}</span><div><b>${i.t}</b><div class="note">${i.area.ico} ${i.area.n} · +10 points</div></div></label><button class="x" data-rm="${id}" aria-label="Remove ${i.t}">✕</button></div>`}).join(""):`<p class="note">No habits yet. Pick a focus area below, or tap “➕ Add to my plan” on tips in your results. Start with 1 to 3 habits.</p>`;
+ h+=`</div><div class="card"><h2>🎁 Bonus activities today</h2>
+ <div class="arow"><span class="ic">🎬</span><div><b>5-minute muscle relaxation</b><div class="note">+30 points once a day</div></div>${l.pmr?"✅":`<a class="btnlink alt" href="#relax">Open</a>`}</div>
+ <div class="arow"><span class="ic">🌬️</span><div><b>Breathing session</b><div class="note">+15 points each</div></div><b>${l.breath} done</b></div>
+ <div class="arow"><span class="ic">🍅</span><div><b>Focus timer block</b><div class="note">+5 points each</div></div><b>${l.pomo} done</b></div></div>`;
+ h+=`<div class="card"><h2>📅 This week</h2><div class="week">`+[6,5,4,3,2,1,0].map(n=>{const d=addDays(new Date(),-n),kk=dkey(d),ac=active(kk),pf=ST.log[kk]&&ST.log[kk].bonus;return `<div class="wd ${ac?"on":""} ${pf?"perf":""} ${n===0?"today":""}">${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]}<i>${pf?"★":ac?"✓":""}</i></div>`}).join("")+`</div><p class="note">Missing a day is okay. Just start again today!</p></div>`;
+ h+=`<div class="card"><h2>🎯 Choose your focus area</h2><p class="note">Areas marked ⭐ scored moderate or higher in your results. Pick one or two habits from the tips below.</p><div class="chips2">`+ord.map(a=>`<button data-focus="${a}" aria-pressed="${a===FOCUS}">${AREAS[a].ico} ${AREAS[a].n}${areaLevel(a)>=2?" ⭐":""}</button>`).join("")+`</div>`;
+ h+=AREAS[FOCUS].tips.filter(t=>!NOADD.includes(t[0])).map(t=>{const id=FOCUS+"|"+t[0],on=inPlan(id);return `<div class="arow"><span class="ic">${IC[t[0]]||"✨"}</span><div><b>${t[0]}.</b> <span class="note">${t[1]}</span></div><button class="add ${on?"on":""}" data-add="${id}">${on?"✓ In plan":"➕ Add"}</button></div>`}).join("")+`</div>`;
+ h+=`<div class="card"><h2>🎖️ Badges</h2><div class="badges">`+BADGES.map(b=>{const got=ST.badges[b[0]];return `<div class="bd ${got?"got":""}"><div class="bi2">${b[1]}</div><b>${b[2]}</b><p>${got?b[5]:b[3]}</p></div>`}).join("")+`</div></div>`;
+ h+=`<details class="dm"><summary>Teacher tools</summary><button class="ghost" data-act="demo">Add 6 sample days (demo)</button><button class="ghost" data-act="resetall">${ARM?"Tap again to confirm":"Reset all progress"}</button></details>`;
+ $("plan").innerHTML=h;
+}
+function demoDays(){
+ if(!ST.habits.length)AREAS[FOCUS||"a"].tips.filter(t=>!NOADD.includes(t[0])).slice(0,3).forEach(t=>ST.habits.push((FOCUS||"a")+"|"+t[0]));
+ for(let n=1;n<=6;n++){const l=dayLog(dkey(addDays(new Date(),-n)));l.h=ST.habits.slice(0,Math.max(1,ST.habits.length-(n%3===0?1:0)));l.bonus=n%3===0?0:1;if(n%2===0)l.breath=1}
+ ST.demo=true;save();toast("Sample days added. Tick today’s habits to see the rewards!");afterChange(Object.assign(stats(),{streak:0}));
+}
+// ---------- relax: audio helpers
+function tone(f1,f2,dur,vol){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime,g=AC.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+Math.min(.5,dur/3));g.gain.linearRampToValueAtTime(.0001,t+dur);g.connect(AC.destination);[[1,1],[1.5,.4]].forEach(m=>{const o=AC.createOscillator(),gg=AC.createGain();gg.gain.value=m[1];o.type="sine";o.frequency.setValueAtTime(f1*m[0],t);o.frequency.linearRampToValueAtTime(f2*m[0],t+dur);o.connect(gg);gg.connect(g);o.start(t);o.stop(t+dur+.05)})}catch(e){}}
+function speak(t,on){if(!on)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+const mmss=x=>{x=Math.max(0,Math.ceil(x));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0")};
+// ---------- relax: muscle relaxation video
+const PG=[["hands","Hands","Make tight fists and squeeze.","Let go. Feel your fingers loosen and your hands grow heavy and warm."],["arms","Arms","Bend your elbows and tighten your arms.","Let your arms drop. Notice the difference between tight and relaxed."],["shoulders","Shoulders","Pull your shoulders up towards your ears.","Let your shoulders drop and feel the weight leave them."],["forehead","Forehead","Raise your eyebrows high.","Smooth your forehead. Let it feel cool and calm."],["eyes","Eyes and cheeks","Squeeze your eyes shut and scrunch your face.","Relax your eyes and cheeks. Let your face go soft."],["jaw","Jaw","Gently press your teeth together.","Let your jaw hang loose, with your lips slightly apart."],["neck","Neck","Gently press your head back. Skip this if your neck hurts.","Let your head rest. Feel your neck long and loose."],["chest","Chest and back","Take a deep breath in and squeeze your shoulder blades together.","Breathe out and let your chest and back melt."],["stomach","Stomach","Tighten your tummy muscles.","Let your belly go soft and breathe slowly."],["thighs","Hips and thighs","Squeeze your hips and thighs.","Let your legs go heavy and loose."],["legs","Calves and feet","Point your toes up towards you, then curl them.","Release your legs and feet. Feel them heavy and warm."]];
+const PMR=[{s:0,e:25,ph:"intro",r:"",t:"Get comfortable. Sit back or lie down, close your eyes if you like, and breathe slowly in through your nose and out through your mouth.",step:-1}];
+PG.forEach((g,i)=>{const b=25+i*20;PMR.push({s:b,e:b+5,ph:"tense",r:g[0],t:g[2],step:i},{s:b+5,e:b+20,ph:"release",r:g[0],t:g[3],step:i})});
+PMR.push({s:245,e:290,ph:"scan",r:"all",t:"Now feel your whole body, heavy, warm and relaxed. Breathe slowly and enjoy this calm.",step:-1},{s:290,e:300,ph:"end",r:"",t:"Slowly wiggle your fingers and toes, take a deeper breath, and open your eyes. Well done.",step:-1});
+const PHL={intro:"🧘 Get ready",tense:"😬 TENSE",release:"😌 RELEASE",scan:"💫 Feel it all",end:"🌈 Well done"};
+const PMRKID={skin:"#f1c27d",hair:"#5b3a1e",style:"pony",tee:"#8ec5ff",gfx:"smile",jeans:"#7aa5d6",sole:"#6c5ce7",acc:[]};
+const OVL=`<ellipse class="reg" data-r="forehead" cx="50" cy="27" rx="13" ry="5"/><ellipse class="reg" data-r="eyes" cx="43" cy="40" rx="6" ry="4.5"/><ellipse class="reg" data-r="eyes" cx="57" cy="40" rx="6" ry="4.5"/><circle class="reg" data-r="eyes" cx="34" cy="47" r="4"/><circle class="reg" data-r="eyes" cx="66" cy="47" r="4"/><ellipse class="reg" data-r="jaw" cx="50" cy="54" rx="12" ry="4.5"/><rect class="reg" data-r="neck" x="44" y="57" width="12" height="10" rx="4"/><ellipse class="reg" data-r="shoulders" cx="34" cy="66" rx="9" ry="5.5"/><ellipse class="reg" data-r="shoulders" cx="66" cy="66" rx="9" ry="5.5"/><g transform="rotate(12 27 68)"><rect class="reg" data-r="arms" x="20" y="70" width="14" height="22" rx="6"/></g><g transform="rotate(-12 73 68)"><rect class="reg" data-r="arms" x="66" y="70" width="14" height="22" rx="6"/></g><circle class="reg" data-r="hands" cx="21" cy="97" r="6"/><circle class="reg" data-r="hands" cx="79" cy="97" r="6"/><rect class="reg" data-r="chest" x="33" y="68" width="34" height="17" rx="6"/><rect class="reg" data-r="stomach" x="33" y="86" width="34" height="19" rx="6"/><rect class="reg" data-r="thighs" x="31" y="104" width="17" height="24" rx="6"/><rect class="reg" data-r="thighs" x="52" y="104" width="17" height="24" rx="6"/><rect class="reg" data-r="legs" x="32" y="130" width="15" height="20" rx="6"/><rect class="reg" data-r="legs" x="53" y="130" width="15" height="20" rx="6"/><ellipse class="reg" data-r="legs" cx="38" cy="156" rx="12" ry="6"/><ellipse class="reg" data-r="legs" cx="62" cy="156" rx="12" ry="6"/>`;
+let pT=0,pPlay=false,pLast=0,pPlayed=0,pSeg=-1,pTm=null;
+function buildPMR(){
+ const inner=teen(PMRKID).replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,"");
+ $("pf").innerHTML=`<svg viewBox="0 0 100 165" role="img" aria-label="Cartoon student showing the muscle being relaxed">${inner}${OVL}</svg>`;
+ $("psteps").innerHTML=PG.map((g,i)=>`<li data-step="${i}">${g[1]}</li>`).join("");
+}
+function setRegion(r,ph){document.querySelectorAll("#pf .reg").forEach(e=>e.classList.remove("tense","relax"));if(!r)return;const c=ph==="tense"?"tense":"relax";document.querySelectorAll(r==="all"?"#pf .reg":`#pf .reg[data-r="${r}"]`).forEach(e=>e.classList.add(c))}
+function pmrDraw(){
+ const idx=PMR.findIndex(x=>pT>=x.s&&pT<x.e),g=PMR[idx>=0?idx:PMR.length-1];
+ if(idx!==pSeg){pSeg=idx;setRegion(g.r,g.ph);$("pph").textContent=PHL[g.ph];$("pcap").textContent=g.t;
+  if(pPlay){speak(g.t,$("pvoice").checked);if($("pchime").checked){if(g.ph==="tense")tone(260,420,.7,.12);if(g.ph==="release")tone(420,240,1.4,.1)}}
+  document.querySelectorAll("#psteps li").forEach((li,i)=>{li.classList.toggle("on",i===g.step);li.classList.toggle("done",g.step>=0?i<g.step:g.ph==="scan"||g.ph==="end")})}
+ $("pcd").textContent=mmss(g.e-pT);$("ppb").style.width=(pT/300*100)+"%";$("ptime").textContent=mmss(pT).replace(/^/,"")+" / 5:00";
+}
+function pmrTick(){const n=Date.now(),dt=Math.min(1,(n-pLast)/1000)*SPEED;pLast=n;pT+=dt;pPlayed+=dt;if(pT>=300){pT=299.99;pmrDraw();pmrStop(true);return}pmrDraw()}
+function pmrStop(done){
+ clearInterval(pTm);pPlay=false;$("pbtn").textContent=done?"▶ Play again":"▶ Play";try{speechSynthesis.cancel()}catch(e){}
+ if(done){$("pph").textContent="🌈 Well done";if(pPlayed>=240)rewardActivity("pmr");else toast("Nice! Play the full session without skipping to earn points.");pT=0;pPlayed=0;pSeg=-1}
+}
+function pmrPlay(){
+ if(pPlay){pmrStop(false);$("pbtn").textContent="▶ Resume";return}
+ pPlay=true;pLast=Date.now();pSeg=-1;$("pbtn").textContent="⏸ Pause";tone(300,300,.1,.0001);pmrDraw();pTm=setInterval(pmrTick,200);
+}
+function pmrReset(){pmrStop(false);pT=0;pPlayed=0;pSeg=-1;setRegion("");$("pph").textContent="Ready";$("pcap").textContent="Press play to begin.";$("pcd").textContent="5:00";$("ppb").style.width="0";$("ptime").textContent="0:00 / 5:00";$("pbtn").textContent="▶ Play";document.querySelectorAll("#psteps li").forEach(li=>li.className="")}
+// ---------- relax: breathing audio
+const BT={belly:{d:"Breathe in slowly through your nose so your belly rises, then out slowly through your lips. Breathe in for 4, out for 6.",p:[["Breathe in",4,"in"],["Breathe out",6,"out"]]},box:{d:"Breathe in, hold, breathe out, hold, each for 4 seconds, like tracing the sides of a box.",p:[["Breathe in",4,"in"],["Hold",4,"hold"],["Breathe out",4,"out"],["Hold",4,"hold"]]},fe:{d:"Breathe in for 4, hold for 7 and breathe out for 8. A slow way to calm down before sleep or an exam.",p:[["Breathe in",4,"in"],["Hold",7,"hold"],["Breathe out",8,"out"]]}};
+let bType="belly",bDur=3,bRun=false,bEl=0,bPh=0,bIdx=0,bN=0,bTm=null,bLast=0;
+function bPhase(){
+ const ph=BT[bType].p[bIdx],d=ph[1]/SPEED,o=$("orb");
+ $("blabel").textContent=ph[0];o.style.transition=`transform ${d}s ease-in-out`;
+ if(ph[2]==="in")o.style.transform="scale(1.6)";if(ph[2]==="out")o.style.transform="scale(.75)";
+ if($("btone").checked){if(ph[2]==="in")tone(196,294,d,.13);else if(ph[2]==="out")tone(294,196,d,.13);else tone(294,294,d,.04)}
+ speak(ph[0],$("bvoice").checked);
+}
+function bTick(){
+ const n=Date.now(),dt=Math.min(1,(n-bLast)/1000)*SPEED;bLast=n;bEl+=dt;bPh+=dt;
+ if(bEl>=bDur*60){bStop(false,true);return}
+ const ph=BT[bType].p[bIdx];
+ if(bPh>=ph[1]){bPh=0;bIdx=(bIdx+1)%BT[bType].p.length;if(bIdx===0){bN++;$("bstat").textContent="Breaths: "+bN+" · "+mmss(bDur*60-bEl)+" left"}bPhase()}
+ else $("bstat").textContent="Breaths: "+bN+" · "+mmss(bDur*60-bEl)+" left";
+}
+function bStart(){
+ if(bRun){bStop(false,false);return}
+ bRun=true;bEl=0;bPh=0;bIdx=0;bN=0;bLast=Date.now();$("bbtn").textContent="■ Stop";bPhase();bTm=setInterval(bTick,200);
+}
+function bStop(silent,done){
+ if(!bRun)return;clearInterval(bTm);bRun=false;$("bbtn").textContent="▶ Start";$("blabel").textContent=done?"Well done 🌈":"Ready";
+ const o=$("orb");o.style.transition="transform .6s";o.style.transform="scale(.75)";try{speechSynthesis.cancel()}catch(e){}
+ if(done)rewardActivity("breath");else if(!silent)toast("Session stopped. Try again when you are ready.");
+}
+function bSel(){
+ document.querySelectorAll("#btypes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.bt===bType));
+ document.querySelectorAll("#bdurs button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.bd===bDur));
+ $("bdesc").textContent=BT[bType].d;
+}
+// ---------- relax: focus timer
+let fMin=25,fLeft=1500,fRun=false,fMode="focus",fTm=null,fLast=0;
+function fShow(){$("ftime").textContent=mmss(fLeft);$("fstat").textContent=fMode==="focus"?(fRun?"Focus time. You can do this! 💪":"Ready to focus"):(fRun?"Break time ☕ Stretch, sip water, breathe.":"Break ready")}
+function fTick(){
+ const n=Date.now(),dt=Math.min(1,(n-fLast)/1000)*SPEED;fLast=n;fLeft-=dt;
+ if(fLeft<=0){clearInterval(fTm);fRun=false;tone(440,660,1.2,.15);
+  if(fMode==="focus"){rewardActivity("pomo");fMode="break";fLeft=(fMin===25?5:3)*60;$("fbtn").textContent="▶ Start break"}
+  else{toast("Break over! Ready for another block?");fMode="focus";fLeft=fMin*60;$("fbtn").textContent="▶ Start"}
+ }
+ fShow();
+}
+function fStart(){if(fRun){clearInterval(fTm);fRun=false;$("fbtn").textContent="▶ Resume";fShow();return}fRun=true;fLast=Date.now();$("fbtn").textContent="⏸ Pause";tone(300,300,.1,.0001);fTm=setInterval(fTick,250);fShow()}
+function fReset(){clearInterval(fTm);fRun=false;fMode="focus";fLeft=fMin*60;$("fbtn").textContent="▶ Start";fShow()}
+function fSel(){document.querySelectorAll("#fdurs button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.fd===fMin))}
+buildPMR();bSel();$("bsteps").innerHTML=TECH.dia.map(x=>`<li>${x}</li>`).join("");
+// ---------- status, summary
+function refresh(){
+ let n=0;["att","mood","well"].forEach(k=>{const d=!!S[k];if(d)n++;$("st-"+k).textContent=d?"✅ Done":"Not started"});
+ $("jn").textContent=n+" of 3 areas done";$("jb").style.width=(n/3*100)+"%";
+ const s=stats(),lv=level(s.pts);
+ const cs=curStu(),un=cs?DB.cases.filter(c=>c.sid===cs.id&&c.unStu).length:0;
+ $("hr").innerHTML=(un?`<div class="card" style="border-left:4px solid var(--mod)"><h2>💬 You have ${un} new update${un>1?"s":""} about your support</h2><a class="btnlink" href="#support">Open Support</a></div>`:"")+`<div class="card"><h2>🏆 Your rewards</h2><div class="mini"><span>🔥 ${s.streak}-day streak</span><span>⭐ ${s.pts} points</span><span>${lv.ico} ${lv.name}</span><span>🎖️ ${Object.keys(ST.badges).length} badges</span></div><p class="note">Turn tips into daily habits to earn points, badges and cheers.</p><a class="btnlink" href="#plan">Open my plan 🏆</a></div>`;
+}
+function measures(R){
+ R=R||S;const m=[];
+ if(R.att){m.push({v:"attention",ico:"🧩",n:"Inattention",val:R.att.a,max:27,li:R.att.la,lab:LAB.att[R.att.la],p:R.att.a/27});m.push({v:"attention",ico:"⚡",n:"Overactivity/impulsivity",val:R.att.h,max:27,li:R.att.lh,lab:LAB.att[R.att.lh],p:R.att.h/27})}
+ if(R.mood)[["s","🌧️","Sadness"],["w","🌀","Worry"],["t","🔥","Stress"]].forEach(x=>m.push({v:"mood",ico:x[1],n:x[2],val:R.mood.r[x[0]],max:42,li:R.mood.l[x[0]],lab:LAB.dass[R.mood.l[x[0]]],p:R.mood.r[x[0]]/42}));
+ if(R.well)m.push({v:"wellbeing",ico:"🌿",n:"Wellbeing",val:R.well.wb,max:36,li:R.well.li,lab:LAB.well[R.well.li],p:1-R.well.wb/36});
+ return m;
+}
+function renderSummary(){
+ const m=measures(),el=$("sum");
+ if(!m.length){el.innerHTML=`<div class="card empty"><div style="display:flex;justify-content:center">${teen(BOY)}${teen(GIRL)}</div><h2>Nothing here yet</h2><p class="note">Complete at least one assessment and your summary will appear here.</p><a class="btnlink" href="#attention">Start now ✨</a></div>`;return}
+ const focus=m.filter(x=>x.li>=2).sort((a,b)=>b.li-a.li||b.p-a.p).slice(0,3);
+ el.innerHTML=`<h2>${nm()}’s summary</h2><div class="grid3">`+m.map(x=>`<a class="card sm" href="#${x.v}"><div class="note">${x.ico} ${x.n}</div><div class="big">${x.val}<span class="note"> / ${x.max}</span></div><div style="margin:8px 0"><span class="badge" style="background:${LC[x.li]}">${x.lab}</span></div><div class="bar"><i style="width:${Math.round(x.p*100)}%;background:${LC[x.li]}"></i></div></a>`).join("")+`</div>`+
+ ((careMood()||(S.well&&S.well.li===4))?careHTML():"")+
+ `<div class="card"><h2>🎯 Where to focus first</h2>`+(focus.length?`<ul>${focus.map(x=>`<li>${x.ico} <b>${x.n}</b> (${x.lab.toLowerCase()}): <a href="#${x.v}">see tips</a></li>`).join("")}</ul>`:`<p style="margin:0">Everything you have checked looks fine. Keep up your healthy habits! 🎉</p>`)+`</div>`+
+ shareCard()+swoCard("stu")+
+ `<div class="row"><a class="btnlink" href="#plan">Build my plan 🏆</a><a class="btnlink alt" href="#home">Home 🏠</a></div><p class="note">These self-check scores are for awareness and are not a diagnosis. Please speak to a counsellor or doctor if you are worried.</p>`;
+}
+// ---------- students, roles and the SWO support loop
+const SEMS=["S1","S2","S3","S4","S5","S6","S7","S8"];
+const CLASSES=["CSE A","CSE B","CSE C","CS-AI","AI&DS","IT","ECE A","ECE B","EEE","AEI","ME","CE"];
+const TOPICS=[["focus","🎯 Focus & study"],["mood","💙 Feeling low"],["worry","🌀 Worry"],["stress","🔥 Stress"],["sleep","😴 Sleep"],["people","🤝 Friends & family"],["other","✨ Something else"]];
+const URG={routine:"Can wait a week",soon:"Soon (2–3 days)",urgent:"Urgent (today)"};
+const MODES=["In person","Online meeting","Phone call","Email"];
+const STEPS=[["sent","Sent"],["ack","Seen"],["prog","Talking"],["meet","Meeting"],["conf","Confirm"],["closed","Loop closed"]];
+const STL={sent:"New",ack:"Seen by SWO",prog:"In conversation",meet:"Meeting scheduled",conf:"Awaiting student confirmation",closed:"Loop closed"};
+const STL_FAC={sent:"Sent to SWO",ack:"Seen by SWO",prog:"In progress",meet:"Meeting scheduled",conf:"Awaiting student confirmation",closed:"Loop closed"};
+const STL_STU={sent:"Sent",ack:"Seen by SWO",prog:"In conversation",meet:"Meeting scheduled",conf:"Please confirm",closed:"Loop closed"};
+const QR=[["👋 Thank you","Thank you for reaching out. I am glad you did. Let us find a time to talk this week."],["📅 Ask for a time","When are you free this week? Please share two or three times that suit you."],["💙 Check in","Just checking in to see how you are doing since we last spoke."]];
+const FA=[["a","🧩 Attention"],["h","⚡ Overactivity/impulsivity"],["s","🌧️ Sadness"],["w","🌀 Worry"],["t","🔥 Stress"],["g","🌿 Wellbeing"]];
+const FL={a:"🧩 Classroom tips for improving attention",h:"⚡ Classroom tips for managing overactivity/impulsivity",s:"🌧️ Supporting students who feel low",w:"🌀 Supporting worried students",t:"🔥 Reducing student stress",g:"💛 Supporting the whole student"};
+let EDIT=null,DEL=null,REF=null,OPEN=null,SFIL="open",FTAB="a",PICK=[],RATE={},FIL={cls:"",sem:"",q:""};
+const fmtT=t=>new Date(t).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
+const fmtDate=d=>new Date(d+"T00:00:00").toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+const fmtTm=t=>{const [H,M]=String(t).split(":"),h=+H;return (h%12||12)+":"+M+(h<12?" am":" pm")};
+const ago=t=>{const m=Math.round((Date.now()-t)/6e4);return m<1?"just now":m<60?m+" min ago":m<1440?Math.round(m/60)+" h ago":Math.round(m/1440)+" d ago"};
+const nDone=s=>["att","mood","well"].filter(k=>s.res&&s.res[k]).length;
+const stuOf=c=>DB.students.find(s=>s.id===c.sid)||{name:"(removed)",cls:"",sem:"",res:{}};
+const topicsTxt=c=>(c.topics||[]).map(k=>(TOPICS.find(t=>t[0]===k)||[k,k])[1]).join(", ");
+const stat=(ico,n,lab)=>`<div class="card"><div class="n">${ico} ${n}</div><div class="note">${lab}</div></div>`;
+const swoNote=()=>`<p class="note">Demo note: the Student, Faculty and SWO dashboards share this browser's storage, so a request sent here appears in the SWO dashboard on this same device. A live version needs college logins and a secure server. To reach the SWO today, use the email links.</p>`;
+function swoCard(mode){
+ const btn=mode==="stu"?`<a class="btnlink" href="#support">💬 Request support in the app</a><a class="btnlink alt" href="mailto:${SWO.mail}?subject=${encodeURIComponent("Request to meet the Student Welfare Officer")}">✉️ Send an email</a>`:mode?`<a class="btnlink alt" href="mailto:${SWO.mail}?subject=${encodeURIComponent(mode==="fac"?"Student referral":"Request to meet the Student Welfare Officer")}">✉️ Email the SWO</a>`:"";
+ return `<div class="card swo-card"><h3>🧑‍⚕️ Student Welfare Officer</h3><p style="margin:0"><b>${SWO.name}</b>, ${SWO.role}<br><span class="note">${SWO.org}</span></p><p style="margin:6px 0 0">✉️ ${SWOL}<br>📞 Tele-MANAS <a href="tel:14416">14416</a> (free, 24 hours) · Emergency <a href="tel:112">112</a></p>${btn}</div>`;
+}
+function fillCls(){$("clsList").innerHTML=[...new Set([...CLASSES,...classesUsed()])].map(c=>`<option value="${esc(c)}">`).join("")}
+function classesUsed(){return [...new Set(DB.students.map(s=>s.cls))].sort()}
+function addStudent(name,cls,sem){
+ name=String(name||"").trim().replace(/\s+/g," ");cls=String(cls||"").trim().toUpperCase().replace(/\s+/g," ");if(!name||!cls||!SEMS.includes(sem))return null;
+ const dup=DB.students.find(x=>x.name.toLowerCase()===name.toLowerCase()&&x.cls===cls&&x.sem===sem);if(dup)return dup;
+ const s={id:"s"+(DB.seq++),name,cls,sem,res:{},game:NEWGAME(),shareFac:false,shareSwo:false,added:Date.now()};DB.students.push(s);saveDB();return s;
+}
+function stuForm(p,s,btn){s=s||{};return `<div class="frm"><label class="full">Full name<input type="text" id="${p}-name" value="${esc(s.name)}" placeholder="e.g. Kuttan Pillai" autocomplete="off"></label><label>Class<input type="text" id="${p}-cls" list="clsList" value="${esc(s.cls)}" placeholder="e.g. CSE A" autocomplete="off"></label><label>Semester<select id="${p}-sem">${SEMS.map(x=>`<option ${x===(s.sem||"S1")?"selected":""}>${x}</option>`).join("")}</select></label>${btn}</div><p class="note" id="${p}-msg" role="alert"></p>`}
+const readForm=p=>({name:$(p+"-name").value.trim(),cls:$(p+"-cls").value.trim().toUpperCase(),sem:$(p+"-sem").value});
+function filtered(){return DB.students.filter(s=>(!FIL.cls||s.cls===FIL.cls)&&(!FIL.sem||s.sem===FIL.sem)&&(!FIL.q||s.name.toLowerCase().includes(FIL.q.toLowerCase()))).sort((a,b)=>a.cls.localeCompare(b.cls)||a.sem.localeCompare(b.sem)||a.name.localeCompare(b.name))}
+function filtersHTML(q,nosem){if(FIL.cls&&!classesUsed().includes(FIL.cls))FIL.cls="";return `<div class="fl2"><label>Class<select data-fil="cls"><option value="">All classes</option>${classesUsed().map(c=>`<option ${c===FIL.cls?"selected":""}>${esc(c)}</option>`).join("")}</select></label>${nosem?"":`<label>Semester<select data-fil="sem"><option value="">All</option>${SEMS.map(x=>`<option ${x===FIL.sem?"selected":""}>${x}</option>`).join("")}</select></label>`}${q?`<label>Search<input type="text" data-fil="q" value="${esc(FIL.q)}" placeholder="Name"></label>`:""}</div>`}
+function stepper(c){const i=STEPS.findIndex(x=>x[0]===c.st),cl=c.st==="closed";return `<ol class="stepper" aria-label="Status: ${STL[c.st]}">${STEPS.map((x,j)=>`<li class="${j<i||cl?"done":j===i?"cur":""}">${x[1]}</li>`).join("")}</ol>`}
+function newCase(o){const c=Object.assign({id:"c"+(DB.seq++),at:Date.now(),st:"sent",origin:"stu",thread:[],log:[],meet:null,fb:null,unSwo:true,unStu:false,unFac:false,facUpd:[],note:"",topics:[],msg:"",reason:"",pref:"",ptime:"",by:"",talked:false,urg:"soon"},o);DB.cases.push(c);return c}
+const caseLog=(c,t)=>{(c.log=c.log||[]).push({t,at:Date.now()})};
+const sys=(c,t)=>c.thread.push({f:"sys",t,at:Date.now()});
+function swoTouch(c){if(!c.firstResp)c.firstResp=Date.now();c.unStu=true}
+function stuFlags(s){const R=s.res||{},f=[];
+ if(R.mood){[["s","Sadness"],["w","Worry"],["t","Stress"]].forEach(([k,n])=>{if(R.mood.l[k]>=3)f.push(n+": "+LAB.dass[R.mood.l[k]].toLowerCase())});if(R.mood.q21>=2)f.push("Item 21 (“life felt meaningless”) scored 2 or more")}
+ if(R.well&&R.well.li===4)f.push("Wellbeing: needs support");
+ if(R.att&&(R.att.la===4||R.att.lh===4))f.push("High attention/activity score");return f}
+const caseFlags=c=>{const s=stuOf(c);return s.shareSwo?stuFlags(s):[]};
+const isPrio=c=>c.st!=="closed"&&(c.urg==="urgent"||caseFlags(c).length>0);
+function scoreMini(s){const m=measures(s.res||{});if(!m.length)return '<p class="note" style="margin:0">No self-checks completed yet.</p>';return m.map(x=>`<div class="arow" style="border:0;padding:4px 0"><span>${x.ico}</span><div>${x.n}</div><b>${x.val}<span class="note"> / ${x.max}</span></b> <span class="badge" style="background:${LC[x.li]}">${x.lab}</span></div>`).join("")}
+function threadHTML(c,me){if(!c.thread.length)return '<p class="note">No messages yet.</p>';return `<div class="thread">${c.thread.map(m=>m.f==="sys"?`<div class="msg sys">${esc(m.t)}<small>${fmtT(m.at)}</small></div>`:`<div class="msg ${m.f===me?"me":""}"><small>${m.f===me?"You":m.f==="swo"?"Student Welfare Officer":esc(first(stuOf(c).name))}</small><span style="white-space:pre-wrap">${esc(m.t)}</span><small>${fmtT(m.at)}</small></div>`).join("")}</div>`}
+function meetHTML(c,who){const m=c.meet,R={"":"⏳ Waiting for the student to reply",yes:"✅ Student will attend",no:"🔁 Student asked for another time"},Rs={"":"Please tell the SWO if this time works for you.",yes:"✅ You said you will attend.",no:"🔁 You asked for another time. Suggest times in a message below."};
+ return `<div class="box">📅 <b>${fmtDate(m.d)}, ${fmtTm(m.tm)}</b> · ${esc(m.mode)}${m.place?" · "+esc(m.place):""}<div class="note">${(who==="swo"?R:Rs)[m.resp||""]}</div>${who==="stu"&&c.st==="meet"&&m.resp!=="yes"?`<div class="row" style="margin:8px 0 0"><button class="primary" data-a="attend" data-id="${c.id}">✅ I'll be there</button><button class="ghost" data-a="resched" data-id="${c.id}">🔁 Need another time</button></div>`:""}</div>`}
+function mailtoFor(c){const s=stuOf(c);const body=`Name: ${s.name}\nClass: ${s.cls}\nSemester: ${s.sem}\n\nTopics: ${topicsTxt(c)||"-"}\nPreferred contact: ${c.pref||"-"}${c.ptime?" ("+c.ptime+")":""}\n\n${c.msg||""}`;return `mailto:${SWO.mail}?subject=${encodeURIComponent(`Support request – ${s.name} (${s.cls}, ${s.sem})`)}&body=${encodeURIComponent(body)}`}
+function shareCard(){const s=curStu();if(!s)return "";return `<div class="card"><h2>🔐 Who can see my scores?</h2><div class="chk"><label><input type="checkbox" data-share="shareSwo" ${s.shareSwo?"checked":""}> The Student Welfare Officer can see all my self-check scores</label><label><input type="checkbox" data-share="shareFac" ${s.shareFac?"checked":""}> My faculty can see my Attention &amp; Activity scores (never my mood or wellbeing)</label></div><p class="note">You can change this at any time.</p></div>`}
+
+// student profile and switching
+function renderProfile(){
+ const s=curStu(),L=DB.students.slice().sort((a,b)=>a.name.localeCompare(b.name));
+ $("prof").innerHTML=(L.length?`<div class="fl2" style="margin-top:0"><label style="flex:1;min-width:220px">Choose your name<select id="stuSel"><option value="">— Select your name —</option>${L.map(x=>`<option value="${x.id}" ${x.id===DB.cur?"selected":""}>${esc(x.name)} · ${esc(x.cls)} · ${x.sem}</option>`).join("")}</select></label></div>`:"")+
+ (s?`<p class="who">👋 Hi <b>${esc(s.name)}</b> · ${esc(s.cls)} · Semester ${s.sem.slice(1)} <button class="ghost sm2" data-a="signout">Not you?</button></p>`:"")+
+ `<details class="dm" ${L.length?"":"open"}><summary>${L.length?"Not in the list? Add your details":"Add your details"}</summary>${stuForm("me",null,`<button class="primary" data-a="addme">Add me</button>`)}</details>`;
+}
+function loadStudent(){
+ const s=curStu();ST=s?s.game:DB.guest;if(!ST||!ST.log){ST=Object.assign(NEWGAME(),ST||{});save()}
+ ["att","mood","well"].forEach(k=>{const p={att:"t",mood:"m",well:"w"}[k];document.querySelectorAll(`input[name^="${p}"]`).forEach(r=>r.checked=false);$("m-"+k).textContent="";
+  S[k]=s&&s.res&&s.res[k]?s.res[k]:null;
+  if(S[k]){(S[k].v||[]).forEach((x,i)=>{const r=document.querySelector(`input[name="${p}${i}"][value="${x}"]`);if(r)r.checked=true});TAB[k]="stu";showRes(k,true)}else $("r-"+k).style.display="none";upd(p)});
+ FOCUS=null;renderProfile();refresh();renderNav();
+}
+
+// students tab
+function renderStudents(){
+ fillCls();const e=EDIT&&DB.students.find(s=>s.id===EDIT);
+ $("stu").innerHTML=`<div class="card"><h2>${e?"✏️ Edit student":"➕ Add a student"}</h2>${stuForm("ns",e,e?`<div class="row" style="margin:0"><button class="primary" data-a="savestu">Save</button><button class="ghost" data-a="canceledit">Cancel</button></div>`:`<button class="primary" data-a="addstu">Add</button>`)}</div>
+ <div class="card"><h2>📋 Add many at once</h2><p class="note">One student per line: name, class, semester. Example: <i>Kuttan Pillai, CSE A, S1</i>. You can paste from a spreadsheet too.</p><textarea id="bulk" placeholder="Kuttan Pillai, CSE A, S1&#10;Chinnu Chacko, CSE A, S1"></textarea><div class="row" style="margin:8px 0 0"><button class="ghost" data-a="bulk">Add all</button></div><p class="note" id="bulk-msg" role="alert"></p></div>
+ <div class="card"><h2>👥 Student list<small id="stu-n"></small></h2>${filtersHTML(true)}<div id="stuTbl"></div></div>
+ <details class="dm"><summary>Demo tools</summary><button class="ghost" data-a="seed">Load a sample class with requests</button></details>`;
+ renderStuTable();
+}
+function renderStuTable(){
+ const L=filtered(),swo=DB.role==="swo";
+ $("stu-n").textContent=` ${L.length} of ${DB.students.length}`;
+ $("stuTbl").innerHTML=L.length?`<div class="tblw"><table class="tbl"><thead><tr><th>Name</th><th>Class</th><th>Semester</th><th>Self-checks</th>${swo?"<th>Support cases</th>":""}<th></th></tr></thead><tbody>${L.map(s=>{const oc=DB.cases.filter(c=>c.sid===s.id),op=oc.filter(c=>c.st!=="closed").length;return `<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.cls)}</td><td>${s.sem}</td><td>${nDone(s)} of 3</td>${swo?`<td>${oc.length?`${op} open · ${oc.length-op} closed`:"—"}</td>`:""}<td style="white-space:nowrap;text-align:right"><button class="ghost sm2" data-a="edit" data-id="${s.id}">Edit</button> <button class="ghost sm2" data-a="del" data-id="${s.id}">${DEL===s.id?"Tap again to delete":"Delete"}</button></td></tr>`}).join("")}</tbody></table></div>`:`<p class="note">${DB.students.length?"No students match these filters.":"No students yet. Add them above, or load the sample class from Demo tools."}</p>`;
+}
+
+// faculty dashboard
+function attCell(s,k){const R=s.res&&s.res.att;if(!R)return '<span class="note">Not done</span>';if(!s.shareFac)return '<span class="note">🔒 Not shared</span>';const li=k==="a"?R.la:R.lh;return `<span class="badge" style="background:${LC[li]}">${LAB.att[li]} · ${k==="a"?R.a:R.h}</span>`}
+const openRef=sid=>DB.cases.find(c=>c.sid===sid&&c.origin==="fac"&&c.st!=="closed");
+function renderFaculty(){
+ fillCls();
+ const L=filtered(),att=L.filter(s=>s.res&&s.res.att),sh=att.filter(s=>s.shareFac),fl=sh.filter(s=>s.res.att.la>=2||s.res.att.lh>=2);
+ const refs=DB.cases.filter(c=>c.origin==="fac").sort((a,b)=>(a.st==="closed")-(b.st==="closed")||b.at-a.at);
+ const rs=REF&&DB.students.find(s=>s.id===REF);
+ let h=`<div class="card"><div class="fl2" style="margin-top:0"><label style="flex:1;min-width:220px">Your name (shown on referrals)<input type="text" id="facName" value="${esc(DB.facName)}" placeholder="e.g. Prof. Anil Kumar"></label></div>${filtersHTML(false)}</div>`;
+ h+=`<div class="stat4">${stat("👥",L.length,"students")}${stat("🎯",att.length,"did Attention &amp; Activity")}${stat("🔓",sh.length,"shared scores with you")}${stat("📨",refs.filter(c=>c.st!=="closed").length,"open referrals")}</div>`;
+ if(sh.length)h+=`<div class="card tc-a"><h3>📈 Class insight</h3><p style="margin:0">${fl.length} of ${sh.length} students who shared their scores show <b>moderate or high</b> inattention or overactivity/impulsivity. The classroom strategies below can help the whole class.</p></div>`;
+ if(rs)h+=`<div class="card" id="refcard" style="border-top:6px solid var(--ch)"><h2>📨 Refer ${esc(rs.name)} to the Student Welfare Officer</h2><p class="note">${esc(rs.cls)} · ${rs.sem}. Describe what you have noticed (attendance, focus, mood, marks). Please avoid labels or diagnoses.</p><label class="lbl">What have you noticed?<textarea id="ref-why" placeholder="e.g. Has missed 5 classes in 2 weeks and seems withdrawn. Marks dropped in the series test."></textarea></label><div class="fl2"><label>How soon?<select id="ref-urg">${Object.entries(URG).map(([k,v])=>`<option value="${k}" ${k==="soon"?"selected":""}>${v}</option>`).join("")}</select></label><label style="flex-direction:row;align-items:center;gap:6px;color:var(--text)"><input type="checkbox" id="ref-talk"> I have spoken to the student about this</label></div><p class="note">If a student talks about hurting themselves, do not wait for this form: stay with them and call the SWO or 112 now.</p><div class="row" style="margin:0"><button class="primary" data-a="refsend">Send referral</button><button class="ghost" data-a="refcancel">Cancel</button></div><p class="note" id="ref-msg" role="alert"></p></div>`;
+ h+=`<div class="card"><h2>👥 My students</h2>${L.length?`<div class="tblw"><table class="tbl"><thead><tr><th>Name</th><th>Class</th><th>Sem</th><th>Self-checks</th><th>Inattention</th><th>Overactivity/ impulsivity</th><th>Student Welfare Officer</th></tr></thead><tbody>${L.map(s=>{const r=openRef(s.id);return `<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.cls)}</td><td>${s.sem}</td><td>${nDone(s)} of 3</td><td>${attCell(s,"a")}</td><td>${attCell(s,"h")}</td><td>${r?`<span class="pill ${r.st}">${STL_FAC[r.st]}</span>`:`<button class="ghost sm2" data-a="refer" data-id="${s.id}">Refer</button>`}</td></tr>`}).join("")}</tbody></table></div>`:'<p class="note">No students yet. Add them in the <a href="#students">Students</a> tab.</p>'}<p class="note">Mood and wellbeing scores stay private between the student and the Student Welfare Officer. Attention &amp; Activity scores show here only if the student chose to share them.</p></div>`;
+ h+=`<div class="card"><h2>📨 My referrals</h2>${refs.length?refs.map(c=>{const s=stuOf(c);return `<div class="box" ${c.unFac?'style="border-left:4px solid var(--mod)"':""}><b>${esc(s.name)}</b> <span class="note">${esc(s.cls)} · ${s.sem} · referred ${fmtT(c.at)} by ${esc(c.by)}</span> <span class="pill ${c.st}">${STL_FAC[c.st]}</span>${stepper(c)}${(c.facUpd||[]).length?c.facUpd.map(u=>`<div class="note">💬 <b>SWO update:</b> ${esc(u.t)} · ${fmtT(u.at)}</div>`).join(""):'<div class="note">No updates from the SWO yet.</div>'}</div>`}).join(""):'<p class="note">You have not referred anyone yet. Use “Refer” in the table above.</p>'}</div>`;
+ h+=`<h2>🧑‍🏫 Classroom strategies</h2><div class="chips2">${FA.map(([k,v])=>`<button data-a="ftab" data-id="${k}" aria-pressed="${k===FTAB}">${v}</button>`).join("")}</div>${tipCard(FL[FTAB],CD[FTAB].fac,FTAB,"",false)}`;
+ h+=swoCard("fac")+swoNote();
+ $("fac").innerHTML=h;
+ refs.forEach(c=>c.unFac=false);saveDB();renderNav("faculty");
+ if(rs)setTimeout(()=>{const r=$("refcard");if(r){r.scrollIntoView({behavior:"smooth"});$("ref-why").focus({preventScroll:true})}},0);
+}
+
+// SWO dashboard
+const FS=[["open","Open"],["sent","New"],["meet","Meetings"],["conf","Awaiting confirmation"],["closed","Closed"],["all","All"]];
+const fsMatch=(c,k)=>k==="all"||(k==="open"?c.st!=="closed":c.st===k);
+function renderSWO(){
+ const C=DB.cases,open=C.filter(c=>c.st!=="closed"),closed=C.filter(c=>c.st==="closed"),byStu=closed.filter(c=>c.closedBy==="stu").length;
+ const fr=C.filter(c=>c.firstResp),avg=fr.length?fr.reduce((a,c)=>a+(c.firstResp-c.at),0)/fr.length/36e5:null;
+ let h=`<div class="stat4">${stat("🆕",C.filter(c=>c.st==="sent").length,"new requests")}${stat("📂",open.length,"open cases")}${stat("⚠️",open.filter(isPrio).length,"priority cases")}${stat("🔁",closed.length?Math.round(byStu/closed.length*100)+"%":"—","loops closed with student confirmation")}</div>`;
+ if(OPEN){const c=C.find(x=>x.id===OPEN);if(c){$("swo").innerHTML=h+caseDetail(c);renderNav("swo");return}OPEN=null}
+ const L=C.filter(c=>fsMatch(c,SFIL)).filter(c=>!FIL.cls||stuOf(c).cls===FIL.cls).sort((a,b)=>isPrio(b)-isPrio(a)||b.unSwo-a.unSwo||(b.closedAt||b.at)-(a.closedAt||a.at));
+ h+=`<div class="card"><h2>📥 Cases</h2><div class="chips2">${FS.map(([k,v])=>`<button data-a="sfil" data-id="${k}" aria-pressed="${k===SFIL}">${v} (${C.filter(x=>fsMatch(x,k)).length})</button>`).join("")}</div>${filtersHTML(false,true)}`+
+ (L.length?L.map(c=>{const s=stuOf(c),p=isPrio(c);return `<div class="case ${c.unSwo?"un":""}" data-a="case" data-id="${c.id}" role="button" tabindex="0"><span style="font-size:1.4rem" title="${p?"Priority":c.origin==="fac"?"Faculty referral":"Self-request"}">${p?"⚠️":c.origin==="fac"?"👩‍🏫":"🎓"}</span><div><b>${esc(s.name)}</b> <span class="note">${esc(s.cls)} · ${s.sem}</span>${c.unSwo?' <span class="pill sent">Unread</span>':""}<div class="note">${c.origin==="fac"?"Faculty referral by "+esc(c.by):"Self-request"}${topicsTxt(c)?" · "+topicsTxt(c):""} · ${ago(c.at)}</div></div><span class="pill ${c.urg==="urgent"?"urg":""}">${URG[c.urg]}</span><span class="pill ${c.st}">${STL[c.st]}</span></div>`}).join(""):'<p class="note">No cases here.</p>')+
+ `<p class="note">Average time to first response: ${avg==null?"—":avg<1?Math.max(1,Math.round(avg*60))+" min":avg.toFixed(1)+" h"}. Priority cases (⚠️) are marked urgent or have severe scores the student chose to share.</p></div>`+swoNote();
+ $("swo").innerHTML=h;renderNav("swo");
+}
+function caseDetail(c){
+ const s=stuOf(c),f=caseFlags(c);
+ if(c.unSwo){c.unSwo=false;saveDB()}
+ let h=`<div class="card"><button class="ghost sm2" data-a="back">← All cases</button>
+ <h2 style="margin-top:10px">${esc(s.name)} <small>${esc(s.cls)} · ${s.sem}</small></h2>
+ <p class="note" style="margin:0">${c.origin==="fac"?`👩‍🏫 Referred by ${esc(c.by)} ${c.talked?"(has spoken to the student)":"(has not yet spoken to the student)"}`:"🎓 Self-request"} · ${fmtT(c.at)} · <span class="pill ${c.urg==="urgent"?"urg":""}">${URG[c.urg]}</span> <span class="pill ${c.st}">${STL[c.st]}</span></p>
+ ${stepper(c)}
+ ${f.length?`<div class="care">⚠️ <b>Flags from shared scores:</b> ${f.map(esc).join("; ")}</div>`:""}
+ ${c.urg==="urgent"&&c.st!=="closed"?`<p class="prio">Marked urgent by ${c.origin==="fac"?"the faculty member":"the student"}. Please contact the student today.</p>`:""}
+ <div class="grid"><div class="box"><h3>📝 ${c.origin==="fac"?"Reason for referral":"Request"}</h3>${topicsTxt(c)?`<p style="margin:0 0 6px">${topicsTxt(c)}</p>`:""}<p style="margin:0;white-space:pre-wrap">${esc(c.origin==="fac"?c.reason:c.msg)||'<span class="note">No message</span>'}</p>${c.pref?`<p class="note" style="margin:6px 0 0">Prefers: ${esc(c.pref)}${c.ptime?" · "+esc(c.ptime):""}</p>`:""}</div>
+ <div class="box"><h3>📊 Shared self-check scores</h3>${s.shareSwo?scoreMini(s):'<p class="note" style="margin:0">🔒 The student has not shared their scores. You can ask them in a reply.</p>'}</div></div></div>`;
+ h+=`<div class="card"><h2>💬 Conversation with ${esc(first(s.name))}</h2>${threadHTML(c,"swo")}${c.st!=="closed"?`<div class="chips2">${QR.map((q,i)=>`<button data-a="qr" data-id="${i}">${q[0]}</button>`).join("")}</div><textarea id="swo-reply" placeholder="Write a reply to the student…"></textarea><div class="row" style="margin:8px 0 0"><button class="primary" data-a="sreply" data-id="${c.id}">Send reply</button></div>`:""}</div>`;
+ h+=`<div class="card"><h2>📅 Meeting</h2>${c.meet?meetHTML(c,"swo"):'<p class="note">No meeting scheduled yet.</p>'}${c.st!=="closed"?`<div class="fl2"><label>Date<input type="date" id="m-d" value="${c.meet?c.meet.d:""}"></label><label>Time<input type="time" id="m-t" value="${c.meet?c.meet.tm:""}"></label><label>Mode<select id="m-mode">${MODES.slice(0,3).map(m=>`<option ${c.meet&&c.meet.mode===m?"selected":""}>${m}</option>`).join("")}</select></label><label style="flex:1;min-width:180px">Place or link<input type="text" id="m-place" value="${esc(c.meet?c.meet.place:"")}" placeholder="e.g. Counselling room, Main block"></label></div><button class="ghost" data-a="meet" data-id="${c.id}">${c.meet?"Update meeting":"Schedule meeting"}</button><p class="note" id="m-msg" role="alert"></p>`:""}</div>`;
+ h+=`<div class="card"><h2>🔁 Close the loop</h2>`+
+ (c.st==="closed"?`<p>✅ Closed ${c.closedBy==="stu"?"by the student, who confirmed they got the support they needed":"by you: "+esc(c.closeWhy)} on ${fmtT(c.closedAt)}.</p>${c.fb?`<div class="box">Student rating: ${"⭐".repeat(c.fb.r)}${c.fb.t?`<br>“${esc(c.fb.t)}”`:""}</div>`:""}<button class="ghost" data-a="reopen" data-id="${c.id}">Reopen case</button>`
+ :c.st==="conf"?`<p>Waiting for ${esc(first(s.name))} to confirm that they got the support they needed.</p><button class="ghost" data-a="remind" data-id="${c.id}">🔔 Send a reminder</button>`
+ :`<p class="note">When the session or support is complete, ask the student to confirm. The loop closes when they reply.</p><button class="primary" data-a="conf" data-id="${c.id}">✅ Support given: ask student to confirm</button>`)+
+ (c.st!=="closed"?`<details class="dm"><summary>Close without student confirmation</summary><select id="cl-why"><option>Resolved in person</option><option>Student did not respond after reminders</option><option>Referred to an external professional</option><option>Duplicate request</option></select> <button class="ghost" data-a="close" data-id="${c.id}">Close case</button></details>`:"")+`</div>`;
+ if(c.origin==="fac")h+=`<div class="card"><h2>👩‍🏫 Update for ${esc(c.by)}</h2><p class="note">Share only what the faculty member needs, for example “Met the student, support in progress”. Keep private details confidential.</p>${(c.facUpd||[]).map(u=>`<div class="note">💬 ${esc(u.t)} · ${fmtT(u.at)}</div>`).join("")}<div class="fl2"><input type="text" id="fac-upd" placeholder="Short update" style="flex:1;max-width:none"><button class="ghost" data-a="facupd" data-id="${c.id}">Send update</button></div></div>`;
+ h+=`<div class="card"><h2>🔒 Private notes</h2><textarea id="swo-note" data-id="${c.id}" placeholder="Only visible in the SWO dashboard. Saved as you type.">${esc(c.note||"")}</textarea><h3 style="margin-top:12px">🕒 Activity</h3><ul>${(c.log||[]).slice().reverse().map(l=>`<li>${esc(l.t)} <span class="note">${fmtT(l.at)}</span></li>`).join("")}</ul></div>`;
+ return h;
+}
+
+// student support view
+function stuCase(c){
+ const un=c.unStu;
+ let h=`<div class="card" ${un?'style="border-left:4px solid var(--mod)"':""}><h3>${c.origin==="fac"?`👩‍🏫 Suggested by ${esc(c.by)}`:`💬 ${topicsTxt(c)||"Support request"}`} ${un?'<span class="pill sent">New</span>':""}</h3><p class="note" style="margin:0">${c.origin==="fac"?"Referred":"Sent"} ${fmtT(c.at)} · <span class="pill ${c.st}">${STL_STU[c.st]}</span></p>${stepper(c)}`;
+ if(c.origin==="fac")h+=`<p style="margin:0 0 6px">Your faculty member thinks a chat with the Student Welfare Officer could help. It is private and meant to support you. You can reply below.</p>`;
+ if(c.meet)h+=meetHTML(c,"stu");
+ h+=threadHTML(c,"stu");
+ if(c.st==="conf")h+=`<div class="box"><h3>🔁 Did you get the support you needed?</h3><p class="note" style="margin:0">How helpful was it?</p><div class="chips2">${[1,2,3,4,5].map(n=>`<button data-a="rate" data-id="${c.id}" data-n="${n}" aria-pressed="${RATE[c.id]===n}" aria-label="${n} of 5">${"⭐".repeat(n)}</button>`).join("")}</div><textarea id="fb-${c.id}" placeholder="Anything you want to tell the SWO? (optional)"></textarea><div class="row" style="margin:8px 0 0"><button class="primary" data-a="closeloop" data-id="${c.id}">✅ Yes, close the loop</button><button class="ghost" data-a="stillneed" data-id="${c.id}">🔁 I still need support</button></div><p class="note" id="fb-msg-${c.id}" role="alert"></p></div>`;
+ else if(c.st==="closed")h+=`<div class="box">🎉 <b>Loop complete.</b> ${c.closedBy==="stu"?"You confirmed you got support. Thank you for your feedback!":"The SWO closed this request ("+esc(c.closeWhy)+")."} You can start a new request any time.</div>`;
+ if(c.st!=="closed")h+=`<textarea id="ur-${c.id}" placeholder="Write to the SWO…"></textarea><div class="row" style="margin:8px 0 0"><button class="ghost" data-a="ureply" data-id="${c.id}">Send message</button>${c.origin==="stu"?`<a class="btnlink alt" href="${mailtoFor(c)}">✉️ Also send by email</a>`:""}</div>`;
+ return h+`</div>`;
+}
+function renderSupport(){
+ const s=curStu();
+ if(!s){$("sup").innerHTML=`<div class="card empty"><h2>Who are you?</h2><p class="note">Choose your name on the Home page first, so the Student Welfare Officer knows who is asking.</p><a class="btnlink" href="#home">Go to Home 🏠</a></div>`+swoCard("mail");return}
+ const C=DB.cases.filter(c=>c.sid===s.id).sort((a,b)=>(a.st==="closed")-(b.st==="closed")||b.at-a.at),hasOpen=C.some(c=>c.st!=="closed");
+ let h=`<div class="care">🚨 This in-app request is <b>not an emergency service</b> and is not watched all the time. If you feel unsafe or think about hurting yourself, call <a href="tel:112">112</a> or Tele-MANAS <a href="tel:14416">14416</a> now, and tell someone near you.</div>`;
+ if(C.length)h+=`<h2>📬 My requests</h2>`+C.map(stuCase).join("");
+ h+=`<details class="card" ${hasOpen?"":"open"}><summary><b>✍️ ${hasOpen?"Start another request":"Ask the Student Welfare Officer for support"}</b></summary>
+ <p class="note">What you write here goes only to the Student Welfare Officer, not to your faculty.</p>
+ <h3>What would you like help with?</h3><div class="chips2">${TOPICS.map(([k,v])=>`<button data-a="topic" data-id="${k}" aria-pressed="${PICK.includes(k)}">${v}</button>`).join("")}</div>
+ <label class="lbl">Tell the SWO a little more (optional)<textarea id="rq-msg" placeholder="e.g. I can't focus in class and I'm worried about my series exams."></textarea></label>
+ <div class="fl2"><label>How would you like to talk?<select id="rq-pref">${MODES.map(m=>`<option>${m}</option>`).join("")}</select></label><label style="flex:1;min-width:200px">Good times for you (optional)<input type="text" id="rq-time" placeholder="e.g. Tue or Thu after 3:30 pm"></label></div>
+ <h3>How soon?</h3><div class="chk">${Object.entries(URG).map(([k,v])=>`<label><input type="radio" name="rq-urg" value="${k}" ${k==="soon"?"checked":""}> ${v}</label>`).join("")}</div><div id="rq-care"></div>
+ <div class="chk"><label><input type="checkbox" id="rq-share" ${s.shareSwo?"checked":""}> Share my self-check scores with the SWO (${nDone(s)} of 3 done)</label></div>
+ <div class="row" style="margin:8px 0 0"><button class="primary" data-a="sendreq">📨 Send to the SWO</button></div><p class="note" id="rq-err" role="alert"></p></details>`;
+ h+=shareCard()+swoCard("mail")+swoNote();
+ $("sup").innerHTML=h;
+ C.forEach(c=>c.unStu=false);saveDB();renderNav("support");refresh();
+}
+
+// sample data (joke names, no real students)
+function seed(){
+ const L=[["Kuttan Pillai","CSE A","S1"],["Chinnu Chacko","CSE A","S1"],["Appu Kuttan","CSE A","S1"],["Mittu Mathai","CSE A","S1"],["Pappan Varghese","ECE B","S3"],["Thankamma Joseph","ECE B","S3"],["Kunjumon Kuruvila","ME","S5"]];
+ const vary=(arr,i,o)=>arr.map((x,j)=>Math.max(0,Math.min(3,x-(i%3)+((i*3+j+o)%4===0?1:0))));
+ const made=L.map((x,i)=>{const s=addStudent(...x);if(!nDone(s)){
+  if(i!==3)s.res.att=score("att",vary(DEMO.att,i,0));
+  if(i<5&&i!==3)s.res.mood=score("mood",vary(DEMO.mood,i,1));
+  if(i<4)s.res.well=score("well",vary(DEMO.well,i,2));
+  s.shareFac=i!==2;s.shareSwo=i<2||i===4}return s});
+ if(!DB.cases.some(c=>c.demo)){
+  const H=36e5,now=Date.now(),[a,b,,,e]=made;
+  const c1=newCase({demo:1,sid:a.id,topics:["stress","sleep"],msg:"Series exams are next week and I can't sleep or concentrate. I feel like I'm falling behind.",pref:"In person",ptime:"After 3:30 pm",urg:"soon",at:now-26*H,st:"prog",firstResp:now-25*H,unSwo:true});
+  c1.thread.push({f:"sys",t:"👀 The Student Welfare Officer has seen your request.",at:now-25*H},{f:"swo",t:"Thank you for reaching out. Exam stress is very common and we can work on it together. Are you free on Thursday after 3:30?",at:now-24*H},{f:"stu",t:"Yes, Thursday works for me.",at:now-20*H});
+  c1.log=[{t:"Request sent by student",at:now-26*H},{t:"Seen by SWO",at:now-25*H},{t:"SWO replied",at:now-24*H},{t:"Student replied",at:now-20*H}];
+  const c2=newCase({demo:1,sid:b.id,topics:["focus"],msg:"I lose focus in long lectures.",pref:"Online meeting",urg:"routine",at:now-8*24*H,st:"closed",closedBy:"stu",closedAt:now-2*24*H,firstResp:now-7.5*24*H,unSwo:false,fb:{r:5,t:"The focus timer and sitting near the front really helped."},meet:{d:dkey(addDays(new Date(),-4)),tm:"15:30",mode:"Online meeting",place:"Google Meet",resp:"yes"}});
+  c2.thread.push({f:"swo",t:"Let us meet online and try a few focus strategies.",at:now-7.5*24*H},{f:"sys",t:"🎉 Student confirmed they got support. Loop closed.",at:now-2*24*H});
+  c2.log=[{t:"Request sent by student",at:now-8*24*H},{t:"Meeting scheduled",at:now-7.5*24*H},{t:"SWO asked student to confirm",at:now-3*24*H},{t:"Student confirmed support. Loop closed",at:now-2*24*H}];
+  const c3=newCase({demo:1,sid:e.id,origin:"fac",by:"Prof. Demo Faculty",reason:"Has missed several classes in the last two weeks and seems withdrawn. Marks dropped in the first series test.",urg:"soon",talked:true,at:now-3*H,unStu:true});
+  c3.log=[{t:"Referral sent by Prof. Demo Faculty",at:now-3*H}];
+ }
+ saveDB();toast("Sample class loaded. Switch dashboards with the selector at the top.");route();
+}
+
+// new actions
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-a]");if(!b)return;
+ const a=b.dataset.a,id=b.dataset.id,c=id&&DB.cases.find(x=>x.id===id),now=Date.now();
+ const done=(m,big)=>{saveDB();renderNav();if(m)toast(m,big)};
+ switch(a){
+ case "addme":{const f=readForm("me"),s=addStudent(f.name,f.cls,f.sem);if(!s){$("me-msg").textContent="Please enter your full name and class.";return}DB.cur=s.id;saveDB();loadStudent();fillCls();toast(`Welcome, ${first(s.name)}! 👋`);break}
+ case "signout":DB.cur=null;saveDB();loadStudent();break;
+ case "addstu":{const f=readForm("ns"),s=addStudent(f.name,f.cls,f.sem);if(!s){$("ns-msg").textContent="Please enter a name and a class.";return}renderStudents();toast("Added "+s.name);break}
+ case "savestu":{const s=DB.students.find(x=>x.id===EDIT),f=readForm("ns");if(!f.name||!f.cls){$("ns-msg").textContent="Please enter a name and a class.";return}if(s)Object.assign(s,f);EDIT=null;saveDB();renderStudents();toast("Saved");break}
+ case "canceledit":EDIT=null;renderStudents();break;
+ case "edit":EDIT=id;DEL=null;renderStudents();window.scrollTo({top:0,behavior:"smooth"});break;
+ case "del":if(DEL!==id){DEL=id;renderStuTable();return}DB.students=DB.students.filter(x=>x.id!==id);DB.cases=DB.cases.filter(x=>x.sid!==id);if(DB.cur===id){DB.cur=null;loadStudent()}DEL=null;saveDB();renderStudents();toast("Student removed.");break;
+ case "bulk":{const lines=$("bulk").value.split(/\n/).map(x=>x.trim()).filter(Boolean);let ok=0;const bad=[];
+  lines.forEach(l=>{const p=l.split(/[,\t;]/).map(x=>x.trim());let sem=(p[2]||"").toUpperCase().replace(/^SEM(ESTER)?\s*/,"S");if(/^\d$/.test(sem))sem="S"+sem;const n=DB.students.length;if(p[0]&&p[1]&&SEMS.includes(sem)&&addStudent(p[0],p[1],sem)){if(DB.students.length>n)ok++}else bad.push(l)});
+  renderStudents();$("bulk").value=bad.join("\n");$("bulk-msg").textContent=`${ok} student${ok===1?"":"s"} added.`+(bad.length?` ${bad.length} line${bad.length>1?"s":""} could not be read (kept in the box). Use: name, class, semester (S1–S8).`:"");break}
+ case "seed":seed();break;
+ case "ftab":FTAB=id;renderFaculty();break;
+ case "refer":REF=id;renderFaculty();break;
+ case "refcancel":REF=null;renderFaculty();break;
+ case "refsend":{const why=$("ref-why").value.trim();if(!DB.facName){$("ref-msg").textContent="Please enter your name at the top of this page.";return}if(!why){$("ref-msg").textContent="Please describe what you have noticed.";return}
+  const nc=newCase({sid:REF,origin:"fac",by:DB.facName,reason:why,urg:$("ref-urg").value,talked:$("ref-talk").checked,unStu:true});caseLog(nc,"Referral sent by "+DB.facName);REF=null;saveDB();renderFaculty();toast("Referral sent to the Student Welfare Officer 📨");break}
+ case "sfil":SFIL=id;renderSWO();break;
+ case "case":if(c){OPEN=id;if(c.st==="sent"){c.st="ack";sys(c,"👀 The Student Welfare Officer has seen your request.");caseLog(c,"Seen by SWO");swoTouch(c);if(c.origin==="fac"){c.facUpd.push({t:"Referral received and seen by the SWO.",at:now});c.unFac=true}}c.unSwo=false;saveDB();renderSWO();window.scrollTo(0,0)}break;
+ case "back":OPEN=null;renderSWO();break;
+ case "qr":$("swo-reply").value=QR[+id][1];$("swo-reply").focus();break;
+ case "sreply":{const t=$("swo-reply").value.trim();if(!t||!c)return;c.thread.push({f:"swo",t,at:now});if(["sent","ack"].includes(c.st))c.st="prog";swoTouch(c);caseLog(c,"SWO replied");done("Reply sent to the student");renderSWO();break}
+ case "meet":{const d=$("m-d").value,tm=$("m-t").value;if(!d||!tm){$("m-msg").textContent="Please choose a date and a time.";return}const upd2=!!c.meet;c.meet={d,tm,mode:$("m-mode").value,place:$("m-place").value.trim(),resp:""};c.st="meet";sys(c,`📅 Meeting ${upd2?"changed to":"scheduled for"} ${fmtDate(d)}, ${fmtTm(tm)} · ${c.meet.mode}${c.meet.place?" · "+c.meet.place:""}`);swoTouch(c);caseLog(c,upd2?"Meeting updated":"Meeting scheduled");done("Meeting sent to the student 📅");renderSWO();break}
+ case "conf":c.st="conf";sys(c,"The SWO marked your support as given. Please confirm below whether you got the help you needed.");swoTouch(c);caseLog(c,"SWO asked student to confirm");done("Asked the student to confirm");renderSWO();break;
+ case "remind":sys(c,"🔔 Reminder: please confirm whether you got the support you needed.");c.unStu=true;caseLog(c,"Reminder sent");done("Reminder sent");renderSWO();break;
+ case "close":{const why=$("cl-why").value;c.st="closed";c.closedBy="swo";c.closeWhy=why;c.closedAt=now;sys(c,"Closed by the SWO: "+why);c.unStu=true;caseLog(c,"Closed by SWO: "+why);if(c.origin==="fac"){c.facUpd.push({t:"Case closed by the SWO.",at:now});c.unFac=true}done("Case closed");renderSWO();break}
+ case "reopen":c.st="prog";c.closedBy=null;c.closedAt=null;sys(c,"The SWO reopened this case.");c.unStu=true;caseLog(c,"Reopened by SWO");done("Case reopened");renderSWO();break;
+ case "facupd":{const t=$("fac-upd").value.trim();if(!t)return;c.facUpd.push({t,at:now});c.unFac=true;caseLog(c,"Update sent to "+c.by);done("Update sent to the faculty member");renderSWO();break}
+ case "topic":{const i=PICK.indexOf(id);if(i>=0)PICK.splice(i,1);else PICK.push(id);b.setAttribute("aria-pressed",PICK.includes(id));break}
+ case "sendreq":{const s=curStu();if(!s)return;const msg=$("rq-msg").value.trim();if(!PICK.length&&!msg){$("rq-err").textContent="Pick at least one topic or write a short message.";return}
+  const urg=(document.querySelector('input[name="rq-urg"]:checked')||{}).value||"soon";s.shareSwo=$("rq-share").checked;
+  const nc=newCase({sid:s.id,topics:PICK.slice(),msg,pref:$("rq-pref").value,ptime:$("rq-time").value.trim(),urg});caseLog(nc,"Request sent by student");PICK=[];saveDB();renderSupport();window.scrollTo({top:0,behavior:"smooth"});
+  toast(urg==="urgent"?"Sent. If you feel unsafe right now, please call 112 or 14416.":"Sent to the Student Welfare Officer 📨 Watch this page for replies.");break}
+ case "ureply":{const t=$("ur-"+id).value.trim();if(!t||!c)return;c.thread.push({f:"stu",t,at:now});c.unSwo=true;caseLog(c,"Student replied");done("Message sent");renderSupport();break}
+ case "attend":c.meet.resp="yes";sys(c,"✅ Attendance confirmed for the meeting.");c.unSwo=true;caseLog(c,"Student will attend the meeting");done("Great! The SWO knows you will attend.");renderSupport();break;
+ case "resched":c.meet.resp="no";sys(c,"🔁 The student asked for another time.");c.unSwo=true;caseLog(c,"Student asked for another time");done("Tell the SWO which times suit you in the message box.");renderSupport();break;
+ case "rate":RATE[id]=+b.dataset.n;b.parentNode.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.n===RATE[id]));break;
+ case "closeloop":{if(!RATE[id]){$("fb-msg-"+id).textContent="Please choose a star rating first.";return}c.fb={r:RATE[id],t:$("fb-"+id).value.trim()};c.st="closed";c.closedBy="stu";c.closedAt=now;sys(c,"🎉 Student confirmed they got support. Loop closed.");c.unSwo=true;caseLog(c,"Student confirmed support. Loop closed");if(c.origin==="fac"){c.facUpd.push({t:"Support completed and confirmed by the student.",at:now});c.unFac=true}
+  done(`🎉 Loop complete. Thank you for looking after yourself, ${nm()}!`,true);renderSupport();break}
+ case "stillneed":c.st="prog";sys(c,"🔁 The student says they still need support.");c.unSwo=true;caseLog(c,"Student still needs support");done("The SWO will know you still need support.");renderSupport();break;
+ }
+});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("case")){e.preventDefault();e.target.click()}});
+document.addEventListener("change",e=>{
+ const t=e.target;
+ if(t.id==="role"){DB.role=t.value;OPEN=null;REF=null;EDIT=null;saveDB();location.hash=RHOME[t.value];route()}
+ if(t.id==="stuSel"){DB.cur=t.value||null;saveDB();loadStudent();if(curStu())toast(`Hi ${nm()}! 👋`)}
+ if(t.dataset&&t.dataset.fil){FIL[t.dataset.fil]=t.value;const v=location.hash.slice(1);if(v==="students")renderStuTable();else if(v==="faculty")renderFaculty();else if(v==="swo")renderSWO()}
+ if(t.dataset&&t.dataset.share){const s=curStu();if(s){s[t.dataset.share]=t.checked;saveDB();document.querySelectorAll(`[data-share="${t.dataset.share}"]`).forEach(x=>x.checked=t.checked);toast(t.checked?"Sharing turned on.":"Sharing turned off.")}}
+ if(t.name==="rq-urg")$("rq-care").innerHTML=t.value==="urgent"?careHTML():"";
+});
+document.addEventListener("input",e=>{
+ const t=e.target;
+ if(t.id==="facName"){DB.facName=t.value.trim();saveDB()}
+ if(t.id==="swo-note"){const c=DB.cases.find(x=>x.id===t.dataset.id);if(c){c.note=t.value;saveDB()}}
+ if(t.dataset&&t.dataset.fil==="q"){FIL.q=t.value;renderStuTable()}
+});
+
+// ---------- navigation and events
+const VIEWS=["home","attention","mood","wellbeing","relax","plan","summary","support","faculty","swo","students"];
+const ROLEV={student:["home","attention","mood","wellbeing","relax","plan","summary","support"],faculty:["faculty","students"],swo:["swo","students"]};
+const RHOME={student:"home",faculty:"faculty",swo:"swo"};
+const NAVS={home:["🏠","Home"],attention:["🎯","Attention & Activity"],mood:["💙","Mood"],wellbeing:["🌿","Wellbeing"],relax:["🧘","Relax"],plan:["🏆","My Plan"],summary:["📊","My Summary"],support:["💬","Support"],faculty:["👩‍🏫","Faculty Dashboard"],swo:["🩺","SWO Dashboard"],students:["👥","Students"]};
+function renderNav(cur){
+ cur=cur||location.hash.slice(1);const C=DB.cases,s=curStu();
+ const cnt={support:s?C.filter(c=>c.sid===s.id&&c.unStu).length:0,swo:C.filter(c=>c.unSwo).length,faculty:C.filter(c=>c.origin==="fac"&&c.unFac).length};
+ $("nav").innerHTML=(ROLEV[DB.role]||ROLEV.student).map(v=>`<a href="#${v}" data-v="${v}" class="${v===cur?"on":""}">${NAVS[v][0]} <span>${NAVS[v][1]}</span>${cnt[v]?`<b class="nb" aria-label="${cnt[v]} new">${cnt[v]}</b>`:""}</a>`).join("");
+}
+function route(){
+ if(!ROLEV[DB.role])DB.role="student";
+ let h=location.hash.slice(1);if(!ROLEV[DB.role].includes(h))h=RHOME[DB.role];
+ if(location.hash.slice(1)!==h)history.replaceState(null,"","#"+h);
+ if(h!=="relax"){if(pPlay)pmrStop(false);bStop(true,false)}
+ VIEWS.forEach(v=>$("v-"+v).classList.toggle("on",v===h));
+ renderNav(h);
+ if(h==="home")renderProfile();
+ if(h==="summary")renderSummary();
+ if(h==="plan"){ARM=false;renderPlan()}
+ if(h==="support")renderSupport();
+ if(h==="faculty")renderFaculty();
+ if(h==="swo")renderSWO();
+ if(h==="students"){EDIT=null;DEL=null;renderStudents()}
+ window.scrollTo(0,0);
+}
+addEventListener("hashchange",route);
+const DEMO={att:[3,2,3,2,3,2,3,2,3,1,0,1,1,0,1,2,1,0],mood:[2,1,1,0,1,2,1,2,1,1,2,2,2,1,1,1,0,1,0,1,0],well:[1,1,1,2,1,1,1,2,1,2,1,0]};
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-calc],[data-demo],[data-reset],[data-tab],[data-add],[data-rm],[data-focus],[data-act],[data-rtab],[data-bt],[data-bd],[data-fd],#psteps li");if(!b)return;
+ const d=b.dataset;
+ if(d.calc)calc(d.calc);
+ if(d.demo){const k=d.demo,p={att:"t",mood:"m",well:"w"}[k];DEMO[k].forEach((x,i)=>{document.querySelector(`input[name="${p}${i}"][value="${x}"]`).checked=true});upd(p)}
+ if(d.reset){const k=d.reset,p={att:"t",mood:"m",well:"w"}[k];document.querySelectorAll(`input[name^="${p}"]`).forEach(r=>r.checked=false);S[k]=null;const cs=curStu();if(cs&&cs.res){delete cs.res[k];delete cs.res[k+"At"];saveDB()}$("r-"+k).style.display="none";$("m-"+k).textContent="";upd(p);refresh();window.scrollTo({top:0,behavior:"smooth"})}
+ if(d.tab){TAB[d.view]=d.tab;renderTips(d.view)}
+ if(d.add)togglePlan(d.add);
+ if(d.rm)togglePlan(d.rm);
+ if(d.focus){FOCUS=d.focus;renderPlan()}
+ if(d.rtab){document.querySelectorAll("#rtabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.rtab===d.rtab));["pmr","breath","focus"].forEach(x=>$("pane-"+x).classList.toggle("on",x===d.rtab));if(d.rtab!=="pmr"&&pPlay)pmrStop(false);if(d.rtab!=="breath")bStop(true,false)}
+ if(d.bt){if(bRun)bStop(true,false);bType=d.bt;bSel()}
+ if(d.bd){if(bRun)bStop(true,false);bDur=+d.bd;bSel()}
+ if(d.fd){fMin=+d.fd;fReset();fSel()}
+ if(d.act==="pplay")pmrPlay();
+ if(d.act==="prst")pmrReset();
+ if(d.act==="bstart")bStart();
+ if(d.act==="fstart")fStart();
+ if(d.act==="freset")fReset();
+ if(d.act==="demo")demoDays();
+ if(d.act==="resetall"){if(!ARM){ARM=true;renderPlan();return}ARM=false;ST={name:ST.name,habits:[],log:{},badges:{},lvl:0,demo:false};save();toast("Progress reset.");rerender();renderPlan()}
+ if(b.matches&&b.matches("#psteps li")){pT=PMR.find(x=>x.step===+d.step&&x.ph==="tense").s;pSeg=-1;pmrDraw()}
+});
+document.addEventListener("change",e=>{
+ const t=e.target;
+ if(t.type==="radio"&&META[t.name[0]]&&/^[tmw]\d+$/.test(t.name))upd(t.name[0]);
+ if(t.dataset&&t.dataset.done)toggleDone(t.dataset.done);
+ if(t.classList&&t.classList.contains("dc")){DC[+t.dataset.i]=t.checked?1:0;$("dcount").textContent=DC.reduce((a,b)=>a+b,0)+" of 5 done today"}
+});
+/* PSY:KOS embed: student view only, signed in from the PSY:KOS session */
+(function(){const q=new URLSearchParams(location.search);if(!q.get("embed"))return;
+ document.documentElement.classList.add("embed");DB.role="student";
+ const n=q.get("name"),c=q.get("cls");if(n&&c){const s=addStudent(n,c,"S1");if(s)DB.cur=s.id}saveDB();})();
+$("heroArt").innerHTML=teen(BOY)+teen(GIRL)+teen(COOL);
+$("role").value=DB.role;$("home-swo").innerHTML=swoCard("stu");fillCls();
+fReset();loadStudent();route();
+</script>
+<script>
+(function(){var b=document.getElementById('psy-theme');function lab(){b.setAttribute('aria-label',document.documentElement.getAttribute('data-theme')==='light'?'Switch to dark mode':'Switch to light mode')}lab();
+b.addEventListener('click',function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('psykos-theme',t)}catch(e){}lab()});
+/* follow the theme when it is changed on the PSY:KOS page around this one */
+window.addEventListener('storage',function(e){if(e.key==='psykos-theme'&&e.newValue){document.documentElement.setAttribute('data-theme',e.newValue);lab()}});})();
+</script>
+</body>
+</html>

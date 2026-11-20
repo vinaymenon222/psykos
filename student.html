@@ -23,6 +23,16 @@
     <div style="display:flex;gap:10px;flex-wrap:wrap" id="top-links"></div>
   </div>
 
+  <div class="view-tabs" role="tablist" aria-label="Views" id="view-tabs" style="margin-bottom:-16px">
+    <button class="view-tab" role="tab" type="button" id="tab-learning" data-view="learning" aria-controls="view-learning" aria-selected="true">My learning</button>
+    <button class="view-tab" role="tab" type="button" id="tab-wellbeing" data-view="wellbeing" aria-controls="view-wellbeing" aria-selected="false">Wellbeing</button>
+  </div>
+
+  <section id="view-wellbeing" role="tabpanel" aria-labelledby="tab-wellbeing" hidden>
+    <iframe id="wellbeing-frame" title="FocusWell wellbeing check" style="width:100%;height:calc(100vh - 140px);min-height:620px;border:0;border-radius:28px;background:var(--bg);display:block"></iframe>
+  </section>
+
+  <div id="view-learning" role="tabpanel" aria-labelledby="tab-learning" style="display:flex;flex-direction:column;gap:40px">
   <section id="start" aria-labelledby="start-h" style="display:flex;flex-direction:column;gap:16px;scroll-margin-top:16px">
     <div>
       <h2 id="start-h" style="font-size:22px">Start here</h2>
@@ -53,6 +63,7 @@
         <p class="small muted" id="req-note">Opens your email with the request filled in.</p>
       </form>
     </section>
+  </div>
   </div>
 </main>
 
@@ -86,8 +97,34 @@
     renderMarks();
     renderFeedback();
     renderRequest();
+    setupTabs();
     showNotice();
   }).catch(function (err) { P.showError(err.message); });
+
+  /* Two views: My learning and Wellbeing (the counsellor's FocusWell page, student side only). */
+  function setupTabs() {
+    var tabs = document.getElementById('view-tabs');
+    function show(view) {
+      var well = view === 'wellbeing';
+      document.getElementById('tab-learning').setAttribute('aria-selected', String(!well));
+      document.getElementById('tab-wellbeing').setAttribute('aria-selected', String(well));
+      document.getElementById('view-learning').style.display = well ? 'none' : 'flex';
+      document.getElementById('view-wellbeing').hidden = !well;
+      if (well) {
+        document.getElementById('notice-layer').hidden = true;
+        var f = document.getElementById('wellbeing-frame');
+        if (!f.getAttribute('src')) {
+          f.setAttribute('src', 'wellbeing.html?embed=1&name=' + encodeURIComponent(me.name) + '&cls=' + encodeURIComponent(me.cls) + '#home');
+        }
+      }
+      history.replaceState(null, '', well ? '#wellbeing' : location.pathname);
+    }
+    tabs.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-view]');
+      if (b) show(b.getAttribute('data-view'));
+    });
+    if (location.hash === '#wellbeing') show('wellbeing');
+  }
 
   /* Only English has marks so far; any subject added to Classes shows up in the toggle. */
   function subjects() { return D.getSubjectsForClass(me.cls); }
@@ -148,7 +185,7 @@
 
   function showNotice() {
     var n = Wk.getPopups(me.id, 'English').length;
-    if (!n) return;
+    if (!n || location.hash === '#wellbeing') return;
     var key = 'psykos-notice-' + me.id;
     try { if (sessionStorage.getItem(key)) return; } catch (e) { /* show it anyway */ }
     document.getElementById('notice-ic').innerHTML = P.ICONS.bell;
